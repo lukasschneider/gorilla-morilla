@@ -10,10 +10,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-attributes")   # clang does
 set(CMAKE_CXX_FLAGS_DEBUG   "-Og")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2_IMAGE.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2Mixer.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2TTF.cmake)
+if(APPLE)
+    include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2_IMAGE.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2Mixer.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2TTF.cmake)
+endif()
 
 add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")
 
@@ -24,7 +26,10 @@ add_executable(sdl_basegame
         src/recthelper.h
 
         src/main.cpp
-        )
+        src/examplegame.cpp
+        src/examplegame.h
+
+        src/introstate.cpp)
 
 include(FindPkgConfig)
 

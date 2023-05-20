@@ -1,7 +1,7 @@
 #include "../gorillagame.h"
 
 void MainState::Init() {
-    player = new Player;
+    player = new Player(render);
     Vector<Vector<int>> map = {
             {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
             {6, 10,9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 6},
@@ -38,24 +38,10 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     while (SDL_PollEvent(&event)) {
         if (game.HandleEvent(event))
             continue;
-
-        int speed = 5;
-
-        const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
-
-        if (keyboardState[SDL_SCANCODE_W] || keyboardState[SDL_SCANCODE_UP]) {
-            player->tile.y -= speed;
-        }
-        if (keyboardState[SDL_SCANCODE_S] || keyboardState[SDL_SCANCODE_DOWN]) {
-            player->tile.y += speed;
-        }
-        if (keyboardState[SDL_SCANCODE_A] || keyboardState[SDL_SCANCODE_LEFT]) {
-            player->tile.x -= speed;
-        }
-        if (keyboardState[SDL_SCANCODE_D] || keyboardState[SDL_SCANCODE_RIGHT]) {
-            player->tile.x += speed;
-        }
     }
+
+    const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
+    player->handleMovement(keyboardState,deltaT);
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -70,4 +56,5 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
     room->renderMap(render);
+    player->renderPlayer(render);
 }

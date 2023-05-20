@@ -39,8 +39,8 @@ enum TileType {
 
 struct Tile {
     std::string path;
-    Texture *texture;
-    Rect srcRect = {0, 0, 16, 16};
+    SDL_Texture *texture;
+    SDL_Rect srcRect = {0, 0, 16, 16};
     TileType tileType;
     bool isSolid;
 
@@ -55,15 +55,16 @@ struct Tile {
 
 class Room {
 public:
-    int id;
-    Vector<Tile> tiles;
-    std::vector<Vector<int>> map;
 
-    Room(int id, SDL_Renderer *render, Vector<Vector<int>> map);
+    int id;
+    std::vector<Tile> tiles;
+    std::vector<std::vector<int>> map;
+
+    Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map);
 
     void renderMap(SDL_Renderer *render);
 
-    static void renderTile(SDL_Renderer *render, Tile tile, Rect &dstRect);
+    static void renderTile(SDL_Renderer *render, Tile tile, SDL_Rect &dstRect);
 
 };
 

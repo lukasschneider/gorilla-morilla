@@ -1,4 +1,4 @@
-#include "examplegame.h"
+#include "../gorillagame.h"
 
 void IntroState::Init()
 {

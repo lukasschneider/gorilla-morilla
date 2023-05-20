@@ -20,16 +20,16 @@ endif()
 add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")
 
 add_executable(sdl_basegame
-        src/global.h
+        src/lib/global.h
         src/gamebase.h
         src/gamebase.cpp
-        src/recthelper.h
+        src/lib/recthelper.h
 
         src/main.cpp
-        src/examplegame.cpp
-        src/examplegame.h
+        src/gorillagame.cpp
+        src/gorillagame.h
 
-        src/introstate.cpp)
+        src/GameStates/introstate.cpp src/GameStates/MainState.cpp src/GameObjects/Player.cpp src/GameObjects/Player.h src/GameObjects/Enemy.cpp src/GameObjects/Enemy.h src/GameObjects/Teleport.cpp src/GameObjects/Teleport.h src/GameObjects/Bullet.cpp src/GameObjects/Bullet.h src/GameObjects/Items.cpp src/GameObjects/Items.h src/Map/Room.cpp src/Map/Room.h)
 
 include(FindPkgConfig)
 

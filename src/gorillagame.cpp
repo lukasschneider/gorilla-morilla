@@ -1,10 +1,10 @@
-#include "examplegame.h"
+#include "gorillagame.h"
 
 ExampleGame::ExampleGame()
         : Game("Example SDL Game", Point{1280, 960}, false) {
     // Will be freed in Game dtor
     allStates = {
-            new IntroState(*this, render)   // 0
+            new MainState(*this, render)// 0
     };
 
     // The virtual call is ok here

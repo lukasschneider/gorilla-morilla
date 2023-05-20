@@ -1,22 +1,22 @@
-#include "examplegame.h"
+#include "gorillagame.h"
 
 ExampleGame::ExampleGame()
-        : Game("Example SDL Game", Point{1280, 960}, false) {
+        : Game("BIG BABA BUBU GORILLA 🦍🥶", Point{1920, 1080}, false) {
     // Will be freed in Game dtor
     allStates = {
-            new IntroState(*this, render)   // 0
+            new MainState(*this, render)// 0
     };
 
     // The virtual call is ok here
     SetNextState(0);
 
-    SetPerfDrawMode(PerformanceDrawMode::Title);
+    SetPerfDrawMode(PerformanceDrawMode::None);
 }
 
 bool ExampleGame::HandleEvent(const Event event) {
     // Global Keybindings, will be checked before the ones in GameState
     switch (event.type) {
-        case SDL_KEYDOWN: {
+        /*case SDL_KEYDOWN: {
             const Keysym &what_key = event.key.keysym;
 
             if (what_key.scancode == SDL_SCANCODE_1) {
@@ -38,7 +38,7 @@ bool ExampleGame::HandleEvent(const Event event) {
                 return true;
             }
             break;
-        }
+        } */
 
         default:
             break;

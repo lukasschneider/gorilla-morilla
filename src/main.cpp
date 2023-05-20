@@ -1,6 +1,6 @@
-#include "global.h"
+#include "lib/global.h"
 
-#include "examplegame.h"
+#include "gorillagame.h"
 
 extern "C"
 int main( int argc, char * argv [] )

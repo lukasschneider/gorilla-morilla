@@ -16,7 +16,7 @@ ExampleGame::ExampleGame()
 bool ExampleGame::HandleEvent(const Event event) {
     // Global Keybindings, will be checked before the ones in GameState
     switch (event.type) {
-        case SDL_KEYDOWN: {
+        /*case SDL_KEYDOWN: {
             const Keysym &what_key = event.key.keysym;
 
             if (what_key.scancode == SDL_SCANCODE_1) {
@@ -38,7 +38,7 @@ bool ExampleGame::HandleEvent(const Event event) {
                 return true;
             }
             break;
-        }
+        } */
 
         default:
             break;

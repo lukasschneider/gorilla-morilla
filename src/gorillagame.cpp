@@ -1,7 +1,7 @@
 #include "gorillagame.h"
 
 ExampleGame::ExampleGame()
-        : Game("Example SDL Game", Point{1280, 960}, false) {
+        : Game("BIG BABA BUBU GORILLA 🦍🥶", Point{1920, 1080}, false) {
     // Will be freed in Game dtor
     allStates = {
             new MainState(*this, render)// 0
@@ -10,7 +10,7 @@ ExampleGame::ExampleGame()
     // The virtual call is ok here
     SetNextState(0);
 
-    SetPerfDrawMode(PerformanceDrawMode::Title);
+    SetPerfDrawMode(PerformanceDrawMode::None);
 }
 
 bool ExampleGame::HandleEvent(const Event event) {

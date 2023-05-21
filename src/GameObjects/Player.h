@@ -12,20 +12,24 @@ class Player {
 public:
     std::string path = BasePath "asset/graphic/player/ape.png";
     Rect sRect;
-    Rect dRect;
+    FRect dRect;
     Dir dir = LEFT;
     SDL_Texture * texture;
-    float speed = 500;
+    float speed = 256;
 
     Player(SDL_Renderer * renderer){
-        dRect = {700,700,128,128};
+        int windowWidth, windowHeight;
+        SDL_GetRendererOutputSize(renderer, &windowWidth, &windowHeight);
+        windowWidth /= 2;
+        windowHeight /= 2;
+        dRect = {static_cast<float>(windowWidth),static_cast<float>(windowHeight),128,128};
         SDL_Surface * surface = IMG_Load(path.c_str());
         sRect = {0, 0, surface->w, surface->h};
         texture = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);
     }
     void renderPlayer(SDL_Renderer * renderer);
-    void handleMovement(const Uint8 *keyboardState, const float deltaTime);
+    void handleMovement(const Uint8 *keyboardState, float deltaTime);
     };
 
 

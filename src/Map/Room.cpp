@@ -38,7 +38,7 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
 
 
 void Room::renderMap(SDL_Renderer *render) {
-    const int TILE_SIZE = 64; // the size of each tile in pixels
+    const int TILE_SIZE = 32; // the size of each tile in pixels
     const int MAP_WIDTH =  map[0].size(); // the width of the map in tiles
     const int MAP_HEIGHT = map.size(); // the height of the map in tiles
 

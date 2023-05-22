@@ -157,22 +157,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\global.h" />
-    <ClInclude Include="src\gamebase.h" />
     <ClCompile Include="src\gamebase.cpp" />
-    <ClInclude Include="src\recthelper.h" />
-    <ClCompile Include="src\example\pongmain.cpp" />
-    <ClCompile Include="src\example\main.cpp" />
-    <ClInclude Include="src\example\examplegame.h" />
-    <ClCompile Include="src\example\examplegame.cpp" />
-    <ClCompile Include="src\example\camerastate.cpp" />
-    <ClCompile Include="src\example\introstate.cpp" />
-    <ClCompile Include="src\example\plasmastate.cpp" />
-    <ClCompile Include="src\example\shooterstate.cpp" />
-    <ClCompile Include="src\example\sortstate.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="asset\music\severance.ogg" />
     <None Include="classdiagram.drawio" />
     <None Include="LICENSE" />
     <None Include="packages.config">
@@ -181,19 +169,62 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="asset\graphic\background.png" />
-    <Image Include="asset\graphic\ball.png" />
-    <Image Include="asset\graphic\bg-layer-1.png" />
-    <Image Include="asset\graphic\bg-layer-2.png" />
-    <Image Include="asset\graphic\bg-layer-3.png" />
-    <Image Include="asset\graphic\bg-layer-4.png" />
-    <Image Include="asset\graphic\fire.png" />
-    <Image Include="asset\graphic\poison.png" />
     <Image Include="classdiagram.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gorillagame.cpp" />
+    <ClInclude Include="src\gamebase.h" />
+    <ClInclude Include="src\gorillagame.h" />
+    <ClCompile Include="src\GameObjects\Bullet.cpp" />
+    <ClInclude Include="src\GameObjects\Bullet.h" />
+    <ClCompile Include="src\GameObjects\Enemy.cpp" />
+    <ClInclude Include="src\GameObjects\Enemy.h" />
+    <ClCompile Include="src\GameObjects\Items.cpp" />
+    <ClInclude Include="src\GameObjects\Items.h" />
+    <ClCompile Include="src\GameObjects\Player.cpp" />
+    <ClInclude Include="src\GameObjects\Player.h" />
+    <ClCompile Include="src\GameObjects\Teleport.cpp" />
+    <ClInclude Include="src\GameObjects\Teleport.h" />
+    <ClCompile Include="src\GameStates\introstate.cpp" />
+    <ClCompile Include="src\GameStates\MainState.cpp" />
+    <ClInclude Include="src\lib\global.h" />
+    <ClInclude Include="src\lib\recthelper.h" />
+    <ClCompile Include="src\Map\Room.cpp" />
+    <ClInclude Include="src\Map\Room.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="asset\font\MonkeyIsland-1991-refined.ttf" />
     <Font Include="asset\font\RobotoSlab-Bold.ttf" />
+    <Image Include="asset\graphic\tile_0000.png" />
+    <Image Include="asset\graphic\tile_0001.png" />
+    <Image Include="asset\graphic\tile_0002.png" />
+    <Image Include="asset\graphic\tile_0006.png" />
+    <Image Include="asset\graphic\tile_0007.png" />
+    <Image Include="asset\graphic\tile_0008.png" />
+    <Image Include="asset\graphic\tile_0012.png" />
+    <Image Include="asset\graphic\tile_0013.png" />
+    <Image Include="asset\graphic\tile_0014.png" />
+    <Image Include="asset\graphic\tile_0017.png" />
+    <Image Include="asset\graphic\tile_0018.png" />
+    <Image Include="asset\graphic\tile_0019.png" />
+    <Image Include="asset\graphic\tile_0020.png" />
+    <Image Include="asset\graphic\tile_0024.png" />
+    <Image Include="asset\graphic\tile_0025.png" />
+    <Image Include="asset\graphic\tile_0026.png" />
+    <Image Include="asset\graphic\tile_0028.png" />
+    <Image Include="asset\graphic\tile_0029.png" />
+    <Image Include="asset\graphic\tile_0030.png" />
+    <Image Include="asset\graphic\tile_0031.png" />
+    <Image Include="asset\graphic\tile_0032.png" />
+    <Image Include="asset\graphic\tile_0036.png" />
+    <Image Include="asset\graphic\tile_0037.png" />
+    <Image Include="asset\graphic\tile_0038.png" />
+    <Image Include="asset\graphic\tile_0039.png" />
+    <Image Include="asset\graphic\tile_0040.png" />
+    <Image Include="asset\graphic\tile_0041.png" />
+    <Image Include="asset\graphic\tile_0042.png" />
+    <Image Include="asset\graphic\tile_0043.png" />
+    <Audio Include="asset\music\severance.ogg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

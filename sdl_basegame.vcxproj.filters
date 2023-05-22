@@ -4,9 +4,6 @@
     <Filter Include="src">
       <UniqueIdentifier>{e056440c-c3f6-4fef-996b-1c7f8de4e40a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\example">
-      <UniqueIdentifier>{5bb11ad9-ae4d-409b-acba-7a60bf4fef40}</UniqueIdentifier>
-    </Filter>
     <Filter Include="asset">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -23,85 +20,181 @@
       <UniqueIdentifier>{323dc01d-da22-4f6e-92ef-39a77497c4d7}</UniqueIdentifier>
       <Extensions>png</Extensions>
     </Filter>
+    <Filter Include="src\GameObjects">
+      <UniqueIdentifier>{5bb11ad9-ae4d-409b-acba-7a60bf4fef40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\GameStates">
+      <UniqueIdentifier>{0bb06a4e-821d-4d04-904f-dda2ec0bf8b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lib">
+      <UniqueIdentifier>{ccfbc1fe-3d58-48fa-b47d-cb67fa9febeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Map">
+      <UniqueIdentifier>{fe6dd7e8-5836-4dc4-880b-f837d4803dbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\example\camerastate.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\gorillagame.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\example\examplegame.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\GameObjects\Bullet.cpp">
+      <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\example\introstate.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\GameObjects\Enemy.cpp">
+      <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\example\main.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\GameObjects\Items.cpp">
+      <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\example\plasmastate.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\GameObjects\Player.cpp">
+      <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\example\pongmain.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\GameObjects\Teleport.cpp">
+      <Filter>src\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\example\shooterstate.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\GameStates\introstate.cpp">
+      <Filter>src\GameStates</Filter>
     </ClCompile>
-    <ClCompile Include="src\example\sortstate.cpp">
-      <Filter>src\example</Filter>
+    <ClCompile Include="src\GameStates\MainState.cpp">
+      <Filter>src\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Room.cpp">
+      <Filter>src\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\gamebase.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\global.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\gamebase.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\example\examplegame.h">
-      <Filter>src\example</Filter>
-    </ClInclude>
-    <ClInclude Include="src\recthelper.h">
+    <ClInclude Include="src\gorillagame.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Bullet.h">
+      <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Enemy.h">
+      <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Items.h">
+      <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Player.h">
+      <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjects\Teleport.h">
+      <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Room.h">
+      <Filter>src\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\recthelper.h">
+      <Filter>src\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib\global.h">
+      <Filter>src\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="asset\music\severance.ogg">
-      <Filter>asset\music</Filter>
-    </None>
     <None Include="README.md" />
     <None Include="LICENSE" />
     <None Include="classdiagram.drawio" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="asset\graphic\background.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
-    <Image Include="asset\graphic\ball.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
-    <Image Include="asset\graphic\bg-layer-1.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
-    <Image Include="asset\graphic\bg-layer-2.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
-    <Image Include="asset\graphic\bg-layer-3.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
-    <Image Include="asset\graphic\bg-layer-4.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
-    <Image Include="asset\graphic\fire.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
-    <Image Include="asset\graphic\poison.png">
-      <Filter>asset\graphic</Filter>
-    </Image>
     <Image Include="classdiagram.png" />
+    <Image Include="asset\graphic\tile_0000.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0001.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0002.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0006.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0007.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0008.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0012.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0013.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0014.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0017.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0018.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0019.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0020.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0024.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0025.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0026.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0028.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0029.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0030.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0031.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0032.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0036.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0037.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0038.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0039.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0040.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0041.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0042.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
+    <Image Include="asset\graphic\tile_0043.png">
+      <Filter>asset\graphic</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="asset\font\MonkeyIsland-1991-refined.ttf">

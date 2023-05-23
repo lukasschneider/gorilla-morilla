@@ -100,8 +100,8 @@ bool Game::HandleEvent( const Event event )
 			auto & key_event = event.key;
 			Keysym what_key = key_event.keysym;
 
-			if( (what_key.mod & KMOD_ALT) &&
-			    (what_key.scancode == SDL_SCANCODE_F4) || what_key.scancode == SDL_SCANCODE_ESCAPE)
+			if( ((what_key.mod & KMOD_ALT) &&
+			    (what_key.scancode == SDL_SCANCODE_F4)) || what_key.scancode == SDL_SCANCODE_ESCAPE)
 			{
 				Event next_event; // = { .type = SDL_QUIT };
 				next_event.type = SDL_QUIT;

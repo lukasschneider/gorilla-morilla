@@ -21,12 +21,7 @@ void MainState::Init() {
             {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6}
     };
     room = new Room(1, render, map);
-
-    if (!image) {
-        image = IMG_LoadTexture(render, BasePath "asset/graphic/background.png");
-        if (!image)
-            cerr << "IMG_LoadTexture failed: " << IMG_GetError() << endl;
-    }
+    camera = {{0, 0, 1920, 1080},1920, 1080};
 }
 
 void MainState::UnInit() {}
@@ -41,10 +36,12 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     }
 
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
-    player->handleMovement(keyboardState,deltaT);
+    player->handleMovement(keyboardState,deltaT,*room);
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
+    camera.update(player->dRect, 1920, 1080); // Use camera member variable
+
     /**
      *  1. Spieler gegner Kollision
      *  if (spiler->bulletile is collison enenmy
@@ -55,6 +52,6 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
-    room->renderMap(render);
-    player->renderPlayer(render);
+    room->renderMap(render, camera);
+    player->renderPlayer(render, camera);
 }

@@ -33,25 +33,27 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0017.png",render,GRASS,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0043.png",render,GRAVEL,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0029.png",render,SHROOM,false);
+
+    this->MAP_WIDTH = this->map[0].size();
+    this->MAP_HEIGHT = this->map.size();
+
+    int windowWidth, windowHeight;
+    SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight);
+
+    this->MAP_PIXEL_WIDTH = this->MAP_WIDTH * TILE_SIZE;
+    this->MAP_PIXEL_HEIGHT = this->MAP_HEIGHT * TILE_SIZE;
+
+    this->START_X = (windowWidth - MAP_PIXEL_WIDTH) / 2;
+    this->START_Y = (windowHeight - MAP_PIXEL_HEIGHT) / 2;
+
 }
 
 
 
-void Room::renderMap(SDL_Renderer *render) {
-    const int TILE_SIZE = 32; // the size of each tile in pixels
-    const int MAP_WIDTH =  map[0].size(); // the width of the map in tiles
-    const int MAP_HEIGHT = map.size(); // the height of the map in tiles
+void Room::renderMap(SDL_Renderer *render, const Camera& camera) {
 
     int windowWidth, windowHeight;
     SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight); // get the window size
-
-    // Calculate the total size of the map in pixels
-    const int MAP_PIXEL_WIDTH = MAP_WIDTH * TILE_SIZE;
-    const int MAP_PIXEL_HEIGHT = MAP_HEIGHT * TILE_SIZE;
-
-    // Calculate the starting x and y coordinates to center the map
-    const int START_X = (windowWidth - MAP_PIXEL_WIDTH) / 2;
-    const int START_Y = (windowHeight - MAP_PIXEL_HEIGHT) / 2;
 
     // Calculate how many tiles we need to add around the map
     const int BORDER_WIDTH = 1 + (windowWidth - MAP_PIXEL_WIDTH) / (2 * TILE_SIZE);
@@ -80,14 +82,15 @@ void Room::renderMap(SDL_Renderer *render) {
             int tileType = map[y][x];
 
             SDL_Rect dstRect = {
-                    START_X + x * TILE_SIZE,
-                    START_Y + y * TILE_SIZE,
+                    START_X + x * TILE_SIZE - static_cast<int>(camera.frect.x),
+                    START_Y + y * TILE_SIZE - static_cast<int>(camera.frect.y),
                     TILE_SIZE,
                     TILE_SIZE
             };
             if(tileType != -1){
                 const Tile &tile = this->tiles[tileType];
                 renderTile(render, tile, dstRect);
+                // ...
             }
         }
     }
@@ -95,8 +98,33 @@ void Room::renderMap(SDL_Renderer *render) {
 
 
 
-void Room::renderTile(SDL_Renderer *render, Tile tile, Rect &dstRect) {
+void Room::renderTile(SDL_Renderer *render, const Tile& tile, Rect &dstRect) {
     SDL_RenderCopy(render, tile.texture, &tile.srcRect, &dstRect);
 }
+
+
+bool Room::checkCollision(const Rect& rect) const {
+    int startX = static_cast<int>(rect.x - START_X) / TILE_SIZE;
+    int startY = static_cast<int>(rect.y - START_Y) / TILE_SIZE;
+    int endX = static_cast<int>(rect.x + rect.w - START_X) / TILE_SIZE;
+    int endY = static_cast<int>(rect.y + rect.h - START_Y) / TILE_SIZE;
+
+    startX = std::max(0, std::min(startX, MAP_WIDTH - 1));
+    startY = std::max(0, std::min(startY, MAP_HEIGHT - 1));
+    endX = std::max(0, std::min(endX, MAP_WIDTH - 1));
+    endY = std::max(0, std::min(endY, MAP_HEIGHT - 1));
+
+    for (int y = startY; y <= endY; ++y) {
+        for (int x = startX; x <= endX; ++x) {
+            if (tiles[map[y][x]].isSolid && map[y][x] != -1) {
+                cout << map[y][x] << endl;
+                cout << x << " : " << y << endl;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 

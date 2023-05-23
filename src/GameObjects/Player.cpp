@@ -1,12 +1,33 @@
 #include "Player.h"
 
 
-void Player::renderPlayer(SDL_Renderer *renderer) {
+
+void Player::renderPlayer(SDL_Renderer *renderer, const Camera& camera) {
     SDL_RendererFlip flip = (dir == RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_RenderCopyExF(renderer, texture, nullptr, &dRect, 0.0, nullptr, flip);
+    SDL_FRect dstRect = {
+            dRect.x - camera.frect.x,
+            dRect.y - camera.frect.y,
+            dRect.w,
+            dRect.h
+    };
+    SDL_RenderCopyExF(renderer, texture, nullptr, &dstRect, 0.0, nullptr, flip);
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // set the draw color to red
+
+    SDL_Rect outlineRect = {
+            static_cast<int>(dRect.x),
+            static_cast<int>(dRect.y),
+            static_cast<int>(dRect.w),
+            static_cast<int>(dRect.h)
+    };
+
+    SDL_RenderDrawRect(renderer, &outlineRect); // draw the outline
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // reset the draw color to black
 }
 
-void Player::handleMovement(const Uint8* keyboardState, float deltaTime) {
+
+void Player::handleMovement(const Uint8* keyboardState, float deltaTime ,const Room & room) {
     float newX = dRect.x;
     float newY = dRect.y;
 
@@ -37,6 +58,24 @@ void Player::handleMovement(const Uint8* keyboardState, float deltaTime) {
         newY += dirY * moveSpeed;
     }
 
-    dRect.x = newX;
-    dRect.y = newY;
+    // Check horizontal movement
+    if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+        dRect.x = newX;
+    } else {
+        // If collision, move the player as close to the obstacle as possible
+        while (!room.checkCollision({static_cast<int>(dRect.x + dirX), static_cast<int>(dRect.y), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+            dRect.x += dirX;
+        }
+    }
+
+    // Check vertical movement
+    if (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(newY), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+        dRect.y = newY;
+    } else {
+        // If collision, move the player as close to the obstacle as possible
+        while (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(dRect.y + dirY), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+            dRect.y += dirY;
+        }
+    }
 }
+

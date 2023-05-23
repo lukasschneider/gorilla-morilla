@@ -3,6 +3,8 @@
 
 #include "../lib/global.h"
 
+const int TILE_SIZE = 128;
+
 enum TileType {
     GROUND = 0,
     GROUND_GRASS = 1,
@@ -54,6 +56,13 @@ struct Tile {
 
 
 class Room {
+private:
+    int START_X,
+        START_Y,
+        MAP_WIDTH,
+        MAP_HEIGHT,
+        MAP_PIXEL_WIDTH,
+        MAP_PIXEL_HEIGHT;
 public:
 
     int id;
@@ -62,9 +71,11 @@ public:
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map);
 
-    void renderMap(SDL_Renderer *render);
+    void renderMap(SDL_Renderer *render, const Camera& camera);
 
-    static void renderTile(SDL_Renderer *render, Tile tile, SDL_Rect &dstRect);
+    static void renderTile(SDL_Renderer *render, const Tile& tile, SDL_Rect &dstRect);
+
+    bool checkCollision(const SDL_Rect &rect) const;
 
 };
 

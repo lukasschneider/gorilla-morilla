@@ -22,6 +22,8 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 
+
+#include "../GameObjects/Camera.h"
 #include "../Map/Room.h"
 
 using uint  = unsigned int;

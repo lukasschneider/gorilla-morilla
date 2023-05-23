@@ -1,7 +1,7 @@
 #include "gorillagame.h"
 
 ExampleGame::ExampleGame()
-        : Game("BIG BABA BUBU GORILLA 🦍🥶", Point{1280, 720}, false) {
+        : Game("BIG BABA BUBU GORILLA 🦍🥶", Point{1920, 1080}, false) {
     // Will be freed in Game dtor
     allStates = {
             new MainState(*this, render)// 0

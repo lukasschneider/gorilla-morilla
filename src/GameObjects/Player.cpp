@@ -2,15 +2,9 @@
 
 
 
-void Player::renderPlayer(SDL_Renderer *renderer, const Camera& camera) {
+void Player::renderPlayer(SDL_Renderer *renderer) {
     SDL_RendererFlip flip = (dir == RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    SDL_FRect dstRect = {
-            dRect.x - camera.frect.x,
-            dRect.y - camera.frect.y,
-            dRect.w,
-            dRect.h
-    };
-    SDL_RenderCopyExF(renderer, texture, nullptr, &dstRect, 0.0, nullptr, flip);
+    SDL_RenderCopyExF(renderer, texture, nullptr, &dRect, 0.0, nullptr, flip);
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // set the draw color to red
 

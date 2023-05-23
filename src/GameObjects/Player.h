@@ -27,7 +27,7 @@ public:
         texture = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);
     }
-    void renderPlayer(SDL_Renderer * renderer, const Camera& camera);
+    void renderPlayer(SDL_Renderer * renderer);
     void handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room);
     };
 

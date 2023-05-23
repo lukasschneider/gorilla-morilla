@@ -50,7 +50,7 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
 
 
 
-void Room::renderMap(SDL_Renderer *render, const Camera& camera) {
+void Room::renderMap(SDL_Renderer *render) {
 
     int windowWidth, windowHeight;
     SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight); // get the window size
@@ -80,13 +80,13 @@ void Room::renderMap(SDL_Renderer *render, const Camera& camera) {
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             int tileType = map[y][x];
-
             SDL_Rect dstRect = {
-                    START_X + x * TILE_SIZE - static_cast<int>(camera.frect.x),
-                    START_Y + y * TILE_SIZE - static_cast<int>(camera.frect.y),
+                    START_X + x * TILE_SIZE,
+                    START_Y + y * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE
             };
+
             if(tileType != -1){
                 const Tile &tile = this->tiles[tileType];
                 renderTile(render, tile, dstRect);

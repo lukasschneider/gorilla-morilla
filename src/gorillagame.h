@@ -68,7 +68,6 @@ protected:
     Player *player;
     Texture *image = nullptr;
     Room *room;
-    Camera camera;
 
 public:
     // ctor

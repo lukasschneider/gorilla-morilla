@@ -3,7 +3,7 @@
 
 #include "../lib/global.h"
 
-const int TILE_SIZE = 128;
+const int TILE_SIZE = 64;
 
 enum TileType {
     GROUND = 0,
@@ -71,7 +71,7 @@ public:
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map);
 
-    void renderMap(SDL_Renderer *render, const Camera& camera);
+    void renderMap(SDL_Renderer *render);
 
     static void renderTile(SDL_Renderer *render, const Tile& tile, SDL_Rect &dstRect);
 

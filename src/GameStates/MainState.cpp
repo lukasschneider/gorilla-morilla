@@ -21,7 +21,6 @@ void MainState::Init() {
             {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6}
     };
     room = new Room(1, render, map);
-    camera = {{0, 0, 1920, 1080},1920, 1080};
 }
 
 void MainState::UnInit() {}
@@ -40,7 +39,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
-    camera.update(player->dRect, 1920, 1080); // Use camera member variable
 
     /**
      *  1. Spieler gegner Kollision
@@ -52,6 +50,6 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
-    room->renderMap(render, camera);
-    player->renderPlayer(render, camera);
+    room->renderMap(render);
+    player->renderPlayer(render);
 }

@@ -57,8 +57,8 @@ void Room::renderMap(SDL_Renderer *render) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             int tileType = map[y][x];
             SDL_Rect dstRect = {
-                    START_X + x * TILE_SIZE,
-                    START_Y + y * TILE_SIZE,
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE
             };
@@ -71,6 +71,7 @@ void Room::renderMap(SDL_Renderer *render) {
     }
 }
 
+// Rendert 
 void Room::renderBackboard(SDL_Renderer *render) {
     int windowWidth, windowHeight;
     SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight); // get the window size
@@ -84,8 +85,8 @@ void Room::renderBackboard(SDL_Renderer *render) {
         for (int x = -BORDER_WIDTH; x < MAP_WIDTH + BORDER_WIDTH; ++x) {
             // Only render the tile if it's outside of the map
             SDL_Rect dstRect = {
-                    START_X + x * TILE_SIZE,
-                    START_Y + y * TILE_SIZE,
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE
             };
@@ -105,10 +106,10 @@ void Room::renderTile(SDL_Renderer *render, const Tile& tile, Rect &dstRect) {
 
 
 bool Room::checkCollision(const Rect& rect) const {
-    int startX = static_cast<int>(rect.x - START_X) / TILE_SIZE;
-    int startY = static_cast<int>(rect.y - START_Y) / TILE_SIZE;
-    int endX = static_cast<int>(rect.x + rect.w - START_X) / TILE_SIZE;
-    int endY = static_cast<int>(rect.y + rect.h - START_Y) / TILE_SIZE;
+    int startX = static_cast<int>(rect.x) / TILE_SIZE;
+    int startY = static_cast<int>(rect.y) / TILE_SIZE;
+    int endX = static_cast<int>(rect.x + rect.w) / TILE_SIZE;
+    int endY = static_cast<int>(rect.y + rect.h) / TILE_SIZE;
 
     startX = std::max(0, std::min(startX, MAP_WIDTH - 1));
     startY = std::max(0, std::min(startY, MAP_HEIGHT - 1));

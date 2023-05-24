@@ -21,6 +21,7 @@ void MainState::Init() {
             {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6}
     };
     room = new Room(1, render, map);
+    camera = new Camera(player);
 }
 
 void MainState::UnInit() {}
@@ -39,6 +40,7 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
+    camera->updateCamera();
 
     /**
      *  1. Spieler gegner Kollision
@@ -53,5 +55,6 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     room->renderBackboard(render);
     player->renderPlayer(render);
     room->renderMap(render);
+    camera->renderCam(render);
 
 }

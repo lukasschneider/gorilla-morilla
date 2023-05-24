@@ -40,7 +40,7 @@ Game::Game( const char * windowTitle, const Point windowSize, const bool vSync )
 		SDL_WINDOWPOS_CENTERED,
 		windowSize.x,
 		windowSize.y,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN |SDL_WINDOW_FULLSCREEN );
 
 	if( window == nullptr )
 	{

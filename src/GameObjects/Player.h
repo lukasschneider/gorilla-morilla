@@ -17,11 +17,7 @@ public:
     float speed = 600;
 
     Player(SDL_Renderer * renderer){
-        int windowWidth, windowHeight;
-        SDL_GetRendererOutputSize(renderer, &windowWidth, &windowHeight);
-        windowWidth /= 2;
-        windowHeight /= 2;
-        dRect = {static_cast<float>(windowWidth),static_cast<float>(windowHeight),100,100};
+        dRect = {static_cast<float>(500),static_cast<float>(500),64,128};
         SDL_Surface * surface = IMG_Load(path.c_str());
         sRect = {0, 0, surface->w, surface->h};
         texture = SDL_CreateTextureFromSurface(renderer, surface);

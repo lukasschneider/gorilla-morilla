@@ -14,7 +14,6 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             static_cast<int>(dRect.w),
             static_cast<int>(dRect.h)
     };
-
     SDL_RenderDrawRect(renderer, &outlineRect); // draw the outline
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // reset the draw color to black

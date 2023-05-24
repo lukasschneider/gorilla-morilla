@@ -4,15 +4,15 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
         : id(id), map(std::move(map)) {
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0000.png",render,GROUND,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0001.png",render,GROUND_GRASS,false);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0006.png",render,FOREST_LEFT_TOP,true);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0007.png",render,FOREST_MIDDLE_TOP,true);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0008.png",render,FOREST_RIGHT_TOP,true);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0018.png",render,FOREST_LEFT_MID,true);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0006.png",render,FOREST_LEFT_TOP,false);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0007.png",render,FOREST_MIDDLE_TOP,false);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0008.png",render,FOREST_RIGHT_TOP,false);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0018.png",render,FOREST_LEFT_MID,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0019.png",render,FOREST_MIDDLE_MID,true);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0020.png",render,FOREST_RIGHT_MID,true);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0030.png",render,FOREST_LEFT_DOWN,true);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0031.png",render,FOREST_MIDDLE_DOWN,true);
-    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0032.png",render,FOREST_RIGHT_DOWN,true);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0020.png",render,FOREST_RIGHT_MID,false);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0030.png",render,FOREST_LEFT_DOWN,false);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0031.png",render,FOREST_MIDDLE_DOWN,false);
+    this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0032.png",render,FOREST_RIGHT_DOWN,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0012.png",render,DIRT_LEFT_TOP,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0013.png",render,DIRT_MIDDLE_TOP,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0014.png",render,DIRT_RIGHT_TOP,false);
@@ -52,6 +52,26 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
 
 void Room::renderMap(SDL_Renderer *render) {
 
+    // Render the map
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map[y][x];
+            SDL_Rect dstRect = {
+                    START_X + x * TILE_SIZE,
+                    START_Y + y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+
+            if(tileType != -1){
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect);
+            }
+        }
+    }
+}
+
+void Room::renderBackboard(SDL_Renderer *render) {
     int windowWidth, windowHeight;
     SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight); // get the window size
 
@@ -72,25 +92,6 @@ void Room::renderMap(SDL_Renderer *render) {
             renderTile(render, tiles[0], dstRect); // Render Backboard
             if (x < 0 || y < 0 || x >= MAP_WIDTH || y >= MAP_HEIGHT) {
                 renderTile(render, tiles[6], dstRect); // Render Backboard
-            }
-        }
-    }
-
-    // Render the map
-    for (int y = 0; y < MAP_HEIGHT; ++y) {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            int tileType = map[y][x];
-            SDL_Rect dstRect = {
-                    START_X + x * TILE_SIZE,
-                    START_Y + y * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE
-            };
-
-            if(tileType != -1){
-                const Tile &tile = this->tiles[tileType];
-                renderTile(render, tile, dstRect);
-                // ...
             }
         }
     }

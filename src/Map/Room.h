@@ -73,6 +73,8 @@ public:
 
     void renderMap(SDL_Renderer *render);
 
+    void renderBackboard(SDL_Renderer *render);
+
     static void renderTile(SDL_Renderer *render, const Tile& tile, SDL_Rect &dstRect);
 
     bool checkCollision(const SDL_Rect &rect) const;

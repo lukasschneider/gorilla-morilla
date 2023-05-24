@@ -6,8 +6,8 @@ Camera::Camera(Player *player) {
     this->viewport = {
             .x = static_cast<int>(player->dRect.x + player->dRect.w / 2 - 1920 / 2),
             .y = static_cast<int>(player->dRect.y + player->dRect.h / 2 - 1080 / 2),
-            .w = 1920/2,
-            .h = 1080/2
+            .w = 1920,
+            .h = 1080
     };
 }
 

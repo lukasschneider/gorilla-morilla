@@ -3,6 +3,8 @@
 
 #include "../lib/global.h"
 
+const int TILE_SIZE = 64;
+
 enum TileType {
     GROUND = 0,
     GROUND_GRASS = 1,
@@ -39,8 +41,8 @@ enum TileType {
 
 struct Tile {
     std::string path;
-    Texture *texture;
-    Rect srcRect = {0, 0, 16, 16};
+    SDL_Texture *texture;
+    SDL_Rect srcRect = {0, 0, 16, 16};
     TileType tileType;
     bool isSolid;
 
@@ -54,16 +56,28 @@ struct Tile {
 
 
 class Room {
+private:
+    int START_X,
+        START_Y,
+        MAP_WIDTH,
+        MAP_HEIGHT,
+        MAP_PIXEL_WIDTH,
+        MAP_PIXEL_HEIGHT;
 public:
-    int id;
-    Vector<Tile> tiles;
-    std::vector<Vector<int>> map;
 
-    Room(int id, SDL_Renderer *render, Vector<Vector<int>> map);
+    int id;
+    std::vector<Tile> tiles;
+    std::vector<std::vector<int>> map;
+
+    Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map);
 
     void renderMap(SDL_Renderer *render);
 
-    static void renderTile(SDL_Renderer *render, Tile tile, Rect &dstRect);
+    void renderBackboard(SDL_Renderer *render);
+
+    static void renderTile(SDL_Renderer *render, const Tile& tile, SDL_Rect &dstRect);
+
+    bool checkCollision(const SDL_Rect &rect) const;
 
 };
 

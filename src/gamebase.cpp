@@ -40,7 +40,7 @@ Game::Game( const char * windowTitle, const Point windowSize, const bool vSync )
 		SDL_WINDOWPOS_CENTERED,
 		windowSize.x,
 		windowSize.y,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN |SDL_WINDOW_FULLSCREEN );
 
 	if( window == nullptr )
 	{
@@ -100,8 +100,8 @@ bool Game::HandleEvent( const Event event )
 			auto & key_event = event.key;
 			Keysym what_key = key_event.keysym;
 
-			if( (what_key.mod & KMOD_ALT) &&
-			    (what_key.scancode == SDL_SCANCODE_F4) )
+			if( ((what_key.mod & KMOD_ALT) &&
+			    (what_key.scancode == SDL_SCANCODE_F4)) || what_key.scancode == SDL_SCANCODE_ESCAPE)
 			{
 				Event next_event; // = { .type = SDL_QUIT };
 				next_event.type = SDL_QUIT;

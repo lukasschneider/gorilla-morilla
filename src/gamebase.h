@@ -32,7 +32,7 @@ public:
     explicit Game(
             const char *windowTitle = "SDL Game",
             const Point windowSize = Point{1920, 1080},
-            const bool vSync = true);
+            const bool vSync = false);
 
     Game(const Game &) = delete;
 

@@ -10,7 +10,7 @@ ExampleGame::ExampleGame()
     // The virtual call is ok here
     SetNextState(0);
 
-    SetPerfDrawMode(PerformanceDrawMode::None);
+    SetPerfDrawMode(PerformanceDrawMode::Title);
 }
 
 bool ExampleGame::HandleEvent(const Event event) {

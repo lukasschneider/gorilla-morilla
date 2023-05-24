@@ -1,7 +1,7 @@
 #include "../gorillagame.h"
 
 void MainState::Init() {
-    player = new Player;
+    player = new Player(render);
     Vector<Vector<int>> map = {
             {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6},
             {6, 10,9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8, 6},
@@ -21,12 +21,7 @@ void MainState::Init() {
             {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6}
     };
     room = new Room(1, render, map);
-
-    if (!image) {
-        image = IMG_LoadTexture(render, BasePath "asset/graphic/background.png");
-        if (!image)
-            cerr << "IMG_LoadTexture failed: " << IMG_GetError() << endl;
-    }
+    camera = new Camera(player);
 }
 
 void MainState::UnInit() {}
@@ -38,27 +33,15 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     while (SDL_PollEvent(&event)) {
         if (game.HandleEvent(event))
             continue;
-
-        int speed = 5;
-
-        const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
-
-        if (keyboardState[SDL_SCANCODE_W] || keyboardState[SDL_SCANCODE_UP]) {
-            player->tile.y -= speed;
-        }
-        if (keyboardState[SDL_SCANCODE_S] || keyboardState[SDL_SCANCODE_DOWN]) {
-            player->tile.y += speed;
-        }
-        if (keyboardState[SDL_SCANCODE_A] || keyboardState[SDL_SCANCODE_LEFT]) {
-            player->tile.x -= speed;
-        }
-        if (keyboardState[SDL_SCANCODE_D] || keyboardState[SDL_SCANCODE_RIGHT]) {
-            player->tile.x += speed;
-        }
     }
+
+    const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
+    player->handleMovement(keyboardState,deltaT,*room);
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
+    camera->updateCamera();
+
     /**
      *  1. Spieler gegner Kollision
      *  if (spiler->bulletile is collison enenmy
@@ -69,5 +52,9 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
+    room->renderBackboard(render);
+    player->renderPlayer(render);
     room->renderMap(render);
+    camera->renderCam(render);
+
 }

@@ -7,6 +7,7 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
     # -Wno-unknown-attributes gibt es auf MSVC nicht.
     # #pragma warning(disable: warning_number) könnte jeweils in den Sourcefiles benutzt werden
+    # TODO: fix Windows Optimisierung-Flags
     #set(CMAKE_CXX_FLAGS_DEBUG   /Od)
     #set(CMAKE_CXX_FLAGS_RELEASE /O2)
 else ()

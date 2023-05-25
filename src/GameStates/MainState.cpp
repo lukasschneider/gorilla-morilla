@@ -52,9 +52,9 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
-    room->renderBackboard(render);
+    room->renderBackboard(render, camera->viewport);
     player->renderPlayer(render);
-    room->renderMap(render);
+    room->renderMap(render, camera->viewport);
     camera->renderCam(render);
 
 }

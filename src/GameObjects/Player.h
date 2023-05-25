@@ -9,7 +9,7 @@ enum Dir{
 
 class Player {
 public:
-    std::string path = BasePath "asset/graphic/player/ape.png";
+    std::string path = BasePath "asset/graphic/player/a.png";
     Rect sRect;
     FRect dRect;
     Dir dir = LEFT;

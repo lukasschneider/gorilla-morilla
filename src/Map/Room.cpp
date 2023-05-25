@@ -50,15 +50,14 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
 
 
 
-void Room::renderMap(SDL_Renderer *render) {
-
+void Room::renderMap(SDL_Renderer *render, const SDL_Rect& viewport) {
     // Render the map
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             int tileType = map[y][x];
             SDL_Rect dstRect = {
-                    x * TILE_SIZE,
-                    y * TILE_SIZE,
+                    x * TILE_SIZE + viewport.x,
+                    y * TILE_SIZE + viewport.y,
                     TILE_SIZE,
                     TILE_SIZE
             };
@@ -71,8 +70,7 @@ void Room::renderMap(SDL_Renderer *render) {
     }
 }
 
-// Rendert 
-void Room::renderBackboard(SDL_Renderer *render) {
+void Room::renderBackboard(SDL_Renderer *render, const SDL_Rect& viewport) {
     int windowWidth, windowHeight;
     SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight); // get the window size
 
@@ -83,17 +81,15 @@ void Room::renderBackboard(SDL_Renderer *render) {
     // Render the border
     for (int y = -BORDER_HEIGHT; y < MAP_HEIGHT + BORDER_HEIGHT; ++y) {
         for (int x = -BORDER_WIDTH; x < MAP_WIDTH + BORDER_WIDTH; ++x) {
-            // Only render the tile if it's outside of the map
             SDL_Rect dstRect = {
-                    x * TILE_SIZE,
-                    y * TILE_SIZE,
+                    x * TILE_SIZE + viewport.x,
+                    y * TILE_SIZE + viewport.y,
                     TILE_SIZE,
                     TILE_SIZE
             };
-            renderTile(render, tiles[0], dstRect); // Render Backboard
-            if (x < 0 || y < 0 || x >= MAP_WIDTH || y >= MAP_HEIGHT) {
-                renderTile(render, tiles[6], dstRect); // Render Backboard
-            }
+
+            const Tile &tile = this->tiles[GROUND];
+            renderTile(render, tile, dstRect);
         }
     }
 }
@@ -118,7 +114,7 @@ bool Room::checkCollision(const Rect& rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            if (tiles[map[y][x]].isSolid && map[y][x] != -1) {
+            if (map[y][x] != -1 && tiles[map[y][x]].isSolid) {
                 cout << map[y][x] << endl;
                 cout << x << " : " << y << endl;
                 return true;

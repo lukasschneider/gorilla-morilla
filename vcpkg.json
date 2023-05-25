@@ -1,0 +1,22 @@
+{
+  "name" : "sdl-basegame",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "ed8fb07a8bd19568c8594c6f1a04955242f82d35",
+  "dependencies" : [ {
+    "name" : "sdl2",
+    "version>=" : "2.26.5",
+    "$comment" : "    find_package(SDL2 CONFIG REQUIRED)\n\n    target_link_libraries(main\n\n        PRIVATE\n\n        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>\n\n        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>\n\n    )\n"
+  }, {
+    "name" : "sdl2-image",
+    "version>=" : "2.6.3",
+    "$comment" : "    find_package(SDL2_image CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)\n"
+  }, {
+    "name" : "sdl2-mixer",
+    "version>=" : "2.6.3#1",
+    "$comment" : "    find_package(SDL2_mixer CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)\n"
+  }, {
+    "name" : "sdl2-ttf",
+    "version>=" : "2.20.2",
+    "$comment" : "    find_package(SDL2_ttf CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)\n"
+  } ]
+}

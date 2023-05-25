@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(sdl_basegame)
+project(gorillagame)
 
 set(CMAKE_CXX_STANDARD 17)
 if(WIN32)
@@ -27,17 +27,30 @@ if(APPLE)
     include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2TTF.cmake)
 endif()
 
-add_executable(sdl_basegame
+add_executable(${PROJECT_NAME}
         src/lib/global.h
         src/gamebase.h
         src/gamebase.cpp
         src/lib/recthelper.h
-
         src/main.cpp
         src/gorillagame.cpp
         src/gorillagame.h
-
-        src/GameStates/introstate.cpp src/GameStates/MainState.cpp src/GameObjects/Player.cpp src/GameObjects/Player.h src/GameObjects/Enemy.cpp src/GameObjects/Enemy.h src/GameObjects/Teleport.cpp src/GameObjects/Teleport.h src/GameObjects/Bullet.cpp src/GameObjects/Bullet.h src/GameObjects/Items.cpp src/GameObjects/Items.h src/Map/Room.cpp src/Map/Room.h src/lib/Camera.cpp src/lib/Camera.h)
+        src/GameStates/introstate.cpp
+        src/GameStates/MainState.cpp
+        src/GameObjects/Player.cpp
+        src/GameObjects/Player.h
+        src/GameObjects/Enemy.cpp
+        src/GameObjects/Enemy.h
+        src/GameObjects/Teleport.cpp
+        src/GameObjects/Teleport.h
+        src/GameObjects/Bullet.cpp
+        src/GameObjects/Bullet.h
+        src/GameObjects/Items.cpp
+        src/GameObjects/Items.h
+        src/Map/Room.cpp
+        src/Map/Room.h s
+        src/lib/Camera.cpp
+        src/lib/Camera.h)
 if(NOT WIN32)
     include(FindPkgConfig)
 endif ()

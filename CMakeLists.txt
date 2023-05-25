@@ -48,7 +48,7 @@ add_executable(${PROJECT_NAME}
         src/GameObjects/Items.cpp
         src/GameObjects/Items.h
         src/Map/Room.cpp
-        src/Map/Room.h s
+        src/Map/Room.h
         src/lib/Camera.cpp
         src/lib/Camera.h)
 if(NOT WIN32)
@@ -57,20 +57,20 @@ endif ()
 
 if(WIN32)
     find_package(SDL2 CONFIG REQUIRED)
-    target_link_libraries(sdl_basegame
+    target_link_libraries(${PROJECT_NAME}
             PRIVATE
             $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
             $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
             )
 
     find_package(SDL2_image CONFIG REQUIRED)
-    target_link_libraries(sdl_basegame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
+    target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
 
     find_package(SDL2_mixer CONFIG REQUIRED)
-    target_link_libraries(sdl_basegame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
+    target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
 
     find_package(SDL2_ttf CONFIG REQUIRED)
-    target_link_libraries(sdl_basegame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
+    target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
 else ()
     pkg_search_module(SDL2      REQUIRED sdl2>=2.0.0)
     pkg_search_module(SDL2TTF   REQUIRED SDL2_ttf>=2.0.0)

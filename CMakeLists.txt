@@ -7,7 +7,6 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
     # -Wno-unknown-attributes gibt es auf MSVC nicht.
     # #pragma warning(disable: warning_number) könnte jeweils in den Sourcefiles benutzt werden
-    # TODO: fix Windows Optimisierung-Flags
     #set(CMAKE_CXX_FLAGS_DEBUG   /Od)
     #set(CMAKE_CXX_FLAGS_RELEASE /O2)
 else ()
@@ -38,8 +37,9 @@ add_executable(sdl_basegame
         src/gorillagame.h
 
         src/GameStates/introstate.cpp src/GameStates/MainState.cpp src/GameObjects/Player.cpp src/GameObjects/Player.h src/GameObjects/Enemy.cpp src/GameObjects/Enemy.h src/GameObjects/Teleport.cpp src/GameObjects/Teleport.h src/GameObjects/Bullet.cpp src/GameObjects/Bullet.h src/GameObjects/Items.cpp src/GameObjects/Items.h src/Map/Room.cpp src/Map/Room.h src/lib/Camera.cpp src/lib/Camera.h)
-
-
+if(NOT WIN32)
+    include(FindPkgConfig)
+endif ()
 
 if(WIN32)
     find_package(SDL2 CONFIG REQUIRED)
@@ -57,7 +57,7 @@ if(WIN32)
 
     find_package(SDL2_ttf CONFIG REQUIRED)
     target_link_libraries(sdl_basegame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)
-elseif ()
+else ()
     pkg_search_module(SDL2      REQUIRED sdl2>=2.0.0)
     pkg_search_module(SDL2TTF   REQUIRED SDL2_ttf>=2.0.0)
     pkg_search_module(SDL2NET   REQUIRED SDL2_net>=2.0.0)

@@ -41,14 +41,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
     camera->updateCamera();
-
-    /**
-     *  1. Spieler gegner Kollision
-     *  if (spiler->bulletile is collison enenmy
-     *  2. Spieler Room Kollision
-     *  3. Movement Spieler/Gegner
-     *  4. Room update (Currency Fällt)
-     */
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {

@@ -56,8 +56,8 @@ void Room::renderMap(SDL_Renderer *render, const SDL_Rect& viewport) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             int tileType = map[y][x];
             SDL_Rect dstRect = {
-                    x * TILE_SIZE + viewport.x,
-                    y * TILE_SIZE + viewport.y,
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE
             };
@@ -82,8 +82,8 @@ void Room::renderBackboard(SDL_Renderer *render, const SDL_Rect& viewport) {
     for (int y = -BORDER_HEIGHT; y < MAP_HEIGHT + BORDER_HEIGHT; ++y) {
         for (int x = -BORDER_WIDTH; x < MAP_WIDTH + BORDER_WIDTH; ++x) {
             SDL_Rect dstRect = {
-                    x * TILE_SIZE + viewport.x,
-                    y * TILE_SIZE + viewport.y,
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE
             };
@@ -115,8 +115,8 @@ bool Room::checkCollision(const Rect& rect) const {
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
             if (map[y][x] != -1 && tiles[map[y][x]].isSolid) {
-                cout << map[y][x] << endl;
-                cout << x << " : " << y << endl;
+//                cout << map[y][x] << endl;
+//                cout << x << " : " << y << endl;
                 return true;
             }
         }

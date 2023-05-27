@@ -41,16 +41,9 @@ add_executable(${PROJECT_NAME}
         src/GameObjects/Player.h
         src/GameObjects/Enemy.cpp
         src/GameObjects/Enemy.h
-        src/GameObjects/Teleport.cpp
-        src/GameObjects/Teleport.h
-        src/GameObjects/Bullet.cpp
-        src/GameObjects/Bullet.h
-        src/GameObjects/Items.cpp
-        src/GameObjects/Items.h
         src/Map/Room.cpp
         src/Map/Room.h
-        src/lib/Camera.cpp
-        src/lib/Camera.h)
+        )
 if(NOT WIN32)
     include(FindPkgConfig)
 endif ()

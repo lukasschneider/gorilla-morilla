@@ -57,27 +57,30 @@ struct Tile {
 
 class Room {
 private:
-    int START_X,
-        START_Y,
+    int
         MAP_WIDTH,
         MAP_HEIGHT,
         MAP_PIXEL_WIDTH,
-        MAP_PIXEL_HEIGHT;
+        MAP_PIXEL_HEIGHT,
+        BACK_PIXEL_WIDTH,
+        BACK_PIXEL_HEIGHT;
+    SDL_FRect * vp;
 public:
 
     int id;
     std::vector<Tile> tiles;
     std::vector<std::vector<int>> map;
 
-    Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map);
 
-    static void renderTile(SDL_Renderer *render, const Tile& tile, SDL_Rect &dstRect);
+    Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map, SDL_FRect *viewport);
 
-    bool checkCollision(const SDL_Rect &rect) const;
+    [[nodiscard]] bool checkCollision(const SDL_Rect &rect) const;
 
-    void renderBackboard(SDL_Renderer *render, const SDL_Rect &viewport);
+    void renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect, SDL_FRect &viewport);
 
-    void renderMap(SDL_Renderer *render, const SDL_Rect &viewport);
+    void renderMap(SDL_Renderer *render);
+
+    void renderBackboard(SDL_Renderer *render);
 };
 
 

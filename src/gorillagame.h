@@ -6,7 +6,6 @@
 #include "lib/recthelper.h"
 #include "GameObjects/Player.h"
 #include "Map/Room.h"
-#include "lib/Camera.h"
 
 class ExampleGame;
 
@@ -69,8 +68,6 @@ protected:
     Player *player;
     Texture *image = nullptr;
     Room *room;
-    Camera * camera;
-
 public:
     // ctor
     using GameState::GameState;

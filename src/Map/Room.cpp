@@ -1,7 +1,7 @@
 #include "Room.h"
 
-Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
-        : id(id), map(std::move(map)) {
+Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map,SDL_FRect *viewport)
+        : id(id), map(map), vp(viewport) {
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0000.png",render,GROUND,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0001.png",render,GROUND_GRASS,false);
     this->tiles.emplace_back(BasePath "asset/graphic/tiles/tile_0006.png",render,FOREST_LEFT_TOP,false);
@@ -37,21 +37,24 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<int>> map)
     this->MAP_WIDTH = this->map[0].size();
     this->MAP_HEIGHT = this->map.size();
 
-    int windowWidth, windowHeight;
-    SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight);
-
     this->MAP_PIXEL_WIDTH = this->MAP_WIDTH * TILE_SIZE;
     this->MAP_PIXEL_HEIGHT = this->MAP_HEIGHT * TILE_SIZE;
 
-    this->START_X = (windowWidth - MAP_PIXEL_WIDTH) / 2;
-    this->START_Y = (windowHeight - MAP_PIXEL_HEIGHT) / 2;
-
+    this->BACK_PIXEL_WIDTH = MAP_PIXEL_WIDTH + 1280;
+    this->BACK_PIXEL_HEIGHT = MAP_PIXEL_HEIGHT + 720;
 }
 
+void Room::renderTile(SDL_Renderer *render, const Tile& tile, SDL_Rect &dstRect, SDL_FRect &viewport) {
+    SDL_Rect offsetRect = {
+            static_cast<int>(dstRect.x - viewport.x),
+            static_cast<int>(dstRect.y - viewport.y),
+            dstRect.w,
+            dstRect.h
+    };
+    SDL_RenderCopy(render, tile.texture, &tile.srcRect, &offsetRect);
+}
 
-
-void Room::renderMap(SDL_Renderer *render, const SDL_Rect& viewport) {
-    // Render the map
+void Room::renderMap(SDL_Renderer *render) {
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             int tileType = map[y][x];
@@ -62,25 +65,21 @@ void Room::renderMap(SDL_Renderer *render, const SDL_Rect& viewport) {
                     TILE_SIZE
             };
 
-            if(tileType != -1){
+            if (tileType != -1) {
                 const Tile &tile = this->tiles[tileType];
-                renderTile(render, tile, dstRect);
+                renderTile(render, tile, dstRect, *vp);
             }
         }
     }
 }
 
-void Room::renderBackboard(SDL_Renderer *render, const SDL_Rect& viewport) {
-    int windowWidth, windowHeight;
-    SDL_GetRendererOutputSize(render, &windowWidth, &windowHeight); // get the window size
-
-    // Calculate how many tiles we need to add around the map
-    const int BORDER_WIDTH = 1 + (windowWidth - MAP_PIXEL_WIDTH) / (2 * TILE_SIZE);
-    const int BORDER_HEIGHT = 1 + (windowHeight - MAP_PIXEL_HEIGHT) / (2 * TILE_SIZE);
+void Room::renderBackboard(SDL_Renderer *render) {
+    const int BORDER_WIDTH = 1 + (BACK_PIXEL_WIDTH / TILE_SIZE);
+    const int BORDER_HEIGHT = 1 + (BACK_PIXEL_HEIGHT / TILE_SIZE);
 
     // Render the border
-    for (int y = -BORDER_HEIGHT; y < MAP_HEIGHT + BORDER_HEIGHT; ++y) {
-        for (int x = -BORDER_WIDTH; x < MAP_WIDTH + BORDER_WIDTH; ++x) {
+    for (int y = -BORDER_HEIGHT/2; y < (MAP_HEIGHT + BORDER_HEIGHT/2); ++y) {
+        for (int x = -BORDER_WIDTH/2; x < (MAP_WIDTH + BORDER_WIDTH/2); ++x) {
             SDL_Rect dstRect = {
                     x * TILE_SIZE,
                     y * TILE_SIZE,
@@ -89,16 +88,16 @@ void Room::renderBackboard(SDL_Renderer *render, const SDL_Rect& viewport) {
             };
 
             const Tile &tile = this->tiles[GROUND];
-            renderTile(render, tile, dstRect);
+            renderTile(render, tile, dstRect, *vp);
+            if(!(dstRect.x >= 0 && dstRect.x < MAP_PIXEL_WIDTH && dstRect.y >= 0 && dstRect.y < MAP_PIXEL_HEIGHT)){
+                const Tile &tile = this->tiles[FOREST_MIDDLE_MID];
+                renderTile(render, tile, dstRect, *vp);
+            }
         }
     }
 }
 
 
-
-void Room::renderTile(SDL_Renderer *render, const Tile& tile, Rect &dstRect) {
-    SDL_RenderCopy(render, tile.texture, &tile.srcRect, &dstRect);
-}
 
 
 bool Room::checkCollision(const Rect& rect) const {

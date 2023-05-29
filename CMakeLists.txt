@@ -35,7 +35,6 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/gorillagame.cpp
         src/gorillagame.h
-        src/GameStates/introstate.cpp
         src/GameStates/MainState.cpp
         src/GameObjects/Player.cpp
         src/GameObjects/Player.h
@@ -43,7 +42,7 @@ add_executable(${PROJECT_NAME}
         src/GameObjects/Enemy.h
         src/Map/Room.cpp
         src/Map/Room.h
-        )
+        src/GameObjects/Gun.cpp src/GameObjects/Gun.h)
 if(NOT WIN32)
     include(FindPkgConfig)
 endif ()

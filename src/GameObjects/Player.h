@@ -1,6 +1,7 @@
 #ifndef SDL_BASEGAME_PLAYER_H
 #define SDL_BASEGAME_PLAYER_H
 #include "../lib/global.h"
+#include "Gun.h"
 
 enum Dir{
     LEFT,
@@ -13,17 +14,14 @@ public:
     Rect sRect;
     FRect dRect;
     Dir dir = LEFT;
+    std::unique_ptr<Gun> gun;
     SDL_Texture * texture;
-    float speed = 600;
+    float speed = 750;
 
-    Player(SDL_Renderer * renderer){
-        dRect = {static_cast<float>(500),static_cast<float>(500),64,64};
-        SDL_Surface * surface = IMG_Load(path.c_str());
-        sRect = {0, 0, surface->w, surface->h};
-        texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_FreeSurface(surface);
-    }
+    Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
+
     void renderPlayer(SDL_Renderer * renderer);
+
     void handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room);
     };
 

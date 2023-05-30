@@ -18,21 +18,47 @@ SDL_FPoint Gun::getBulletExitPosition() const {
     return {exitX, exitY};
 }
 
-void Gun::render(SDL_Renderer *renderer, const SDL_FRect &playerRect, const SDL_FRect &viewport) {
-    float centerX = playerRect.x + playerRect.w * gunMountOffset.x;
-    float centerY = playerRect.y + playerRect.h * gunMountOffset.y;
+void Gun::updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_FRect &viewport) {
+    float centerX = playerRect.x + playerRect.w / 2 - viewport.x;
+    float centerY = playerRect.y + playerRect.h / 2 - viewport.y;
 
-    dstRect.x = centerX - dstRect.w * bulletExitOffset.x;
-    dstRect.y = centerY - dstRect.h * bulletExitOffset.y;
+    // Adjust the gun's position to the center of the player.
+    dstRect.x = centerX - dstRect.w / 2;
+    dstRect.y = centerY - dstRect.h / 2;
 
+    float deltaX = mouseX - centerX;
+    float deltaY = mouseY - centerY;
+
+    // Assuming that the right direction (positive x-axis) is the reference.
+    float refX = 1.0f, refY = 0.0f;
+
+    // Dot product of reference vector and the vector to the mouse.
+    float dot = refX * deltaX + refY * deltaY;
+    // Cross product of reference vector and the vector to the mouse.
+    float cross = refX * deltaY - refY * deltaX;
+
+    angle = atan2(cross, dot) * (180 / M_PI);
+    if (angle < 0) {
+        angle += 360;
+    }
+    cout << angle << endl;
+}
+
+void Gun::render(SDL_Renderer *renderer) {
     SDL_Rect dstRectInt = {static_cast<int>(dstRect.x), static_cast<int>(dstRect.y), static_cast<int>(dstRect.w), static_cast<int>(dstRect.h)};
-    SDL_Point center = {static_cast<int>(dstRect.w * gunMountOffset.x), static_cast<int>(dstRect.h * gunMountOffset.y)};
-    SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRectInt, angle, &center, SDL_FLIP_NONE);
+    SDL_Point center = {dstRectInt.w / 2, dstRectInt.h / 2}; // The gun's texture is now centered
+
+    if(angle >= 90 && angle <= 270){
+        SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRectInt, angle, &center, SDL_FLIP_VERTICAL);
+    } else{
+        SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRectInt, angle, &center, SDL_FLIP_NONE);
+
+    }
 
     // Calculate line start point
     SDL_Point lineStart;
-    lineStart.x = centerX - viewport.x;
-    lineStart.y = centerY - viewport.y;
+    lineStart.x = dstRect.x + dstRect.w / 2;
+    lineStart.y = dstRect.y + dstRect.h / 2;
 
     // Calculate line end point based on angle
     SDL_Point lineEnd;
@@ -43,19 +69,3 @@ void Gun::render(SDL_Renderer *renderer, const SDL_FRect &playerRect, const SDL_
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderDrawLine(renderer, lineStart.x, lineStart.y, lineEnd.x, lineEnd.y);
 }
-
-
-
-
-void Gun::updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_FRect &camera) {
-    float centerX = playerRect.x + playerRect.w * gunMountOffset.x - camera.x;
-    float centerY = playerRect.y + playerRect.h * gunMountOffset.y - camera.y;
-
-    float deltaX = mouseX - centerX - camera.x;
-    float deltaY = mouseY - centerY -camera.y;
-
-    angle = atan2(-deltaY, deltaX) * 180 / M_PI;
-
-}
-
-

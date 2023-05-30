@@ -65,18 +65,18 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     player->handleMovement(keyboardState,deltaT,*room);
-    player->gun->updateAngle(mouseY,mouseY,player->dRect,camera);
-    crossDrect = {mouseX-50,mouseY-50,100,100};
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
     adjustViewportToPlayer(camera,player->dRect,1280,720);
+    player->gun->updateAngle(mouseX,mouseY,player->dRect,camera);
+    crossDrect = {mouseX-50,mouseY-50,100,100};
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
     room->renderBackboard(render);
     player->renderPlayer(render);
-    player->gun->render(render,player->dRect,camera);
+    player->gun->render(render);
     room->renderMap(render);
 
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);

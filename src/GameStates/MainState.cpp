@@ -57,7 +57,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
             mouseX = event.motion.x;
             mouseY = event.motion.y;
         } else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-            //TODO
             gun->fire();
         }
     }

@@ -13,12 +13,8 @@ SDL_Surface * surface;
 SDL_Texture * crosshair;
 
 
-
-
-
-
-
 void MainState::Init() {
+    enemy = new Enemy(500,500,100);
     SDL_ShowCursor(SDL_DISABLE);
     gun = std::make_unique<Gun>(render);
     player = new Player(render,std::move(gun));
@@ -60,6 +56,9 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         else if (event.type == SDL_MOUSEMOTION) {
             mouseX = event.motion.x;
             mouseY = event.motion.y;
+        } else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+            //TODO
+            gun->fire();
         }
     }
 
@@ -71,6 +70,9 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     adjustViewportToPlayer(camera,player->dRect,1280,720);
     player->gun->updateAngle(mouseX,mouseY,player->dRect,camera);
     crossDrect = {mouseX-50,mouseY-50,100,100};
+    //gun->updateBullets(deltaT);
+    enemy->update();
+
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -78,6 +80,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->renderPlayer(render);
     player->gun->render(render);
     room->renderMap(render);
-
+    //gun->renderBullets(render);
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
+    enemy->render(render,camera);
 }

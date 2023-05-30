@@ -2,6 +2,7 @@
 #define GORILLAGAME_GUN_H
 
 #include "../lib/global.h"
+#include "Bullet.h"
 
 class Gun {
 public:
@@ -14,6 +15,8 @@ public:
 
     float angle = 0.0f;
 
+    std::vector<Bullet> bullets;
+
     Gun(SDL_Renderer * render);
 
     SDL_FPoint getBulletExitPosition() const;
@@ -21,6 +24,13 @@ public:
     void render(SDL_Renderer *renderer);
 
     void updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_FRect &viewport);
+
+    // Bullet Logic
+    void fire();
+
+    void updateBullets(float dt);
+
+    void renderBullets(SDL_Renderer* renderer);
 };
 
 

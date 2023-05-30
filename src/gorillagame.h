@@ -6,6 +6,7 @@
 #include "lib/recthelper.h"
 #include "GameObjects/Player.h"
 #include "Map/Room.h"
+#include "GameObjects/Enemy.h"
 
 class ExampleGame;
 
@@ -21,6 +22,7 @@ protected:
     Player *player;
     Texture *image = nullptr;
     Room *room;
+    Enemy *enemy;
     std::unique_ptr<Gun> gun;
 public:
     // ctor

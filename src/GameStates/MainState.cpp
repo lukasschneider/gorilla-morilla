@@ -13,11 +13,6 @@ SDL_Surface * surface;
 SDL_Texture * crosshair;
 
 
-
-
-
-
-
 void MainState::Init() {
     SDL_ShowCursor(SDL_DISABLE);
     gun = std::make_unique<Gun>(render);
@@ -48,7 +43,10 @@ void MainState::Init() {
     };
     room = new Room(1, render, map,&camera);}
 
-void MainState::UnInit() {}
+void MainState::UnInit() {
+    delete this->room;
+    delete this->player;
+}
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
     SDL_PumpEvents();
@@ -68,6 +66,7 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
+
     adjustViewportToPlayer(camera,player->dRect,1280,720);
     player->gun->updateAngle(mouseX,mouseY,player->dRect,camera);
     crossDrect = {mouseX-50,mouseY-50,100,100};
@@ -78,6 +77,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->renderPlayer(render);
     player->gun->render(render);
     room->renderMap(render);
+
 
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
 }

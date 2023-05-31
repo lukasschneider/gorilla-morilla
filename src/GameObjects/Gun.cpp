@@ -41,7 +41,6 @@ void Gun::updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const
     if (angle < 0) {
         angle += 360;
     }
-    cout << angle << endl;
 }
 
 void Gun::render(SDL_Renderer *renderer) {
@@ -54,18 +53,35 @@ void Gun::render(SDL_Renderer *renderer) {
         SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRectInt, angle, &center, SDL_FLIP_NONE);
 
     }
+}
 
-    // Calculate line start point
-    SDL_Point lineStart;
-    lineStart.x = dstRect.x + dstRect.w / 2;
-    lineStart.y = dstRect.y + dstRect.h / 2;
+void Gun::fire(Renderer * renderer, SDL_FRect *vp) {
+    float x = dstRect.x;
+    float y = dstRect.y + dstRect.h / 2;
+    float angela = angle * M_PI / 180;
+    Bullet Bullet(x , y, 1000.0f, angela, renderer, vp);
+    bullets.emplace_back(Bullet);
+}
 
-    // Calculate line end point based on angle
-    SDL_Point lineEnd;
-    lineEnd.x = lineStart.x + 1000 * cos(angle * M_PI / 180);
-    lineEnd.y = lineStart.y + 1000 * sin(angle * M_PI / 180);
+void Gun::updateBullets(float dt) {
+    if(!bullets.empty()){
+        for (auto& bullet : bullets) {
+            bullet.update(dt);
+        }
+    }
 
-    // Render line
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderDrawLine(renderer, lineStart.x, lineStart.y, lineEnd.x, lineEnd.y);
+    // TODO : Remove Bulltes off screen
+}
+
+void Gun::renderBullets(SDL_Renderer *renderer, SDL_FRect *vp) {
+
+    if(bullets.size() > 200) {
+        bullets.erase(bullets.begin(), bullets.begin() + 100);
+    }
+
+    if(!bullets.empty()){
+        for (const auto& bullet : bullets) {
+            bullet.render(renderer, vp);
+        }
+    }
 }

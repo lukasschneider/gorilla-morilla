@@ -12,11 +12,11 @@ public:
     float speed;
     float angle;
 
-    Bullet(float x, float y, float speed, float angle, SDL_Renderer* renderer);
+    Bullet(float x, float y, float speed, float angle, SDL_Renderer* renderer, SDL_FRect *vp);
 
     void update(float dt);
 
-    void render(SDL_Renderer* renderer) const;
+    void render(SDL_Renderer *renderer, SDL_FRect *vp) const;
 };
 
 #endif //GORILLAGAME_BULLET_H

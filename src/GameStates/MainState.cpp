@@ -42,11 +42,14 @@ void MainState::Init() {
     };
     room = new Room(1, render, map,&camera);}
 
-void MainState::UnInit() {}
+void MainState::UnInit() {
+    delete enemy;
+    delete player;
+    delete room;
+}
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
     SDL_PumpEvents();
-
 
     Event event;
     while (SDL_PollEvent(&event)) {
@@ -55,13 +58,19 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         else if (event.type == SDL_MOUSEMOTION) {
             mouseX = event.motion.x;
             mouseY = event.motion.y;
-        } else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-            player->gun->fire(render);
         }
     }
+
+    // Check if the left mouse button is being held down
+    Uint32 mouseState = SDL_GetMouseState(NULL, NULL);
+    if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+        player->gun->fire(render, &camera);
+    }
+
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     player->handleMovement(keyboardState,deltaT,*room);
 }
+
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
     adjustViewportToPlayer(camera,player->dRect,1280,720);
@@ -78,7 +87,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->renderPlayer(render);
     player->gun->render(render);
     room->renderMap(render);
-    player->gun->renderBullets(render);
+    player->gun->renderBullets(render,&camera);
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
     enemy->render(render,camera);
 }

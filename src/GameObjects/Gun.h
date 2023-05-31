@@ -27,11 +27,11 @@ public:
     void updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_FRect &viewport);
 
     // Bullet Logic
-    void fire(Renderer* renderer);
+    void fire(Renderer* renderer, SDL_FRect *vp);
 
     void updateBullets(float dt);
 
-    void renderBullets(SDL_Renderer* renderer);
+    void renderBullets(SDL_Renderer *renderer, SDL_FRect *vp);
 };
 
 

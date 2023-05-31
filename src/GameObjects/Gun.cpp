@@ -55,11 +55,11 @@ void Gun::render(SDL_Renderer *renderer) {
     }
 }
 
-void Gun::fire(Renderer * renderer) {
+void Gun::fire(Renderer * renderer, SDL_FRect *vp) {
     float x = dstRect.x;
     float y = dstRect.y + dstRect.h / 2;
     float angela = angle * M_PI / 180;
-    Bullet Bullet(x , y, 1000.0f, angela, renderer);
+    Bullet Bullet(x , y, 1000.0f, angela, renderer, vp);
     bullets.emplace_back(Bullet);
 }
 
@@ -73,11 +73,15 @@ void Gun::updateBullets(float dt) {
     // TODO : Remove Bulltes off screen
 }
 
-void Gun::renderBullets(SDL_Renderer *renderer) {
+void Gun::renderBullets(SDL_Renderer *renderer, SDL_FRect *vp) {
+
+    if(bullets.size() > 200) {
+        bullets.erase(bullets.begin(), bullets.begin() + 100);
+    }
 
     if(!bullets.empty()){
         for (const auto& bullet : bullets) {
-            bullet.render(renderer);
+            bullet.render(renderer, vp);
         }
     }
 }

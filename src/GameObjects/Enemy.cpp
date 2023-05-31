@@ -4,14 +4,13 @@ Enemy::Enemy(float x, float y, float maxHp)
         : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp) { }
 
 void Enemy::update() {
+
     if (hp <= 0) {
         respawn();
     }
 }
 
 void Enemy::respawn() {
-    cout<< "respawn" <<endl;
-    // Change these values to set the new enemy's position
     body.x = 500;
     body.y = 500;
 
@@ -49,7 +48,7 @@ void Enemy::render(SDL_Renderer* renderer, const SDL_FRect &viewport) {
 void Enemy::coll(const std::vector<Bullet>& bullets) {
     for(const auto& bullet : bullets){
         if(SDL_HasIntersectionF(&bullet.rect, &body)){
-            hp -= 25;
+            hp -= 1;
         }
     }
 }

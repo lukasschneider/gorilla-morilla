@@ -10,9 +10,9 @@ Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun){
 }
 
 void Player::renderPlayer(SDL_Renderer *renderer) {
-    cout << "Player" << endl;
+    /*cout << "Player" << endl;
     cout << "x: " << dRect.x << endl;
-    cout << "y: " << dRect.y << endl;
+    cout << "y: " << dRect.y << endl;*/
     SDL_RendererFlip flip = (dir == RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     int screenWidth = 1280;
     int screenHeight = 720;

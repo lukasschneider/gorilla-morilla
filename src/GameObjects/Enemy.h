@@ -2,6 +2,7 @@
 #define SDL_BASEGAME_ENEMY_H
 
 #include "../lib/global.h"
+#include "Bullet.h"
 
 class Enemy {
 public:
@@ -16,6 +17,8 @@ public:
     void respawn();
 
     void render(SDL_Renderer *renderer, const SDL_FRect &viewport);
+
+    void coll(const std::vector<Bullet> &bullets);
 };
 
 

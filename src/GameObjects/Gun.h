@@ -15,7 +15,7 @@ public:
 
     float angle = 0.0f;
 
-    std::vector<Bullet> bullets;
+    std::vector<Bullet> bullets = {};
 
     Gun(SDL_Renderer * render);
 

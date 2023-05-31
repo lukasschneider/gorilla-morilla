@@ -56,7 +56,8 @@ void Gun::render(SDL_Renderer *renderer) {
 }
 
 void Gun::fire() {
-    bullets.emplace_back(dstRect.x , dstRect.y + dstRect.h / 2, 1000.0f, angle * M_PI / 180);
+    Bullet Bullet(dstRect.x , dstRect.y + dstRect.h / 2, 10.0f, angle * M_PI / 180);
+    bullets.emplace_back(Bullet);
 }
 
 void Gun::updateBullets(float dt) {
@@ -70,6 +71,7 @@ void Gun::updateBullets(float dt) {
 }
 
 void Gun::renderBullets(SDL_Renderer *renderer) {
+
     if(!bullets.empty()){
         for (const auto& bullet : bullets) {
             bullet.render(renderer);

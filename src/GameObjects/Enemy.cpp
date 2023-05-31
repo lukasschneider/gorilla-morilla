@@ -10,6 +10,7 @@ void Enemy::update() {
 }
 
 void Enemy::respawn() {
+    cout<< "respawn" <<endl;
     // Change these values to set the new enemy's position
     body.x = 500;
     body.y = 500;
@@ -44,4 +45,13 @@ void Enemy::render(SDL_Renderer* renderer, const SDL_FRect &viewport) {
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     SDL_RenderFillRect(renderer, &hpBarRect);
 }
+
+void Enemy::coll(const std::vector<Bullet>& bullets) {
+    for(const auto& bullet : bullets){
+        if(SDL_HasIntersectionF(&bullet.rect, &body)){
+            hp -= 25;
+        }
+    }
+}
+
 

@@ -23,7 +23,7 @@ protected:
     Texture *image = nullptr;
     Room *room;
     Enemy *enemy;
-    std::unique_ptr<Gun> gun;
+    //std::unique_ptr<Gun> gun;
 public:
     // ctor
     using GameState::GameState;

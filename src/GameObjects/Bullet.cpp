@@ -16,4 +16,9 @@ void Bullet::render(SDL_Renderer *renderer) const {
 }
 
 Bullet::Bullet(float x, float y, float speed, float angle)
-        : rect({x, y, 5, 5}), speed(speed), angle(angle) { }
+{
+    this->rect = {x,y,5,5};
+    this->speed = speed;
+    this->angle = angle;
+
+}

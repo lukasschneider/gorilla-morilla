@@ -1,6 +1,6 @@
-//
-// Created by user on 30.05.23.
-//
+
+
+// Bullet.cpp
 
 #include "Bullet.h"
 
@@ -9,16 +9,15 @@ void Bullet::update(float dt) {
     rect.y += sin(angle) * speed * dt;
 }
 
-void Bullet::render(SDL_Renderer *renderer) const {
-    SDL_Rect bulletRect = {static_cast<int>(rect.x), static_cast<int>(rect.y), static_cast<int>(rect.w), static_cast<int>(rect.h)};
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderFillRect(renderer, &bulletRect);
+void Bullet::render(SDL_Renderer* renderer) const {
+    SDL_FRect renderRect = {rect.x, rect.y, rect.w, rect.h};
+    SDL_RenderCopyExF(renderer, texture, NULL, &renderRect, angle * 180 / M_PI, NULL, SDL_FLIP_NONE);
 }
 
-Bullet::Bullet(float x, float y, float speed, float angle)
+Bullet::Bullet(float x, float y, float speed, float angle, SDL_Renderer* renderer)
+        : rect{x, y, 25, 25}, speed(speed), angle(angle)
 {
-    this->rect = {x,y,5,5};
-    this->speed = speed;
-    this->angle = angle;
-
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
 }

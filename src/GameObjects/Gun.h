@@ -12,6 +12,7 @@ public:
     SDL_FRect dstRect;
     SDL_FPoint gunMountOffset = {1.0f, 1.0f}; // Relative position to the player (range 0 to 1)
     SDL_FPoint bulletExitOffset = {1.0f, 0.5f}; // Relative position on the gun (range 0 to 1)
+    int counter = 0;
 
     float angle = 0.0f;
 
@@ -26,7 +27,7 @@ public:
     void updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_FRect &viewport);
 
     // Bullet Logic
-    void fire();
+    void fire(Renderer* renderer);
 
     void updateBullets(float dt);
 

@@ -55,8 +55,11 @@ void Gun::render(SDL_Renderer *renderer) {
     }
 }
 
-void Gun::fire() {
-    Bullet Bullet(dstRect.x , dstRect.y + dstRect.h / 2, 10.0f, angle * M_PI / 180);
+void Gun::fire(Renderer * renderer) {
+    float x = dstRect.x;
+    float y = dstRect.y + dstRect.h / 2;
+    float angela = angle * M_PI / 180;
+    Bullet Bullet(x , y, 1000.0f, angela, renderer);
     bullets.emplace_back(Bullet);
 }
 

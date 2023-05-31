@@ -56,10 +56,9 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
             mouseX = event.motion.x;
             mouseY = event.motion.y;
         } else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-            player->gun->fire();
+            player->gun->fire(render);
         }
     }
-
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     player->handleMovement(keyboardState,deltaT,*room);
 }

@@ -15,8 +15,15 @@ void Bullet::render(SDL_Renderer *renderer, SDL_FRect *vp) const {
 }
 
 Bullet::Bullet(float x, float y, float speed, float angle, SDL_Renderer *renderer, SDL_FRect *vp)
-        : rect{x + vp->x, y + vp->y, 25, 25}, speed(speed), angle(angle) {
+        : speed(speed), angle(angle) {
+
     SDL_Surface *surface = IMG_Load(path.c_str());
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+
+    int width, height;
+    SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+    auto ratio = width/height;
+
+    this->rect = {x + vp->x, y + vp->y, 20,static_cast<float>(20/ratio)};
 }

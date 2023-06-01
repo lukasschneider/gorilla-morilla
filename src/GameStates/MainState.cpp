@@ -14,11 +14,10 @@ SDL_Texture * crosshair;
 
 
 void MainState::Init() {
+    enemy = new Enemy(500,500,100);
     SDL_ShowCursor(SDL_DISABLE);
-    gun = std::make_unique<Gun>(render);
+    auto gun = std::make_unique<Gun>(render);
     player = new Player(render,std::move(gun));
-
-    // Crosshair Init
     surface = IMG_Load(BasePath"asset/graphic/ui/crosshair.png");
     crosshair = SDL_CreateTextureFromSurface(render,surface);
     SDL_FreeSurface(surface);
@@ -44,8 +43,9 @@ void MainState::Init() {
     room = new Room(1, render, map,&camera);}
 
 void MainState::UnInit() {
-    delete this->room;
-    delete this->player;
+    delete enemy;
+    delete player;
+    delete room;
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -61,15 +61,26 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         }
     }
 
+    // Check if the left mouse button is being held down
+    Uint32 mouseState = SDL_GetMouseState(NULL, NULL);
+    if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+        player->gun->fire(render, &camera);
+    }
+
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     player->handleMovement(keyboardState,deltaT,*room);
 }
+
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
 
     adjustViewportToPlayer(camera,player->dRect,1280,720);
     player->gun->updateAngle(mouseX,mouseY,player->dRect,camera);
     crossDrect = {mouseX-50,mouseY-50,100,100};
+    player->gun->updateBullets(deltaT);
+    enemy->coll(player->gun->bullets);
+    enemy->update();
+
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -77,7 +88,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->renderPlayer(render);
     player->gun->render(render);
     room->renderMap(render);
-
-
+    player->gun->renderBullets(render,&camera);
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
+    enemy->render(render,camera);
 }

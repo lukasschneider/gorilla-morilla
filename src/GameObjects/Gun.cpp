@@ -56,14 +56,21 @@ void Gun::render(SDL_Renderer *renderer) {
 }
 
 void Gun::fire(Renderer * renderer, SDL_FRect *vp) {
-    float x = dstRect.x;
-    float y = dstRect.y + dstRect.h / 2;
-    float angela = angle * M_PI / 180;
-    Bullet Bullet(x , y, 1000.0f, angela, renderer, vp);
-    bullets.emplace_back(Bullet);
+    if (timeSinceLastShot >= shotDelay) {
+
+        float x = dstRect.x;
+        float y = dstRect.y + dstRect.h / 2;
+        float angela = angle * M_PI / 180;
+        Bullet Bullet(x, y, 1000.0f, angela, renderer, vp);
+        bullets.emplace_back(Bullet);
+        timeSinceLastShot = 0.0f;
+
+    }
 }
 
+
 void Gun::updateBullets(float dt) {
+    timeSinceLastShot += dt;
     if(!bullets.empty()){
         for (auto& bullet : bullets) {
             bullet.update(dt);

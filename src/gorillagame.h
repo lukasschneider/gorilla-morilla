@@ -5,7 +5,7 @@
 #include "gamebase.h"
 #include "lib/recthelper.h"
 #include "GameObjects/Player.h"
-#include "Map/Room.h"
+#include "Map/RoomManager.h"
 #include "GameObjects/Enemy.h"
 
 class ExampleGame;

@@ -69,10 +69,9 @@ public:
 
     int id;
     std::vector<Tile> tiles;
-    std::vector<std::vector<int>> map;
+    std::vector<std::vector<std::vector<int>>> map;
 
-
-    Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map, SDL_FRect *viewport);
+    Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport);
 
     [[nodiscard]] bool checkCollision(const SDL_Rect &rect) const;
 
@@ -81,6 +80,7 @@ public:
     void renderMap(SDL_Renderer *render);
 
     void renderBackboard(SDL_Renderer *render);
+
 };
 
 

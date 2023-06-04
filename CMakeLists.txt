@@ -42,7 +42,7 @@ add_executable(${PROJECT_NAME}
         src/GameObjects/Enemy.h
         src/Map/Room.cpp
         src/Map/Room.h
-        src/GameObjects/Gun.cpp src/GameObjects/Gun.h src/GameObjects/Bullet.cpp src/GameObjects/Bullet.h)
+        src/GameObjects/Gun.cpp src/GameObjects/Gun.h src/GameObjects/Bullet.cpp src/GameObjects/Bullet.h src/Map/RoomManager.cpp src/Map/RoomManager.h)
 if(NOT WIN32)
     include(FindPkgConfig)
 endif ()

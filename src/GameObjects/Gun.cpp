@@ -82,7 +82,7 @@ void Gun::fire(Renderer * renderer, SDL_FRect *vp) {
         float x = pos.x;
         float y = pos.y;
         float angela = angle * M_PI / 180;
-        Bullet Bullet(x, y, 1000.0f, angela, renderer, vp);
+        Bullet Bullet(x, y, 1500.0f, angela, renderer, vp);
         bullets.emplace_back(Bullet);
         timeSinceLastShot = 0.0f;
 

@@ -3,10 +3,25 @@
 Enemy::Enemy(float x, float y, float maxHp)
         : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp) { }
 
-void Enemy::update() {
+void Enemy::update(float dt) {
 
     if (hp <= 0) {
         respawn();
+    }
+
+    if (body.x + body.w >= 14*64) {
+        movingRight = false;
+    }
+        // If the enemy hits the left boundary, change direction
+    else if (body.x <= 128) {
+        movingRight = true;
+    }
+
+    // Update the position based on the direction
+    if (movingRight) {
+        body.x += speed * dt;
+    } else {
+        body.x -= speed * dt;
     }
 }
 

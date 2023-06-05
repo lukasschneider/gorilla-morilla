@@ -9,10 +9,12 @@ public:
     SDL_FRect body;
     float hp;
     float maxHp;
+    bool movingRight = true;
+    float speed = 300.0f;
 
     Enemy(float x, float y, float maxHp);
 
-    void update();
+    void update(float dt);
 
     void respawn();
 

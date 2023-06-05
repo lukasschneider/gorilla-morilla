@@ -83,7 +83,7 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     }
     enemy->coll(bulletPtrs);
 
-    enemy->update();
+    enemy->update(deltaT);
 
 }
 

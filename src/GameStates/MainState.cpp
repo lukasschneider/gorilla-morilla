@@ -68,12 +68,16 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
-    room->renderMap(render);
+    // Backboard includes tree area around room and green background
     room->renderBackboard(render);
+    //room->renderMap(render);
+    // Collision includes every tile the player can colide with
+    room->renderCollision(render);
     player->renderPlayer(render);
     player->gun->render(render);
-    room->renderMap(render);
     player->gun->renderBullets(render,&camera);
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
     enemy->render(render,camera);
+    // Forground renders every styling aspekt
+    room->renderForeground(render);
 }

@@ -18,7 +18,9 @@ public:
 
     void render(SDL_Renderer *renderer, const SDL_FRect &viewport);
 
-    void coll(const std::vector<Bullet> &bullets);
+    void coll(std::vector<Bullet *> &bullets);
+private:
+    std::vector<Bullet*> hitBullets;
 };
 
 

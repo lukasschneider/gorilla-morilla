@@ -10,11 +10,9 @@ public:
     SDL_Texture* texture;
     SDL_Rect srcRect;
     SDL_FRect dstRect;
-    SDL_FPoint gunMountOffset = {1.0f, 1.0f};
-    SDL_FPoint bulletExitOffset = {1.0f, 0.5f};
 
     float timeSinceLastShot = 0.0f;
-    const float shotDelay = 0.28f;
+    const float shotDelay = 0.14f;
 
     float angle = 0.0f;
 

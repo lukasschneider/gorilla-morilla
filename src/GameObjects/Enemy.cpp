@@ -45,12 +45,18 @@ void Enemy::render(SDL_Renderer* renderer, const SDL_FRect &viewport) {
     SDL_RenderFillRect(renderer, &hpBarRect);
 }
 
-void Enemy::coll(const std::vector<Bullet>& bullets) {
-    for(const auto& bullet : bullets){
-        if(SDL_HasIntersectionF(&bullet.rect, &body)){
-            hp -= 1;
+void Enemy::coll(std::vector<Bullet*>& bullets) {
+    for(auto& bullet : bullets){
+        if(SDL_HasIntersectionF(&bullet->rect, &body)){
+            // Check if the bullet has already hit this enemy
+            if (std::find(hitBullets.begin(), hitBullets.end(), bullet) == hitBullets.end()) {
+                hp -= 20;
+                hitBullets.push_back(bullet);
+            }
         }
     }
 }
+
+
 
 

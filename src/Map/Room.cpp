@@ -21,7 +21,7 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
     int spritesheet_height = 176;
     int spritesheet_width = 192;
-    int tile_size= 16;
+    int tile_size = 16;
 
     for (int y = 0; y < spritesheet_height; y += tile_size) {
         for (int x = 0; x < spritesheet_width; x += tile_size) {
@@ -35,16 +35,25 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
             auto tileType = static_cast<TileType>(tiles.size());
             bool isSolid = false;
 
-            // 19 because the 19th Tile in our spirtesheet must be solid
-            if (static_cast<TileType>(tiles.size()) == 19) {
-                tileType = FOREST_MIDDLE_MID;
-                isSolid = true;
+            switch (static_cast<TileType>(tiles.size())) {
+                case FOREST_MIDDLE_MID:
+                    tileType = FOREST_MIDDLE_MID;
+                    isSolid = true;
+                    break;
+                case TELEPORT_BOTTOM:
+                    tileType = TELEPORT_BOTTOM;
+                    break;
+                case TELEPORT_LEFT:
+                    tileType = TELEPORT_LEFT;
+                    break;
+                case TELEPORT_TOP:
+                    tileType = TELEPORT_TOP;
+                    break;
+                case TELEPORT_RIGHT:
+                    tileType = TELEPORT_RIGHT;
+                    break;
             }
 
-
-            if(static_cast<TileType>(tiles.size()) == 43) {
-                tileType = TELEPORT;
-            }
 
             Tile tile(BasePath "asset/graphic/tilemap/tilemap.png", render, tileType, isSolid);
             tile.srcRect = tile_rect;
@@ -130,8 +139,15 @@ int Room::checkTeleport(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            if(map_layer[1][y][x] == TELEPORT) {
-                return TELEPORT;
+            switch (map_layer[1][y][x]) {
+                case TELEPORT_TOP:
+                    return TELEPORT_TOP;
+                case TELEPORT_LEFT:
+                    return TELEPORT_LEFT;
+                case TELEPORT_BOTTOM:
+                    return TELEPORT_BOTTOM;
+                case TELEPORT_RIGHT:
+                    return TELEPORT_RIGHT;
             }
         }
     }

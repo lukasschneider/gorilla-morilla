@@ -16,7 +16,10 @@ const int TILE_SIZE = 64;
 
 enum TileType {
     FOREST_MIDDLE_MID = 19,
-    TELEPORT = 43
+    TELEPORT_LEFT = 26,
+    TELEPORT_TOP = 37,
+    TELEPORT_BOTTOM = 12,
+    TELEPORT_RIGHT = 24
 };
 
 struct Tile {

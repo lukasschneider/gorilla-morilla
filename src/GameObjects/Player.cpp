@@ -32,8 +32,8 @@ int Player::handleTeleport(const Room &room) {
             static_cast<int>(dRect.w),
             static_cast<int>(dRect.h)
     };
-    if (room.checkTeleport(rect) == TELEPORT) {
-        return TELEPORT;
+    if (room.checkTeleport(rect) == TELEPORT_RIGHT) {
+        return TELEPORT_RIGHT;
     }
     return 0;
 }
@@ -106,4 +106,10 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         }
     }
 }
+
+void Player::setPlayerPosition(float x, float y) {
+    this->dRect.x = x;
+    this->dRect.y = y;
+}
+
 

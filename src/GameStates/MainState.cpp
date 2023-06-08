@@ -24,11 +24,10 @@ void MainState::Init() {
 
     RoomManager rm;
     room = rm.create_room(0, render, RoomManager::MapType::TP_TOP_LEFT_BOTTOM_RIGHT, &camera);
-    Room *room1 = rm.create_room(1, render, RoomManager::MapType::TP_BOTTOM_RIGHT, &camera);
+    Room *room1 = rm.create_room(1, render, RoomManager::MapType::TP_TOP_LEFT, &camera);
 
     floor = Floor();
     floor.addEdge(room, room1);
-
 
 }
 
@@ -61,12 +60,14 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     player->handleMovement(keyboardState, deltaT, *room);
 
 
-    if(player->handleTeleport(*room) == TELEPORT) {
+    if(player->handleTeleport(*room) == TELEPORT_RIGHT) {
         cout << "TELEPORT ACTION" << endl;
         std::vector<Room *> neighbors;
         neighbors = floor.getNeighbors(room);
         cout << neighbors[0]->id << endl;
         // TODO: Update Player Postion
+        player->dRect.x = 500;
+        player->dRect.y = 500;
         // TODO: Get information on which teleport u used for correkt new map
         this->room = neighbors[0];
     }

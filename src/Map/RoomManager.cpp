@@ -3,7 +3,7 @@
 #include <sstream>
 
 
-Vector<Vector<int>> RoomManager::readCSVToArray(const std::string& filename) {
+Vector<Vector<int>> RoomManager::readCSVToArray(const std::string &filename) {
 
     Vector<Vector<int>> map_layer;
     std::ifstream file(filename);
@@ -33,7 +33,7 @@ Vector<Vector<Vector<int>>> RoomManager::create_map_vector(MapType map_type) {
 
     Vector<Vector<Vector<int>>> map_layer;
     map_layer.push_back(this->readCSVToArray(BasePath "maps/backboards/Default.csv"));
-    switch(map_type) {
+    switch (map_type) {
         case MapType::TP_RIGHT:
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/MapBorder.csv"));
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/MapBorderStyling.csv"));

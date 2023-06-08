@@ -16,7 +16,6 @@ public:
         TP_BOTTOM_LEFT_RIGHT = 7,
         TP_TOP_LEFT_BOTTOM_RIGHT = 8
     };
-    void printArray(const std::vector<std::vector<std::vector<int>>>&map_layer);
 
     Room *create_room(int id, SDL_Renderer *render, MapType map_type, SDL_FRect *viewport);
 private:

@@ -117,6 +117,15 @@ void Room::renderBackboard(SDL_Renderer *render) {
 
 }
 
+bool Room::checkTeleport(int roomtype) {
+    switch (roomtype) {
+        case 8:
+
+        default:
+            return false;
+    }
+}
+
 bool Room::checkCollision(const Rect &rect) const {
     int startX = static_cast<int>(rect.x) / TILE_SIZE;
     int startY = static_cast<int>(rect.y) / TILE_SIZE;
@@ -180,4 +189,6 @@ void Room::renderCollision(SDL_Renderer *render) {
         }
     }
 }
+
+
 

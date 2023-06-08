@@ -3,6 +3,7 @@
 
 #include "../lib/global.h"
 #include "Bullet.h"
+#include "Gun.h"
 
 class Enemy {
 public:
@@ -20,9 +21,7 @@ public:
 
     void render(SDL_Renderer *renderer, const SDL_FRect &viewport);
 
-    void coll(std::vector<Bullet *> &bullets);
-private:
-    std::vector<Bullet*> hitBullets;
+    void coll(BulletRingBuffer& bullets);
 };
 
 

@@ -15,7 +15,7 @@ void Bullet::render(SDL_Renderer *renderer, SDL_FRect *vp) const {
 }
 
 Bullet::Bullet(float x, float y, float speed, float angle, SDL_Renderer *renderer, SDL_FRect *vp)
-        : speed(speed), angle(angle) {
+        : speed(speed), angle(angle), isActive(true){
 
     SDL_Surface *surface = IMG_Load(path.c_str());
     texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -26,4 +26,8 @@ Bullet::Bullet(float x, float y, float speed, float angle, SDL_Renderer *rendere
     auto ratio = width/height;
 
     this->rect = {x + vp->x, y + vp->y, 40,static_cast<float>(20/ratio)};
+}
+
+void Bullet::deactivate() {
+    isActive = false;
 }

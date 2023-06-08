@@ -60,17 +60,17 @@ void Enemy::render(SDL_Renderer* renderer, const SDL_FRect &viewport) {
     SDL_RenderFillRect(renderer, &hpBarRect);
 }
 
-void Enemy::coll(std::vector<Bullet*>& bullets) {
-    for(auto& bullet : bullets){
+void Enemy::coll(BulletRingBuffer& bullets) {
+    for(int i = 0; i < bullets.size(); ++i){
+        Bullet* bullet = bullets.get(i);
+        if(!bullet->isActive) continue; // Skip inactive bullets
         if(SDL_HasIntersectionF(&bullet->rect, &body)){
-            // Check if the bullet has already hit this enemy
-            if (std::find(hitBullets.begin(), hitBullets.end(), bullet) == hitBullets.end()) {
-                hp -= 20;
-                hitBullets.push_back(bullet);
-            }
+            hp -= 20;
+            bullet->deactivate(); // Deactivate the bullet on hit
         }
     }
 }
+
 
 
 

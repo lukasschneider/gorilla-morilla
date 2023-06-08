@@ -7,6 +7,7 @@
 #include "GameObjects/Player.h"
 #include "Map/Room.h"
 #include "GameObjects/Enemy.h"
+#include "lib/ui.h"
 
 class ExampleGame;
 
@@ -23,6 +24,7 @@ protected:
     Texture *image = nullptr;
     Room *room;
     Enemy *enemy;
+    ui * userinterface;
     //std::unique_ptr<Gun> gun;
 public:
     // ctor

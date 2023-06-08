@@ -40,7 +40,10 @@ void MainState::Init() {
             {6, 4,3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 6},
             {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6}
     };
-    room = new Room(1, render, map,&camera);}
+    room = new Room(1, render, map,&camera);
+    userinterface = new ui(render,player,&camera);
+
+}
 
 void MainState::UnInit() {
     delete enemy;
@@ -61,29 +64,30 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         }
     }
 
+    const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
+
     // Check if the left mouse button is being held down
     Uint32 mouseState = SDL_GetMouseState(NULL, NULL);
     if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
         player->gun->fire(render, &camera);
     }
 
-    const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
+    if(keyboardState[SDL_SCANCODE_R]) {
+        player->gun->reload();
+    }
+
     player->handleMovement(keyboardState,deltaT,*room);
 }
 
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
     adjustViewportToPlayer(camera,player->dRect,1280,720);
-    player->gun->updateAngle(mouseX,mouseY,player->dRect,camera);
+    player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
-    std::vector<Bullet*> bulletPtrs;
-    for (auto& bullet : player->gun->bullets) {
-        bulletPtrs.push_back(&bullet);
-    }
-    enemy->coll(bulletPtrs);
-
+    enemy->coll(player->gun->bullets);
     enemy->update(deltaT);
+    userinterface->update();
 
 }
 
@@ -95,4 +99,5 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->renderBullets(render,&camera);
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
     enemy->render(render,camera);
+    userinterface->drawUi();
 }

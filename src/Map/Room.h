@@ -61,7 +61,7 @@ public:
 
     void renderForeground(SDL_Renderer *render);
 
-    static bool checkTeleport(int roomtype);
+    bool checkTeleport(float x, float y);
 };
 
 

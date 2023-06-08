@@ -117,13 +117,8 @@ void Room::renderBackboard(SDL_Renderer *render) {
 
 }
 
-bool Room::checkTeleport(int roomtype) {
-    switch (roomtype) {
-        case 8:
-
-        default:
-            return false;
-    }
+bool Room::checkTeleport(float x, float y) {
+    cout << x << endl;
 }
 
 bool Room::checkCollision(const Rect &rect) const {
@@ -140,7 +135,8 @@ bool Room::checkCollision(const Rect &rect) const {
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
             if(map_layer[1][y][x] == TELEPORT) {
-                cout << "Teleport action" << endl;
+                cout << "Teleport action: " << TELEPORT << endl;
+                return TELEPORT;
             }
             if (map_layer[1][y][x] != -1 && tiles[map_layer[1][y][x]].isSolid) {
                 cout << map_layer[1][y][x] << endl;

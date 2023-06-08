@@ -52,7 +52,6 @@ void Player::handleMovement(const Uint8* keyboardState, float deltaTime, const R
 
         // Increase speed up to maxSpeed
         speed += acceleration * deltaTime;
-        cout << speed << endl;
         if (speed > maxSpeed) {
             speed = maxSpeed;
         }

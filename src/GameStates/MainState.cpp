@@ -23,7 +23,7 @@ void MainState::Init() {
     SDL_FreeSurface(surface);
 
     RoomManager rm;
-    room = rm.create_room(1, render, RoomManager::MapType::TP_TOP_LEFT_BOTTOM_RIGHT, &camera);
+    room = rm.create_room(1, render, RoomManager::MapType::TP_RIGHT, &camera);
 }
 
 void MainState::UnInit() {

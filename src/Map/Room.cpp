@@ -1,6 +1,15 @@
 #include "Room.h"
 #include <utility>
 
+/**
+ * Room Layout is always the same
+ * [0] Backboard layer
+ * [1] Collision layer
+ * [2] Foreground Styling
+ * [3] Foreground Styling
+ * ...
+ */
+
 Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FRect *viewport) {
 
     this->id = id;

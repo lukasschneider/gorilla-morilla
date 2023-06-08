@@ -14,7 +14,7 @@ else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter") # baseclass functions have plenty unused parameters
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-attributes")
-    set(CMAKE_CXX_FLAGS_DEBUG   "-Og")
+#    set(CMAKE_CXX_FLAGS_DEBUG   "-Og")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 endif ()
 
@@ -42,7 +42,12 @@ add_executable(${PROJECT_NAME}
         src/GameObjects/Enemy.h
         src/Map/Room.cpp
         src/Map/Room.h
-        src/GameObjects/Gun.cpp src/GameObjects/Gun.h src/GameObjects/Bullet.cpp src/GameObjects/Bullet.h src/Map/RoomManager.cpp src/Map/RoomManager.h)
+        src/GameObjects/Gun.cpp
+        src/GameObjects/Gun.h
+        src/GameObjects/Bullet.cpp
+        src/GameObjects/Bullet.h
+        src/Map/RoomManager.cpp
+        src/Map/RoomManager.h)
 if(NOT WIN32)
     include(FindPkgConfig)
 endif ()

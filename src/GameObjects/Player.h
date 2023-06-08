@@ -22,10 +22,14 @@ public:
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
 
+    void setPlayerPosition(float x, float y);
+
     void renderPlayer(SDL_Renderer * renderer);
 
     void handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room);
-    };
+
+    int handleTeleport(const Room &room);
+};
 
 
 #endif //SDL_BASEGAME_PLAYER_H

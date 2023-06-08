@@ -1,9 +1,9 @@
 #include "Player.h"
 
-Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun){
+Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) {
     this->gun = std::move(gun);
-    dRect = {static_cast<float>(500),static_cast<float>(500),64,64};
-    SDL_Surface * surface = IMG_Load(path.c_str());
+    dRect = {static_cast<float>(500), static_cast<float>(500), 64, 64};
+    SDL_Surface *surface = IMG_Load(path.c_str());
     sRect = {0, 0, surface->w, surface->h};
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
@@ -25,8 +25,20 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     SDL_RenderCopyExF(renderer, texture, nullptr, &screenRect, 0.0, nullptr, flip);
 }
 
+int Player::handleTeleport(const Room &room) {
+    const SDL_Rect rect{
+            static_cast<int>(dRect.x),
+            static_cast<int>(dRect.y),
+            static_cast<int>(dRect.w),
+            static_cast<int>(dRect.h)
+    };
+    if (room.checkTeleport(rect) == TELEPORT_RIGHT) {
+        return TELEPORT_RIGHT;
+    }
+    return 0;
+}
 
-void Player::handleMovement(const Uint8* keyboardState, float deltaTime, const Room & room) {
+void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room) {
     float dirX = 0.0f;
     float dirY = 0.0f;
 
@@ -52,7 +64,6 @@ void Player::handleMovement(const Uint8* keyboardState, float deltaTime, const R
 
         // Increase speed up to maxSpeed
         speed += acceleration * deltaTime;
-        cout << speed << endl;
         if (speed > maxSpeed) {
             speed = maxSpeed;
         }
@@ -62,21 +73,27 @@ void Player::handleMovement(const Uint8* keyboardState, float deltaTime, const R
         float newY = dRect.y + dirY * moveSpeed;
 
         // Check horizontal movement
-        if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+        if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y), static_cast<int>(dRect.w),
+                                  static_cast<int>(dRect.h)})) {
             dRect.x = newX;
         } else {
             // If collision, move the player as close to the obstacle as possible
-            while (!room.checkCollision({static_cast<int>(dRect.x + dirX), static_cast<int>(dRect.y), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+            while (!room.checkCollision(
+                    {static_cast<int>(dRect.x + dirX), static_cast<int>(dRect.y), static_cast<int>(dRect.w),
+                     static_cast<int>(dRect.h)})) {
                 dRect.x += dirX;
             }
         }
 
         // Check vertical movement
-        if (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(newY), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+        if (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(newY), static_cast<int>(dRect.w),
+                                  static_cast<int>(dRect.h)})) {
             dRect.y = newY;
         } else {
             // If collision, move the player as close to the obstacle as possible
-            while (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(dRect.y + dirY), static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+            while (!room.checkCollision(
+                    {static_cast<int>(dRect.x), static_cast<int>(dRect.y + dirY), static_cast<int>(dRect.w),
+                     static_cast<int>(dRect.h)})) {
                 dRect.y += dirY;
             }
         }
@@ -89,4 +106,10 @@ void Player::handleMovement(const Uint8* keyboardState, float deltaTime, const R
         }
     }
 }
+
+void Player::setPlayerPosition(float x, float y) {
+    this->dRect.x = x;
+    this->dRect.y = y;
+}
+
 

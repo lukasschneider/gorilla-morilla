@@ -10,9 +10,9 @@ public:
     SDL_Texture* texture;
     SDL_Rect srcRect;
     SDL_FRect dstRect;
-    SDL_FPoint gunMountOffset = {1.0f, 1.0f}; // Relative position to the player (range 0 to 1)
-    SDL_FPoint bulletExitOffset = {1.0f, 0.5f}; // Relative position on the gun (range 0 to 1)
-    int counter = 0;
+
+    float timeSinceLastShot = 0.0f;
+    const float shotDelay = 0.14f;
 
     float angle = 0.0f;
 

@@ -3,10 +3,25 @@
 Enemy::Enemy(float x, float y, float maxHp)
         : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp) { }
 
-void Enemy::update() {
+void Enemy::update(float dt) {
 
     if (hp <= 0) {
         respawn();
+    }
+
+    if (body.x + body.w >= 14*64) {
+        movingRight = false;
+    }
+        // If the enemy hits the left boundary, change direction
+    else if (body.x <= 128) {
+        movingRight = true;
+    }
+
+    // Update the position based on the direction
+    if (movingRight) {
+        body.x += speed * dt;
+    } else {
+        body.x -= speed * dt;
     }
 }
 
@@ -45,12 +60,18 @@ void Enemy::render(SDL_Renderer* renderer, const SDL_FRect &viewport) {
     SDL_RenderFillRect(renderer, &hpBarRect);
 }
 
-void Enemy::coll(const std::vector<Bullet>& bullets) {
-    for(const auto& bullet : bullets){
-        if(SDL_HasIntersectionF(&bullet.rect, &body)){
-            hp -= 1;
+void Enemy::coll(std::vector<Bullet*>& bullets) {
+    for(auto& bullet : bullets){
+        if(SDL_HasIntersectionF(&bullet->rect, &body)){
+            // Check if the bullet has already hit this enemy
+            if (std::find(hitBullets.begin(), hitBullets.end(), bullet) == hitBullets.end()) {
+                hp -= 20;
+                hitBullets.push_back(bullet);
+            }
         }
     }
 }
+
+
 
 

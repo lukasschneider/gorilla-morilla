@@ -25,5 +25,5 @@ Bullet::Bullet(float x, float y, float speed, float angle, SDL_Renderer *rendere
     SDL_QueryTexture(texture, NULL, NULL, &width, &height);
     auto ratio = width/height;
 
-    this->rect = {x + vp->x, y + vp->y, 20,static_cast<float>(20/ratio)};
+    this->rect = {x + vp->x, y + vp->y, 40,static_cast<float>(20/ratio)};
 }

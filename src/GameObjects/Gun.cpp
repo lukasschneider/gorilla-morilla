@@ -12,11 +12,6 @@ Gun::Gun(SDL_Renderer *render) {
     dstRect = { 0, 0, 64,static_cast<float>(64/ratio)};
 }
 
-SDL_FPoint Gun::getBulletExitPosition() const {
-    float exitX = dstRect.x + dstRect.w * bulletExitOffset.x;
-    float exitY = dstRect.y + dstRect.h * bulletExitOffset.y;
-    return {exitX, exitY};
-}
 
 void Gun::updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_FRect &viewport) {
     float centerX = playerRect.x + playerRect.w / 2 - viewport.x;
@@ -41,6 +36,13 @@ void Gun::updateAngle(int mouseX, int mouseY, const SDL_FRect &playerRect, const
     if (angle < 0) {
         angle += 360;
     }
+    // Assuming the radius at which the gun should orbit the player.
+    float orbitRadius = playerRect.w / 2;
+    orbitRadius = 30;
+    // Calculate the new position of the gun's center.
+    dstRect.x = centerX + orbitRadius * cos(angle * M_PI / 180.0f) - dstRect.w / 2;
+    dstRect.y = centerY + orbitRadius * sin(angle * M_PI / 180.0f) - dstRect.h / 2;
+
 }
 
 void Gun::render(SDL_Renderer *renderer) {
@@ -53,17 +55,44 @@ void Gun::render(SDL_Renderer *renderer) {
         SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRectInt, angle, &center, SDL_FLIP_NONE);
 
     }
+    //SDL_RenderDrawRect(renderer ,&dstRectInt);
 }
+
+SDL_FPoint Gun::getBulletExitPosition() const {
+    // The position of the base of the gun
+    float baseX = dstRect.x ;
+    float baseY = dstRect.y + dstRect.h / 2;
+
+    // The offset from the base to the exit point
+    float offsetX = 50 * cos(angle * M_PI / 180);
+    float offsetY = 50 * sin(angle * M_PI / 180);
+
+    // The position of the exit point
+    float exitX = baseX + offsetX;
+    float exitY = baseY + offsetY;
+
+    return {exitX, exitY};
+}
+
+
 
 void Gun::fire(Renderer * renderer, SDL_FRect *vp) {
-    float x = dstRect.x;
-    float y = dstRect.y + dstRect.h / 2;
-    float angela = angle * M_PI / 180;
-    Bullet Bullet(x , y, 1000.0f, angela, renderer, vp);
-    bullets.emplace_back(Bullet);
+    if (timeSinceLastShot >= shotDelay) {
+        SDL_FPoint pos = getBulletExitPosition();
+        float x = pos.x;
+        float y = pos.y;
+        float angela = angle * M_PI / 180;
+        Bullet Bullet(x, y, 1500.0f, angela, renderer, vp);
+        bullets.emplace_back(Bullet);
+        timeSinceLastShot = 0.0f;
+
+    }
 }
 
+
+
 void Gun::updateBullets(float dt) {
+    timeSinceLastShot += dt;
     if(!bullets.empty()){
         for (auto& bullet : bullets) {
             bullet.update(dt);

@@ -46,6 +46,7 @@ private:
 public:
 
     int id;
+    int teleport;
     std::vector<Tile> tiles;
     std::vector<std::vector<std::vector<int>>> map_layer;
 
@@ -60,7 +61,9 @@ public:
     void renderCollision(SDL_Renderer *render);
 
     void renderForeground(SDL_Renderer *render);
+
+    [[nodiscard]] int checkTeleport(const SDL_Rect &rect) const;
 };
 
 
-#endif //SDL_BASEGAME_ROOM_H
+#endif //SDL_BASEGAME_ROOM_Hssssss

@@ -1,7 +1,3 @@
-//
-// Created by lukas on 6/8/23.
-//
-
 #include "Floor.h"
 
 void Floor::addEdge(Room *src, Room *dst) {
@@ -32,5 +28,8 @@ unsigned long Floor::getNumRooms() {
 }
 
 Floor::~Floor() {
-
+    for (auto & it : adjacency_list) {
+        delete it.first;
+    }
+    adjacency_list.clear();
 }

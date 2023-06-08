@@ -24,6 +24,7 @@ protected:
     Texture *image = nullptr;
     Room *room;
     Enemy *enemy;
+    Floor floor;
     //std::unique_ptr<Gun> gun;
 public:
     // ctor

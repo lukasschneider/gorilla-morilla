@@ -117,7 +117,7 @@ void Room::renderBackboard(SDL_Renderer *render) {
 
 }
 
-bool Room::checkCollision(const Rect &rect) const {
+int Room::checkTeleport(const Rect &rect) const {
     int startX = static_cast<int>(rect.x) / TILE_SIZE;
     int startY = static_cast<int>(rect.y) / TILE_SIZE;
     int endX = static_cast<int>(rect.x + rect.w) / TILE_SIZE;
@@ -131,11 +131,28 @@ bool Room::checkCollision(const Rect &rect) const {
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
             if(map_layer[1][y][x] == TELEPORT) {
-                cout << "Teleport action: " << TELEPORT << endl;
+                return TELEPORT;
             }
+        }
+    }
+    return 0;
+}
+
+
+bool Room::checkCollision(const Rect &rect) const {
+    int startX = static_cast<int>(rect.x) / TILE_SIZE;
+    int startY = static_cast<int>(rect.y) / TILE_SIZE;
+    int endX = static_cast<int>(rect.x + rect.w) / TILE_SIZE;
+    int endY = static_cast<int>(rect.y + rect.h) / TILE_SIZE;
+
+    startX = std::max(0, std::min(startX, MAP_WIDTH - 1));
+    startY = std::max(0, std::min(startY, MAP_HEIGHT - 1));
+    endX = std::max(0, std::min(endX, MAP_WIDTH - 1));
+    endY = std::max(0, std::min(endY, MAP_HEIGHT - 1));
+
+    for (int y = startY; y <= endY; ++y) {
+        for (int x = startX; x <= endX; ++x) {
             if (map_layer[1][y][x] != -1 && tiles[map_layer[1][y][x]].isSolid) {
-                cout << map_layer[1][y][x] << endl;
-                //cout << x << " : " << y << endl;
                 return true;
             }
         }

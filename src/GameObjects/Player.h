@@ -25,7 +25,9 @@ public:
     void renderPlayer(SDL_Renderer * renderer);
 
     void handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room);
-    };
+
+    int handleTeleport(const Room &room);
+};
 
 
 #endif //SDL_BASEGAME_PLAYER_H

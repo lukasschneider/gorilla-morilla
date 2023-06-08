@@ -70,8 +70,13 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->updateAngle(mouseX, mouseY, player->dRect, camera);
     crossDrect = {mouseX - 50, mouseY - 50, 100, 100};
     player->gun->updateBullets(deltaT);
-    enemy->coll(player->gun->bullets);
-    enemy->update();
+    std::vector<Bullet*> bulletPtrs;
+    for (auto& bullet : player->gun->bullets) {
+        bulletPtrs.push_back(&bullet);
+    }
+    enemy->coll(bulletPtrs);
+
+    enemy->update(deltaT);
 
 }
 

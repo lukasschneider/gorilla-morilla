@@ -60,8 +60,6 @@ public:
     void renderCollision(SDL_Renderer *render);
 
     void renderForeground(SDL_Renderer *render);
-
-    bool checkTeleport(float x, float y);
 };
 
 

@@ -20,6 +20,7 @@ public:
     float speed = 0.0f;
     float acceleration = 15000.0f;
     float maxSpeed = 650.0f;
+    int health;
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
 

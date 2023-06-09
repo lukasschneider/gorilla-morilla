@@ -1,6 +1,7 @@
 #include "Player.h"
 
 Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun){
+    health = 6;
     this->gun = std::move(gun);
     dRect = {static_cast<float>(500),static_cast<float>(500),64,64};
     SDL_Surface * surface = IMG_Load(playerPath.c_str());
@@ -20,9 +21,6 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             dRect.h
     };
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, 0.0, nullptr, flip);
-    if(this->gun->isReloading){
-
-    }
 }
 
 
@@ -52,7 +50,7 @@ void Player::handleMovement(const Uint8* keyboardState, float deltaTime, const R
 
         // Increase speed up to maxSpeed
         speed += acceleration * deltaTime;
-        cout << speed << endl;
+
         if (speed > maxSpeed) {
             speed = maxSpeed;
         }

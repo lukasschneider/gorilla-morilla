@@ -129,8 +129,8 @@ bool Gun::isEmpty() {
 }
 
 void Gun::reload() {
-    if (!isReloading) {
+    if (!isReloading && ammo < 30) {
         isReloading = true;
-        timeSinceLastReload = 0.0f;  // Reset the reload timer
+        timeSinceLastReload = 0.0f;
     }
 }

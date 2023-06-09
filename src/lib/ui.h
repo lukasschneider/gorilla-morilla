@@ -14,9 +14,13 @@ public:
     TTF_Font* font;
     SDL_Rect ammoCount;
 
+    std::vector<SDL_Texture*> hearts;
+
     // used for the reload animation
     std::string buttonsPath = BasePath "asset/graphic/ui/tilemap_packed.png";
     SDL_Texture *buttons;
+    std::string emotesPath = BasePath "asset/graphic/ui/emotes.png";
+    SDL_Texture *emotes;
     std::vector<SDL_Rect> reloadFrames;
     int reloadIndex;
 
@@ -30,6 +34,8 @@ public:
     [[nodiscard]] int getReloadIndex() const;
 
     SDL_Texture* getAmmo();
+
+    std::vector<SDL_Texture*> getHearts();
 
 };
 

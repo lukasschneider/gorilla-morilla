@@ -14,15 +14,20 @@ public:
     TTF_Font* font;
     SDL_Rect ammoCount;
 
+    //stores heart texutres
     std::vector<SDL_Texture*> hearts;
 
     // used for the reload animation
     std::string buttonsPath = BasePath "asset/graphic/ui/tilemap_packed.png";
     SDL_Texture *buttons;
-    std::string emotesPath = BasePath "asset/graphic/ui/emotes.png";
+    // other reload spritesheet
+    std::string emotesPath = BasePath "asset/graphic/ui/emote.png";
     SDL_Texture *emotes;
     std::vector<SDL_Rect> reloadFrames;
     int reloadIndex;
+    // ui backboard
+    std::string backboardPath = BasePath "asset/graphic/ui/UIpackSheet_transparent.png";
+    SDL_Texture * backboard;
 
 
     ui(SDL_Renderer *r, Player *p, SDL_FRect *vp);

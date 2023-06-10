@@ -6,6 +6,10 @@ ui::ui(SDL_Renderer *r, Player *p, SDL_FRect *vp) : player(p), render(r), viewpo
     emotes = SDL_CreateTextureFromSurface(render, emotesSheet);
     SDL_FreeSurface(emotesSheet);
 
+    SDL_Surface *backboardSheet = IMG_Load(backboardPath.c_str());
+    backboard = SDL_CreateTextureFromSurface(render, backboardSheet);
+    SDL_FreeSurface(backboardSheet);
+
     /*
     for (int i = 0; i < 4; ++i) {
         SDL_Rect newRect = {(i * 16) + 27 * 16, 16 * 16, 16, 16};

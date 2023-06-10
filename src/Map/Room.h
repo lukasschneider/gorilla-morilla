@@ -20,6 +20,7 @@ enum TileType {
     TELEPORT_TOP = 37,
     TELEPORT_BOTTOM = 12,
     TELEPORT_RIGHT = 24
+
 };
 
 struct Tile {

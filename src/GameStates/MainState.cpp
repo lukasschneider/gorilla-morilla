@@ -87,6 +87,7 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 
     enemy->update(deltaT);
 
+
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {

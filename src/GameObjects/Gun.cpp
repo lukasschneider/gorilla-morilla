@@ -111,8 +111,6 @@ void Gun::updateBullets(float dt) {
             bullet->update(dt);
         }
     }
-
-    // TODO : Remove Bulltes off screen
 }
 
 void Gun::renderBullets(SDL_Renderer *renderer, SDL_FRect *vp) {

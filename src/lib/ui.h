@@ -21,7 +21,7 @@ public:
     std::string buttonsPath = BasePath "asset/graphic/ui/tilemap_packed.png";
     SDL_Texture *buttons;
     // other reload spritesheet
-    std::string emotesPath = BasePath "asset/graphic/ui/emote.png";
+    std::string emotesPath = BasePath "asset/graphic/ui/emotes.png";
     SDL_Texture *emotes;
     std::vector<SDL_Rect> reloadFrames;
     int reloadIndex;

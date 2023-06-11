@@ -13,6 +13,12 @@ public:
 
     virtual void apply(float * val) = 0;
 
+    bool checkCollision(const SDL_FRect& playerRect) {
+        return SDL_HasIntersectionF(&pos, &playerRect) == SDL_TRUE;
+    }
+
+
+
 
     void render(SDL_Renderer *renderer, const SDL_FRect &vp) {
         SDL_FRect tmp = {pos.x - vp.x, pos.y - vp.y, pos.w, pos.h};

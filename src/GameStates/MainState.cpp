@@ -1,5 +1,6 @@
 #include "../gorillagame.h"
 #include "../lib/rh.h"
+#include "../lib/ph.h"
 
 SDL_FRect camera = {0, 0, 1280, 720};
 int mouseX, mouseY;
@@ -15,7 +16,6 @@ SDL_Texture *crosshair;
 
 
 void MainState::Init() {
-    RS::getInstance().init(render);
 
     SDL_ShowCursor(SDL_DISABLE);
     auto gun = std::make_unique<Gun>(render);
@@ -45,6 +45,8 @@ void MainState::Init() {
     userinterface = new ui(render, player, &camera);
     enemy = new Enemy(500, 500, 100, &room->activePickups);
 
+    RS::getInstance().init(render);
+    PS::getInstance().init(player);
 }
 
 void MainState::UnInit() {

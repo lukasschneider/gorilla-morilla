@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(float x, float y, float maxHp)
-        : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp) { }
+Enemy::Enemy(float x, float y, float maxHp,std::vector<Pickup*>* pickup)
+        : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) { }
 
 void Enemy::update(float dt) {
 
@@ -26,6 +26,7 @@ void Enemy::update(float dt) {
 }
 
 void Enemy::respawn() {
+    die();
     body.x = 500;
     body.y = 500;
 
@@ -69,6 +70,19 @@ void Enemy::coll(BulletRingBuffer& bullets) {
             bullet->deactivate(); // Deactivate the bullet on hit
         }
     }
+}
+
+bool Enemy::spawnrate() {
+    return rand() % 1 == 0;
+}
+
+void Enemy::die() {
+
+        if (spawnrate()) {
+            SDL_Renderer* renderer = RS::getInstance().get();
+            activePowerUps->push_back(new Banana(this->body,renderer));
+        }
+
 }
 
 

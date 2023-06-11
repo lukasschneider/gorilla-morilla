@@ -2,6 +2,7 @@
 #define SDL_BASEGAME_PLAYER_H
 #include "../lib/global.h"
 #include "Gun.h"
+#include "../Map/Room.h"
 
 enum Dir{
     LEFT,
@@ -21,6 +22,7 @@ public:
     float acceleration = 15000.0f;
     float maxSpeed = 650.0f;
     int health;
+    int currency;
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
 

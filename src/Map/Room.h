@@ -2,6 +2,8 @@
 #define SDL_BASEGAME_ROOM_H
 
 #include "../lib/global.h"
+#include "../GameObjects/Pickups.h"
+#include "../lib/rh.h"
 
 const int TILE_SIZE = 64;
 
@@ -70,6 +72,7 @@ public:
     int id;
     std::vector<Tile> tiles;
     std::vector<std::vector<int>> map;
+    std::vector<Pickup*> activePickups;
 
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<int>> map, SDL_FRect *viewport);
@@ -81,6 +84,8 @@ public:
     void renderMap(SDL_Renderer *render);
 
     void renderBackboard(SDL_Renderer *render);
+
+    void renderPickups();
 };
 
 

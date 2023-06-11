@@ -2,6 +2,7 @@
 #define GORILLAGAME_ROOMMANAGER_H
 
 #include "../lib/global.h"
+#include "../Map/Room.h"
 #include <string>
 
 class RoomManager {

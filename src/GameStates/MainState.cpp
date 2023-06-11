@@ -102,7 +102,6 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     room->renderCollision(render);
     player->renderPlayer(render);
     player->gun->render(render);
-    room->renderMap(render);
     player->gun->renderBullets(render,&camera);
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
     enemy->render(render,camera);

@@ -177,7 +177,7 @@ bool Room::checkCollision(const Rect &rect) const {
 }
 
 void Room::renderForeground(SDL_Renderer *render) {
-    for (ulong z = 2; z < map_layer.size(); ++z) {
+    for (unsigned long z = 2; z < map_layer.size(); ++z) {
         for (int y = 0; y < MAP_HEIGHT; ++y) {
             for (int x = 0; x < MAP_WIDTH; ++x) {
                 int tileType = map_layer[z][y][x];

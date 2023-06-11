@@ -85,7 +85,7 @@ public:
 
     void renderBackboard(SDL_Renderer *render);
 
-    void renderPickups();
+    void renderPickups(const SDL_FRect &viewport);
 };
 
 

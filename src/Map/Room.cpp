@@ -121,10 +121,10 @@ bool Room::checkCollision(const Rect& rect) const {
     return false;
 }
 
-void Room::renderPickups() {
+void Room::renderPickups(const SDL_FRect &vp) {
     if(!activePickups.empty()){
         for(auto pickup : activePickups){
-            pickup->render(RS::getInstance().get());
+            pickup->render(RS::getInstance().get(),vp);
         }
     }
 }

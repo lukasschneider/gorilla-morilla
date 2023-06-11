@@ -93,7 +93,9 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
+
     room->renderBackboard(render);
+    room->renderPickups(camera);
     player->renderPlayer(render);
     player->gun->render(render);
     room->renderMap(render);
@@ -101,5 +103,5 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
     enemy->render(render,camera);
     userinterface->drawUi();
-    room->renderPickups();
+
 }

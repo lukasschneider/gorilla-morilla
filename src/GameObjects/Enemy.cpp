@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(float x, float y, float maxHp,std::vector<Pickup*>* pickup)
-        : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) { }
+Enemy::Enemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
+        : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {}
 
 void Enemy::update(float dt) {
 
@@ -9,7 +9,7 @@ void Enemy::update(float dt) {
         respawn();
     }
 
-    if (body.x + body.w >= 14*64) {
+    if (body.x + body.w >= 14 * 64) {
         movingRight = false;
     }
         // If the enemy hits the left boundary, change direction
@@ -33,7 +33,7 @@ void Enemy::respawn() {
     hp = maxHp;
 }
 
-void Enemy::render(SDL_Renderer* renderer, const SDL_FRect &viewport) {
+void Enemy::render(SDL_Renderer *renderer, const SDL_FRect &viewport) {
 
     SDL_Rect enemyRect = {
             static_cast<int>(body.x - viewport.x),
@@ -61,11 +61,11 @@ void Enemy::render(SDL_Renderer* renderer, const SDL_FRect &viewport) {
     SDL_RenderFillRect(renderer, &hpBarRect);
 }
 
-void Enemy::coll(BulletRingBuffer& bullets) {
-    for(int i = 0; i < bullets.size(); ++i){
-        Bullet* bullet = bullets.get(i);
-        if(!bullet->isActive) continue; // Skip inactive bullets
-        if(SDL_HasIntersectionF(&bullet->rect, &body)){
+void Enemy::coll(BulletRingBuffer &bullets) {
+    for (int i = 0; i < bullets.size(); ++i) {
+        Bullet *bullet = bullets.get(i);
+        if (!bullet->isActive) continue; // Skip inactive bullets
+        if (SDL_HasIntersectionF(&bullet->rect, &body)) {
             hp -= 20;
             bullet->deactivate(); // Deactivate the bullet on hit
         }
@@ -77,12 +77,11 @@ bool Enemy::spawnrate() {
 }
 
 void Enemy::die() {
-
-        if (spawnrate()) {
-            SDL_Renderer* renderer = RS::getInstance().get();
-            activePowerUps->push_back(new Banana(this->body,renderer));
-        }
-
+    if (spawnrate()) {
+        SDL_Renderer *renderer = RS::getInstance().get();
+        SDL_FRect tmp = {body.x + body.w / 2 - 16, body.y + body.h / 2 - 16, 32, 32};
+        activePowerUps->push_back(new Banana(tmp, renderer));
+    }
 }
 
 

@@ -2,6 +2,8 @@
 #define SDL_BASEGAME_ROOM_H
 
 #include "../lib/global.h"
+#include "../GameObjects/Pickups.h"
+#include "../lib/rh.h"
 
 /**
  * Room Layout is always the same
@@ -51,7 +53,9 @@ public:
 
     int id;
     std::vector<Tile> tiles;
+    std::vector<Pickup*> activePickups;
     std::vector<std::vector<std::vector<int>>> map_layer;
+
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport);
 
@@ -70,7 +74,9 @@ public:
     void renderForeground(SDL_Renderer *render);
 
     [[nodiscard]] int checkTeleport(const SDL_Rect &rect) const;
+
+    void renderPickups(const SDL_FRect &viewport);
 };
 
 
-#endif //SDL_BASEGAME_ROOM_Hssssss
+#endif //SDL_BASEGAME_ROOM_H

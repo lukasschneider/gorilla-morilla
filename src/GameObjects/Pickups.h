@@ -8,22 +8,16 @@ protected:
     SDL_FRect pos;
     SDL_Texture *texture{};
 public:
-    explicit Pickup(SDL_FRect pos) : pos(pos) {
-    }
+    explicit Pickup(SDL_FRect pos);
 
-    virtual void apply(float * val) = 0;
+    virtual void apply() = 0;
 
-    bool checkCollision(const SDL_FRect& playerRect) {
-        return SDL_HasIntersectionF(&pos, &playerRect) == SDL_TRUE;
-    }
+    bool checkCollision(const SDL_FRect& playerRect);
 
 
 
 
-    void render(SDL_Renderer *renderer, const SDL_FRect &vp) {
-        SDL_FRect tmp = {pos.x - vp.x, pos.y - vp.y, pos.w, pos.h};
-        SDL_RenderCopyF(renderer, texture, nullptr, &tmp);
-    };
+    void render(SDL_Renderer *renderer, const SDL_FRect &vp);;
 
 
 };
@@ -33,16 +27,9 @@ public:
     int value;
     std::string path = BasePath "asset/graphic/pickups/banana.png";
 
-    Banana(SDL_FRect pos, SDL_Renderer *renderer)
-            : Pickup(pos), value(rand() % 2 + 1) {
-        SDL_Surface *sheet = IMG_Load(path.c_str());
-        texture = SDL_CreateTextureFromSurface(renderer, sheet);
-        SDL_FreeSurface(sheet);
-    }
+    Banana(SDL_FRect pos, SDL_Renderer *renderer);
 
-    void apply(float * val){
-        val += value;
-    }
+    void apply() override;
 
 };
 

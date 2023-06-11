@@ -14,18 +14,18 @@ else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter") # baseclass functions have plenty unused parameters
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-attributes")
-    set(CMAKE_CXX_FLAGS_DEBUG "-Og")
+    set(CMAKE_CXX_FLAGS_DEBUG   "-Og")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 endif ()
 
 add_compile_options("$<$<CONFIG:DEBUG>:-D_DEBUG>")
 
-if (APPLE)
+if(APPLE)
     include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2.cmake)
     include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2_IMAGE.cmake)
     include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2Mixer.cmake)
     include(${CMAKE_CURRENT_LIST_DIR}/CMAKE/FINDSDL2TTF.cmake)
-endif ()
+endif()
 
 add_executable(${PROJECT_NAME}
         src/lib/global.h
@@ -42,7 +42,20 @@ add_executable(${PROJECT_NAME}
         src/GameObjects/Enemy.h
         src/Map/Room.cpp
         src/Map/Room.h
-        src/GameObjects/Gun.cpp src/GameObjects/Gun.h src/GameObjects/Bullet.cpp src/GameObjects/Bullet.h src/lib/ui.cpp src/lib/ui.h src/GameObjects/Pickups.cpp src/GameObjects/Pickups.h src/lib/rh.h src/lib/rh.cpp)
+        src/GameObjects/Gun.cpp
+        src/GameObjects/Gun.h
+        src/GameObjects/Bullet.cpp
+        src/GameObjects/Bullet.h
+        src/lib/ui.cpp
+        src/lib/ui.h
+        src/GameObjects/Pickups.cpp
+        src/GameObjects/Pickups.h
+        src/lib/rh.h
+        src/lib/rh.cpp
+        src/Map/RoomManager.cpp
+        src/Map/RoomManager.h
+        src/Map/Floor.cpp
+        src/Map/Floor.h)
 if (NOT WIN32)
     include(FindPkgConfig)
 endif ()

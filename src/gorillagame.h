@@ -5,7 +5,8 @@
 #include "gamebase.h"
 #include "lib/recthelper.h"
 #include "GameObjects/Player.h"
-#include "Map/Room.h"
+#include "Map/RoomManager.h"
+#include "Map/Floor.h"
 #include "GameObjects/Enemy.h"
 #include "lib/ui.h"
 
@@ -25,6 +26,7 @@ protected:
     Room *room;
     Enemy *enemy;
     ui * userinterface;
+    Floor floor;
     //std::unique_ptr<Gun> gun;
 public:
     // ctor

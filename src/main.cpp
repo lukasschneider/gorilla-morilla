@@ -1,6 +1,7 @@
 #include "lib/global.h"
 
 #include "gorillagame.h"
+#include "Map/RoomManager.h"
 
 extern "C"
 int main( int argc, char * argv [] )

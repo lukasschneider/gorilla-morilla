@@ -18,7 +18,7 @@ enum TileType {
     FOREST_MIDDLE_MID = 19,
     TELEPORT_LEFT = 26,
     TELEPORT_TOP = 37,
-    TELEPORT_BOTTOM = 12,
+    TELEPORT_BOTTOM = 13,
     TELEPORT_RIGHT = 24
 
 };
@@ -50,13 +50,16 @@ private:
 public:
 
     int id;
-    int teleport;
     std::vector<Tile> tiles;
     std::vector<std::vector<std::vector<int>>> map_layer;
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport);
 
     [[nodiscard]] bool checkCollision(const SDL_Rect &rect) const;
+
+    int getMapPixelWidth();
+
+    int getMapPixelHeight();
 
     void renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect, SDL_FRect &viewport);
 

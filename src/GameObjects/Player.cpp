@@ -32,8 +32,15 @@ int Player::handleTeleport(const Room &room) {
             static_cast<int>(dRect.w),
             static_cast<int>(dRect.h)
     };
-    if (room.checkTeleport(rect) == TELEPORT_RIGHT) {
-        return TELEPORT_RIGHT;
+    switch (room.checkTeleport(rect)) {
+        case TELEPORT_TOP:
+            return TELEPORT_TOP;
+        case TELEPORT_RIGHT:
+            return TELEPORT_RIGHT;
+        case TELEPORT_BOTTOM:
+            return TELEPORT_BOTTOM;
+        case TELEPORT_LEFT:
+            return TELEPORT_LEFT;
     }
     return 0;
 }

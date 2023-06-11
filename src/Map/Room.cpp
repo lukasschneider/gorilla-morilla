@@ -75,6 +75,13 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
 }
 
+int Room::getMapPixelHeight() {
+    return this->MAP_PIXEL_HEIGHT;
+}
+
+int Room::getMapPixelWidth() {
+    return this->MAP_PIXEL_WIDTH;
+}
 
 void Room::renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect, SDL_FRect &viewport) {
     SDL_Rect offsetRect = {

@@ -55,7 +55,7 @@ add_executable(${PROJECT_NAME}
         src/Map/RoomManager.cpp
         src/Map/RoomManager.h
         src/Map/Floor.cpp
-        src/Map/Floor.h)
+        src/Map/Floor.h src/lib/ph.cpp src/lib/ph.h)
 if (NOT WIN32)
     include(FindPkgConfig)
 endif ()

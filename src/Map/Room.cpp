@@ -224,7 +224,7 @@ void Room::renderCollision(SDL_Renderer *render) {
 void Room::renderPickups(const SDL_FRect &vp) {
     if(!activePickups.empty()){
         for(auto pickup : activePickups){
-            pickup->render(RS::getInstance().get(),vp);
+            pickup->render(RS::getInstance().get(), vp);
         }
     }
 }

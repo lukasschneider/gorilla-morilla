@@ -11,7 +11,8 @@ public:
     explicit Pickup(SDL_FRect pos) : pos(pos) {
     }
 
-    //virtual void apply(Player * player) = 0;
+    virtual void apply(float * val) = 0;
+
 
     void render(SDL_Renderer *renderer, const SDL_FRect &vp) {
         SDL_FRect tmp = {pos.x - vp.x, pos.y - vp.y, pos.w, pos.h};
@@ -32,6 +33,11 @@ public:
         texture = SDL_CreateTextureFromSurface(renderer, sheet);
         SDL_FreeSurface(sheet);
     }
+
+    void apply(float * val){
+        val += value;
+    }
+
 };
 
 

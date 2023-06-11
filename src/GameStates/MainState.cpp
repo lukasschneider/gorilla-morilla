@@ -71,71 +71,72 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         player->gun->fire(render, &camera);
     }
 
+    if(keyboardState[SDL_SCANCODE_R]) {
+        player->gun->reload();
+    }
+
     player->handleMovement(keyboardState, deltaT, *room);
 
+    if (keyboardState[SDL_SCANCODE_R]) {
+        player->gun->reload();
+    }
+
+    if (player->handleTeleport(*room) == TELEPORT_TOP) {
+        cout << "AKTUELLER RAUM: " << room->id << endl;
+        std::vector<Room *> neighbors;
+        neighbors = floor.getNeighbors(room);
+        printf("TELEPORT ACTION TOP: \n");
+        for (Room *r: neighbors) {
+            cout << r->id << endl;
+        }
+        player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 100;
+        this->room = neighbors[0];
+    }
+    if (player->handleTeleport(*room) == TELEPORT_RIGHT) {
+        cout << "AKTUELLER RAUM: " << room->id << endl;
+        printf("TELEPORT ACTION RIGHT: \n");
+        std::vector<Room *> neighbors;
+        neighbors = floor.getNeighbors(room);
+        for (Room *r: neighbors) {
+            cout << r->id << endl;
+        }
+        player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 200;
+        // TODO: Get information on which teleport u used for correkt new mapdsd
+        this->room = neighbors[1];
+    }
     if (player->handleTeleport(*room) == TELEPORT_BOTTOM) {
         cout << "AKTUELLER RAUM: " << room->id << endl;
-        if (keyboardState[SDL_SCANCODE_R]) {
-            player->gun->reload();
+        std::vector<Room *> neighbors;
+        neighbors = floor.getNeighbors(room);
+        printf("TELEPORT ACTION LEFT: \n");
+        for (Room *r: neighbors) {
+            cout << r->id << endl;
         }
-        if (player->handleTeleport(*room) == TELEPORT_RIGHT) {
-            cout << "TELEPORT ACTION" << endl;
-            std::vector<Room *> neighbors;
-            neighbors = floor.getNeighbors(room);
-            printf("TELEPORT ACTION BOTTOM: \n");
-            for (Room *r: neighbors) {
-                cout << r->id << endl;
-            }
-            player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 100;
-            this->room = neighbors[2];
-        }
-        if (player->handleTeleport(*room) == TELEPORT_LEFT) {
-            cout << "AKTUELLER RAUM: " << room->id << endl;
-            std::vector<Room *> neighbors;
-            neighbors = floor.getNeighbors(room);
-            printf("TELEPORT ACTION LEFT: \n");
-            for (Room *r: neighbors) {
-                cout << r->id << endl;
-            }
-            player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 100;
-            this->room = neighbors[3];
-        }
-        if (player->handleTeleport(*room) == TELEPORT_TOP) {
-            cout << "AKTUELLER RAUM: " << room->id << endl;
-            std::vector<Room *> neighbors;
-            neighbors = floor.getNeighbors(room);
-            printf("TELEPORT ACTION TOP: \n");
-            for (Room *r: neighbors) {
-                cout << r->id << endl;
-            }
-            player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 100;
-            this->room = neighbors[0];
-        }
+        player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 100;
+        this->room = neighbors[2];
 
-        if (player->handleTeleport(*room) == TELEPORT_RIGHT) {
-            cout << "AKTUELLER RAUM: " << room->id << endl;
-            printf("TELEPORT ACTION RIGHT: \n");
-            std::vector<Room *> neighbors;
-            neighbors = floor.getNeighbors(room);
-            for (Room *r: neighbors) {
-                cout << r->id << endl;
-            }
-            player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 200;
-            // TODO: Get information on which teleport u used for correkt new mapdsd
-            this->room = neighbors[1];
+    }
+    if (player->handleTeleport(*room) == TELEPORT_LEFT) {
+        cout << "AKTUELLER RAUM: " << room->id << endl;
+        std::vector<Room *> neighbors;
+        neighbors = floor.getNeighbors(room);
+        printf("TELEPORT ACTION LEFT: \n");
+        for (Room *r: neighbors) {
+            cout << r->id << endl;
         }
+        player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 100;
+        this->room = neighbors[3];
     }
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
-    adjustViewportToPlayer(camera, player->dRect, 1280, 720);
-    player->gun->update(mouseX, mouseY, player->dRect, camera, deltaT);
-    crossDrect = {mouseX - 50, mouseY - 50, 100, 100};
+    adjustViewportToPlayer(camera,player->dRect,1280,720);
+    player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
+    crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
+    enemy->coll(player->gun->bullets);
     enemy->update(deltaT);
     userinterface->update();
-
-
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {

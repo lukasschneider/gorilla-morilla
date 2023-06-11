@@ -13,6 +13,7 @@ public:
 
     TTF_Font* font;
     SDL_Rect ammoCount;
+    SDL_Rect currencyCount;
 
     //stores heart texutres
     std::vector<SDL_Texture*> hearts;
@@ -29,6 +30,14 @@ public:
     std::string backboardPath = BasePath "asset/graphic/ui/UIpackSheet_transparent.png";
     SDL_Texture * backboard;
 
+    std::string bananaPath = BasePath "asset/graphic/pickups/banana.png";
+    SDL_Texture * bananaT;
+
+    std::string ammoPath = BasePath "asset/graphic/pickups/ammo.png";
+    SDL_Texture * ammoT;
+
+
+
 
     ui(SDL_Renderer *r, Player *p, SDL_FRect *vp);
 
@@ -39,6 +48,8 @@ public:
     [[nodiscard]] int getReloadIndex() const;
 
     SDL_Texture* getAmmo();
+
+    SDL_Texture *getCurrency();
 
     std::vector<SDL_Texture*> getHearts();
 

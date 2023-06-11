@@ -9,13 +9,16 @@ ui::ui(SDL_Renderer *r, Player *p, SDL_FRect *vp) : player(p), render(r), viewpo
     SDL_Surface *backboardSheet = IMG_Load(backboardPath.c_str());
     backboard = SDL_CreateTextureFromSurface(render, backboardSheet);
     SDL_FreeSurface(backboardSheet);
+    // Banana
+    SDL_Surface *bananaSurface = IMG_Load(bananaPath.c_str());
+    bananaT = SDL_CreateTextureFromSurface(render, bananaSurface);
+    SDL_FreeSurface(bananaSurface);
 
-    /*
-    for (int i = 0; i < 4; ++i) {
-        SDL_Rect newRect = {(i * 16) + 27 * 16, 16 * 16, 16, 16};
-        reloadFrames.push_back(newRect);
-    }
-     */
+    //Ammo
+    SDL_Surface *ammoSurface = IMG_Load(ammoPath.c_str());
+    ammoT = SDL_CreateTextureFromSurface(render, ammoSurface);
+    SDL_FreeSurface(ammoSurface);
+
     for (int i = 3; i >= 0; i--) {
         SDL_Rect newRect = {3 * 16, i * 16, 16, 16};
         reloadFrames.push_back(newRect);
@@ -82,27 +85,49 @@ void ui::drawUi() {
         };
         SDL_RenderCopy(render, hp[i], nullptr, &newRect);
     }
+    // Draw Currency
+    SDL_RenderCopy(render,getCurrency(), nullptr,&currencyCount);
 }
 
 SDL_Texture *ui::getAmmo() {
-    std::string ammoText = "Ammo: " + std::to_string(player->gun->ammo);
-    SDL_Surface *surface = TTF_RenderText_Solid(font, ammoText.c_str(), {255, 255, 255});
-    if (surface == nullptr) {
-        printf("TTF_RenderText_Solid: %s\n", TTF_GetError());
+    std::string ammoText = ": " + std::to_string(player->gun->ammo);
+
+    SDL_Color white = {255, 255, 255, 255}; // RGBA
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, ammoText.c_str(), white);
+    if (textSurface == nullptr) {
+        printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
+        return nullptr;
     }
 
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(render, surface);
-    if (texture == nullptr) {
-        printf("SDL_CreateTextureFromSurface: %s\n", SDL_GetError());
-    }
+    int ammoW = 50, ammoH = 50;
+    int totalW = ammoW +10+ textSurface->w;
+    int totalH = std::max(ammoH, textSurface->h);
 
-    ammoCount = {24, 74, surface->w, surface->h};
+    SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, totalW, totalH);
+    SDL_SetRenderTarget(render, finalTexture);
 
+    SDL_Rect ammoRect = {0, 0, ammoW, ammoH};
+    SDL_Rect textRect = {ammoW+ 5, 0, textSurface->w, textSurface->h};
 
-    SDL_FreeSurface(surface);
+    SDL_RenderCopy(render, ammoT, NULL, &ammoRect);
 
-    return texture;
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+
+    SDL_SetRenderTarget(render, NULL);
+    SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_FreeSurface(textSurface);
+
+    // Set dimensions of ammoCount
+    ammoCount = {24, 74, totalW, totalH};
+
+    // Return the final texture
+    return finalTexture;
 }
+
 
 std::vector<SDL_Texture *> ui::getHearts() {
     int hp = player->health;
@@ -121,3 +146,39 @@ std::vector<SDL_Texture *> ui::getHearts() {
     return displayHearts;
 }
 
+SDL_Texture *ui::getCurrency() {
+    std::string currencyText = ": " + std::to_string(player->currency);
+
+    SDL_Color white = {255, 255, 255, 255};
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, currencyText.c_str(), white);
+    if (textSurface == nullptr) {
+        printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    int bananaW = 50, bananaH = 50;
+    int totalW = bananaW + 10 + textSurface->w;
+    int totalH = std::max(bananaH, textSurface->h);
+
+    SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, totalW, totalH);
+    SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_Rect bananaRect = {0, 0, bananaW, bananaH};
+    SDL_Rect textRect = {bananaW + 5, 0, textSurface->w, textSurface->h};
+
+    SDL_RenderCopy(render, bananaT, NULL, &bananaRect);
+
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+
+    SDL_SetRenderTarget(render, NULL);
+    SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_FreeSurface(textSurface);
+
+    currencyCount = {24, 130, totalW, totalH};
+
+    return finalTexture;
+}

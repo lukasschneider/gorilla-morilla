@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(0){
+Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(5){
 
     dRect = {static_cast<float>(500),static_cast<float>(500),64,64};
     SDL_Surface * surface = IMG_Load(playerPath.c_str());

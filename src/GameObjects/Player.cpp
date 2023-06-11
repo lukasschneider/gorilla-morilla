@@ -1,18 +1,15 @@
 #include "Player.h"
 
-Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) {
-    this->gun = std::move(gun);
-    dRect = {static_cast<float>(500), static_cast<float>(500), 64, 64};
-    SDL_Surface *surface = IMG_Load(path.c_str());
+Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(0){
+
+    dRect = {static_cast<float>(500),static_cast<float>(500),64,64};
+    SDL_Surface * surface = IMG_Load(playerPath.c_str());
     sRect = {0, 0, surface->w, surface->h};
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    playerTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
 }
 
 void Player::renderPlayer(SDL_Renderer *renderer) {
-    /*cout << "Player" << endl;
-    cout << "x: " << dRect.x << endl;
-    cout << "y: " << dRect.y << endl;*/
     SDL_RendererFlip flip = (dir == RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     int screenWidth = 1280;
     int screenHeight = 720;
@@ -22,7 +19,7 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             dRect.w,
             dRect.h
     };
-    SDL_RenderCopyExF(renderer, texture, nullptr, &screenRect, 0.0, nullptr, flip);
+    SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, 0.0, nullptr, flip);
 }
 
 int Player::handleTeleport(const Room &room) {
@@ -64,6 +61,7 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
 
         // Increase speed up to maxSpeed
         speed += acceleration * deltaTime;
+
         if (speed > maxSpeed) {
             speed = maxSpeed;
         }
@@ -106,10 +104,4 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         }
     }
 }
-
-void Player::setPlayerPosition(float x, float y) {
-    this->dRect.x = x;
-    this->dRect.y = y;
-}
-
 

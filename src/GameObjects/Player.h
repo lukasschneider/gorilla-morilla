@@ -2,6 +2,7 @@
 #define SDL_BASEGAME_PLAYER_H
 #include "../lib/global.h"
 #include "Gun.h"
+#include "../Map/Room.h"
 
 enum Dir{
     LEFT,
@@ -10,15 +11,18 @@ enum Dir{
 
 class Player {
 public:
-    std::string path = BasePath "asset/graphic/player/a.png";
+    std::string playerPath = BasePath "asset/graphic/player/a.png";
+    std::string reloadPath = BasePath "asset/graphic/ui/tilemap_packed.png";
     Rect sRect;
     FRect dRect;
     Dir dir = LEFT;
     std::unique_ptr<Gun> gun;
-    SDL_Texture * texture;
+    SDL_Texture * playerTexture;
     float speed = 0.0f;
     float acceleration = 15000.0f;
     float maxSpeed = 650.0f;
+    int health;
+    int currency;
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
 

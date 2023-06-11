@@ -1,4 +1,5 @@
 #include "../gorillagame.h"
+#include "../lib/rh.h"
 
 SDL_FRect camera = {0, 0, 1280, 720};
 int mouseX, mouseY;
@@ -14,7 +15,7 @@ SDL_Texture *crosshair;
 
 
 void MainState::Init() {
-    enemy = new Enemy(500, 500, 100);
+    RS::getInstance().init(render);
     SDL_ShowCursor(SDL_DISABLE);
     auto gun = std::make_unique<Gun>(render);
     player = new Player(render, std::move(gun));
@@ -28,6 +29,9 @@ void MainState::Init() {
 
     floor = Floor();
     floor.addEdge(room, room1);
+
+    userinterface = new ui(render,player,&camera);
+    enemy = new Enemy(500,500,100,&room->activePickups);
 
 }
 
@@ -49,17 +53,19 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
             mouseY = event.motion.y;
         }
     }
-
+    const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     // Check if the left mouse button is being held down
     Uint32 mouseState = SDL_GetMouseState(NULL, NULL);
     if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
         player->gun->fire(render, &camera);
     }
 
-    const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
-    player->handleMovement(keyboardState, deltaT, *room);
 
+    player->handleMovement(keyboardState,deltaT,*room);
 
+    if(keyboardState[SDL_SCANCODE_R]) {
+        player->gun->reload();
+    }
     if(player->handleTeleport(*room) == TELEPORT_RIGHT) {
         cout << "TELEPORT ACTION" << endl;
         std::vector<Room *> neighbors;
@@ -73,29 +79,34 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     }
 }
 
+
+
+
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
-
-    adjustViewportToPlayer(camera, player->dRect, 1280, 720);
-    player->gun->updateAngle(mouseX, mouseY, player->dRect, camera);
-    crossDrect = {mouseX - 50, mouseY - 50, 100, 100};
+    adjustViewportToPlayer(camera,player->dRect,1280,720);
+    player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
+    crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
-    std::vector<Bullet*> bulletPtrs;
-    for (auto& bullet : player->gun->bullets) {
-        bulletPtrs.push_back(&bullet);
-    }
-    enemy->coll(bulletPtrs);
-
+    enemy->coll(player->gun->bullets);
     enemy->update(deltaT);
+    userinterface->update();
 
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
+
     // Backboard includes tree area around room and green background
     room->renderBackboard(render);
+    room->renderPickups(camera);
     // Collision includes every tile the player can colide with
     room->renderCollision(render);
     player->renderPlayer(render);
     player->gun->render(render);
+    player->gun->renderBullets(render,&camera);
+    SDL_RenderCopy(render,crosshair, NULL,&crossDrect);
+    enemy->render(render,camera);
+    userinterface->drawUi();
+
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
     enemy->render(render, camera);

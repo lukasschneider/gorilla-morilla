@@ -177,7 +177,7 @@ bool Room::checkCollision(const Rect &rect) const {
 }
 
 void Room::renderForeground(SDL_Renderer *render) {
-    for (ulong z = 2; z < map_layer.size(); ++z) {
+    for (unsigned long z = 2; z < map_layer.size(); ++z) {
         for (int y = 0; y < MAP_HEIGHT; ++y) {
             for (int x = 0; x < MAP_WIDTH; ++x) {
                 int tileType = map_layer[z][y][x];
@@ -210,6 +210,14 @@ void Room::renderCollision(SDL_Renderer *render) {
                 const Tile &tile = this->tiles[tileType];
                 renderTile(render, tile, dstRect, *vp);
             }
+        }
+    }
+}
+
+void Room::renderPickups(const SDL_FRect &vp) {
+    if(!activePickups.empty()){
+        for(auto pickup : activePickups){
+            pickup->render(RS::getInstance().get(),vp);
         }
     }
 }

@@ -114,9 +114,4 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
     }
 }
 
-void Player::setPlayerPosition(float x, float y) {
-    this->dRect.x = x;
-    this->dRect.y = y;
-}
-
 

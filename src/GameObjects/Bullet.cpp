@@ -1,7 +1,3 @@
-
-
-// Bullet.cpp
-
 #include "Bullet.h"
 
 void Bullet::update(float dt) {

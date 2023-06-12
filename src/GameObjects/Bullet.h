@@ -2,7 +2,6 @@
 #define GORILLAGAME_BULLET_H
 
 #include "../lib/global.h"
-
 class Bullet {
 public:
     std::string path = BasePath "asset/graphic/bullets/basic_bullet.png";
@@ -13,6 +12,10 @@ public:
     bool isActive;
 
     Bullet(float x, float y, float speed, float angle, SDL_Renderer* renderer, SDL_FRect *vp);
+
+    ~Bullet(){
+        SDL_DestroyTexture(texture);
+    };
 
     void deactivate();
 

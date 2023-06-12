@@ -2,65 +2,13 @@
 #define GORILLAGAME_GUN_H
 
 #include "../lib/global.h"
-#include "Bullet.h"
+#include "../lib/BulletRingBuffer.h"
 
-class BulletRingBuffer {
-private:
-    std::vector<Bullet*> buffer;
-    int maxSize;
-    int currentSize;
-    int start;
-    int end;
-
-public:
-    BulletRingBuffer(int size) : maxSize(size), currentSize(0), start(0), end(0) {
-        buffer.resize(maxSize);
-    }
-
-    void push(Bullet* bullet) {
-        buffer[end] = bullet;
-        if (currentSize < maxSize) {
-            currentSize++;
-        } else {
-            // The buffer is full, so we override the oldest element.
-            start = (start + 1) % maxSize;
-        }
-        end = (end + 1) % maxSize;
-    }
-
-    Bullet* pop() {
-        if (currentSize == 0) {
-            return nullptr; // buffer is empty
-        }
-        Bullet* result = buffer[start];
-        start = (start + 1) % maxSize;
-        currentSize--;
-        return result;
-    }
-
-    Bullet* get(int index) const {
-        if (index < 0 || index >= currentSize) {
-            return nullptr; // index out of range
-        }
-        return buffer[(start + index) % maxSize];
-    }
-
-    int size() const {
-        return currentSize;
-    }
-
-    bool isFull() const {
-        return currentSize == maxSize;
-    }
-
-    bool isEmpty() const {
-        return currentSize == 0;
-    }
-};
 
 class Gun {
 public:
     int ammo;
+    int magazin;
     float reloadTime;
     float timeSinceLastReload;
     bool isReloading;

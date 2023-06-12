@@ -1,35 +1,45 @@
 #include "Floor.h"
 
-void Floor::addEdge(Room *src, Room *dst) {
-    //Hinzufügen einer Kante in die Adjazenzliste, sowohl Hinweg als auch Rückweg da ungerichtet
-    this->adjacency_list[src].push_back(dst);
-    this->adjacency_list[dst].push_back(src);
-}
-
-bool Floor::hasEdge(Room *src, Room *dst) {
-    auto srcIt = adjacency_list.find(src);
-    if (srcIt != adjacency_list.end()) {
-        const auto &neighbors = srcIt->second;
-        return std::find(neighbors.begin(), neighbors.end(), dst) != neighbors.end();
+void Floor::addEdge(Room* src, Room* dst, int index) {
+    if (adjacency_list.empty()) {
+        Edge edge{};
+        edge.start = src;
+        edge.neighbors[index] = dst;
+        adjacency_list.push_back(edge);
+        return;
     }
-}
 
-const std::vector<Room *> &Floor::getNeighbors(Room *room) {
-    auto it = adjacency_list.find(room);
-    if (it != adjacency_list.end()) {
-        return it->second;
+    for (auto & i : adjacency_list) {
+        if (src->id == i.start->id) {
+            i.neighbors[index] = dst;
+            return;
+        }
     }
-    static const std::vector<Room *> empty;
-    return empty;
+
+    Edge edge{};
+    edge.start = src;
+    edge.neighbors[index] = dst;
+    adjacency_list.push_back(edge);
 }
 
-unsigned long Floor::getNumRooms() {
-    return this->adjacency_list.size();
+
+std::array<Room *, 4> Floor::getNeighbors(Room *room) {
+    for (Edge e: adjacency_list) {
+        if (e.start == room) {
+            return e.neighbors;
+        }
+    }
 }
 
 Floor::~Floor() {
-    for (auto & it : adjacency_list) {
-        delete it.first;
-    }
-    adjacency_list.clear();
 }
+
+Room *Floor::getStartRoom() {
+    if (adjacency_list.empty()) {
+        return nullptr;
+    }
+    return adjacency_list[0].start;
+}
+
+
+

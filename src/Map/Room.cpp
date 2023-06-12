@@ -139,6 +139,8 @@ int Room::checkTeleport(const Rect &rect) const {
     int endX = static_cast<int>(rect.x + rect.w) / TILE_SIZE;
     int endY = static_cast<int>(rect.y + rect.h) / TILE_SIZE;
 
+
+
     startX = std::max(0, std::min(startX, MAP_WIDTH - 1));
     startY = std::max(0, std::min(startY, MAP_HEIGHT - 1));
     endX = std::max(0, std::min(endX, MAP_WIDTH - 1));

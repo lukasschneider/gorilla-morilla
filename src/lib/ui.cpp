@@ -121,3 +121,13 @@ std::vector<SDL_Texture *> ui::getHearts() {
     return displayHearts;
 }
 
+ui::~ui() {
+    SDL_DestroyTexture(emotes);
+    SDL_DestroyTexture(backboard);
+    TTF_CloseFont(font);
+
+    for (SDL_Texture* heart : hearts) {
+        SDL_DestroyTexture(heart);
+    }
+}
+

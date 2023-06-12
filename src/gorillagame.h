@@ -21,12 +21,10 @@ public:
 class MainState : public GameState {
 protected:
     Player *player;
-    Texture *image = nullptr;
     Room *room;
     Enemy *enemy;
     ui *userinterface;
     Floor floor;
-    //std::unique_ptr<Gun> gun;
 public:
     // ctor
     using GameState::GameState;

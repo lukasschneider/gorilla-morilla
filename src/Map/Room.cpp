@@ -231,5 +231,15 @@ void Room::renderPickups(const SDL_FRect &vp) {
     }
 }
 
+Room::~Room() {
 
+    for (auto& tile : tiles) {
+        tile.destroy();
+    }
+
+    for (auto pickup : activePickups) {
+        delete pickup;
+    }
+    activePickups.clear();
+}
 

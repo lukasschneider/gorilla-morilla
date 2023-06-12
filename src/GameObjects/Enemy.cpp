@@ -85,6 +85,11 @@ void Enemy::die() {
 }
 
 
-
+Enemy::~Enemy() {
+    for (auto powerUp : *activePowerUps) {
+        delete powerUp;
+    }
+    activePowerUps->clear();
+}
 
 

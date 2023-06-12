@@ -56,6 +56,13 @@ public:
     bool isEmpty() const {
         return currentSize == 0;
     }
+
+    ~BulletRingBuffer() {
+        for (int i = 0; i < currentSize; i++) {
+            delete buffer[(start + i) % maxSize];
+        }
+    }
+
 };
 
 class Gun {
@@ -94,6 +101,9 @@ public:
     bool isEmpty();
 
     void reload();
+
+    ~Gun();
+
 };
 
 

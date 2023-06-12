@@ -31,9 +31,6 @@ std::array<Room *, 4> Floor::getNeighbors(Room *room) {
     }
 }
 
-Floor::~Floor() {
-}
-
 Room *Floor::getStartRoom() {
     if (adjacency_list.empty()) {
         return nullptr;

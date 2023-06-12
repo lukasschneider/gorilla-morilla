@@ -18,9 +18,6 @@ public:;
     std::array<Room *, 4> getNeighbors(Room *room);
 
     Room* getStartRoom();
-
-
-    ~Floor();
 };
 
 

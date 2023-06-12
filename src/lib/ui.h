@@ -42,6 +42,7 @@ public:
 
     std::vector<SDL_Texture*> getHearts();
 
+    ~ui();
 };
 
 

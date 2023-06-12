@@ -37,6 +37,7 @@ void MainState::UnInit() {
     delete enemy;
     delete player;
     delete room;
+    delete userinterface;
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -72,9 +73,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
         printf("TELEPORT ACTION TOP: \n");
-        for (Room *r: neighbors) {
-            cout << r->id << endl;
-        }
         player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 100;
         this->room = neighbors[0];
     }
@@ -83,9 +81,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         printf("TELEPORT ACTION RIGHT: \n");
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        for (Room *r: neighbors) {
-            cout << r->id << endl;
-        }
         player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 200;
         this->room = neighbors[1];
     }
@@ -94,9 +89,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
         printf("TELEPORT ACTION LEFT: \n");
-        for (Room *r: neighbors) {
-            cout << r->id << endl;
-        }
         player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 100;
         this->room = neighbors[2];
 
@@ -106,9 +98,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
         printf("TELEPORT ACTION LEFT: \n");
-        for (Room *r: neighbors) {
-            cout << r->id << endl;
-        }
         player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 100;
         this->room = neighbors[3];
     }

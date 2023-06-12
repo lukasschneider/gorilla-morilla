@@ -137,6 +137,7 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
+    room->updatePickups();
     enemy->coll(player->gun->bullets);
     enemy->update(deltaT);
     userinterface->update();

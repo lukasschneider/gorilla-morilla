@@ -8,6 +8,10 @@ bool Pickup::checkCollision(const SDL_FRect &playerRect) {
     return SDL_HasIntersectionF(&pos, &playerRect) == SDL_TRUE;
 }
 
+Pickup::~Pickup() {
+    SDL_DestroyTexture(texture);
+}
+
 void Pickup::render(SDL_Renderer *renderer, const SDL_FRect &vp) {
     SDL_FRect tmp = {pos.x - vp.x, pos.y - vp.y, pos.w, pos.h};
     SDL_RenderCopyF(renderer, texture, nullptr, &tmp);
@@ -20,6 +24,6 @@ Banana::Banana(SDL_FRect pos, SDL_Renderer *renderer)
     SDL_FreeSurface(sheet);
 }
 
-void Banana::apply() {
-    value++;
+void Banana::apply(Player * player) {
+    player->currency += value;
 }

@@ -2,6 +2,10 @@
 #define GORILLAGAME_PICKUPS_H
 
 #include "../lib/global.h"
+#include "Player.h"
+
+class Player;
+
 
 class Pickup {
 protected:
@@ -10,12 +14,12 @@ protected:
 public:
     explicit Pickup(SDL_FRect pos);
 
-    virtual void apply() = 0;
+    virtual void apply(Player * player) = 0;
 
     bool checkCollision(const SDL_FRect& playerRect);
 
 
-
+    virtual ~Pickup();
 
     void render(SDL_Renderer *renderer, const SDL_FRect &vp);;
 
@@ -29,7 +33,7 @@ public:
 
     Banana(SDL_FRect pos, SDL_Renderer *renderer);
 
-    void apply() override;
+    void apply(Player * player) override;
 
 };
 

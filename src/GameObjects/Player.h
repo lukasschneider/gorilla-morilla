@@ -4,6 +4,9 @@
 #include "Gun.h"
 #include "../Map/Room.h"
 
+class Room;
+
+
 enum Dir{
     LEFT,
     RIGHT

@@ -32,9 +32,9 @@ public:
     int health;
     int currency;
     SDL_FPoint rollDirection;
-    float rollDuration = 0.5f;
+    float rollDuration = 0.7;
     float rollTimer = 0.0f;
-    float rollMovementSpeed = 750.0f;
+    float rollMovementSpeed = 550.0f;
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
 

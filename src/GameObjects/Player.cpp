@@ -64,7 +64,7 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         dirX += 1.0f;
         dir = RIGHT;
     }
-    if (keyboardState[SDL_SCANCODE_SPACE] && state != PlayerState::Dodge) {
+    if (keyboardState[SDL_SCANCODE_LSHIFT] && state != PlayerState::Dodge) {
         state = PlayerState::Dodge;
         rollTimer = rollDuration;
         if (dirX == 0.0f && dirY == 0.0f) {

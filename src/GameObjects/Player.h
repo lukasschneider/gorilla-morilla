@@ -6,6 +6,10 @@
 
 class Room;
 
+enum PlayerState{
+    Dodge,
+    Damage
+};
 
 enum Dir{
     LEFT,
@@ -21,15 +25,22 @@ public:
     Dir dir = LEFT;
     std::unique_ptr<Gun> gun;
     SDL_Texture * playerTexture;
+    PlayerState state = Damage;
     float speed = 0.0f;
     float acceleration = 15000.0f;
     float maxSpeed = 650.0f;
     int health;
     int currency;
+    SDL_FPoint rollDirection;
+    float rollDuration = 0.5f;
+    float rollTimer = 0.0f;
+    float rollMovementSpeed = 750d.0f;
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
 
     void setPlayerPosition(float x, float y);
+
+    void takeDamage();
 
     void renderPlayer(SDL_Renderer * renderer);
 

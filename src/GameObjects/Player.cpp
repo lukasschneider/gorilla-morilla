@@ -67,7 +67,6 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
     if (keyboardState[SDL_SCANCODE_SPACE] && state != PlayerState::Dodge) {
         state = PlayerState::Dodge;
         rollTimer = rollDuration;
-        // If the player is not moving, roll in the direction they are facing
         if (dirX == 0.0f && dirY == 0.0f) {
             rollDirection = (dir == RIGHT) ? SDL_FPoint{1.0f, 0.0f} : SDL_FPoint{-1.0f, 0.0f};
         } else {
@@ -84,18 +83,16 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
             float newX = dRect.x + rollDirection.x * rollSpeed;
             float newY = dRect.y + rollDirection.y * rollSpeed;
 
-            // Check horizontal movement
             if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y),
                                       static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
                 dRect.x = newX;
             }
 
-            // Check vertical movement
             if (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(newY),
                                       static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
                 dRect.y = newY;
             }
-            return; // Skip the rest of the movement handling
+            return;
         }
     }
 
@@ -104,7 +101,6 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         dirX /= length;
         dirY /= length;
 
-        // Increase speed up to maxSpeed
         speed += acceleration * deltaTime;
 
         if (speed > maxSpeed) {
@@ -115,12 +111,10 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         float newX = dRect.x + dirX * moveSpeed;
         float newY = dRect.y + dirY * moveSpeed;
 
-        // Check horizontal movement
         if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y),
                                   static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
             dRect.x = newX;
         } else {
-            // If collision, move the player as close to the obstacle as possible
             while (!room.checkCollision(
                     {static_cast<int>(dRect.x + dirX), static_cast<int>(dRect.y), static_cast<int>(dRect.w),
                      static_cast<int>(dRect.h)})) {
@@ -128,12 +122,10 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
             }
         }
 
-        // Check vertical movement
         if (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(newY), static_cast<int>(dRect.w),
                                   static_cast<int>(dRect.h)})) {
             dRect.y = newY;
         } else {
-            // If collision, move the player as close to the obstacle as possible
             while (!room.checkCollision(
                     {static_cast<int>(dRect.x), static_cast<int>(dRect.y + dirY), static_cast<int>(dRect.w),
                      static_cast<int>(dRect.h)})) {

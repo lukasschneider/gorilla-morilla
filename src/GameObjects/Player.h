@@ -34,7 +34,7 @@ public:
     SDL_FPoint rollDirection;
     float rollDuration = 0.5f;
     float rollTimer = 0.0f;
-    float rollMovementSpeed = 750d.0f;
+    float rollMovementSpeed = 750.0f;
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
 

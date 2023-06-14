@@ -32,11 +32,11 @@ public:
 
     void coll(BulletRingBuffer& bullets);
 
-    void attack();
+    static void attack();
 
     ~Enemy();
 
-    bool inRadius() const;
+    [[nodiscard]] bool inRadius() const;
 };
 
 

@@ -14,6 +14,8 @@
  * ...
  */
 
+class Pickup;
+
 const int TILE_SIZE = 64;
 
 enum TileType {
@@ -76,6 +78,8 @@ public:
     [[nodiscard]] int checkTeleport(const SDL_Rect &rect) const;
 
     void renderPickups(const SDL_FRect &viewport);
+
+    void updatePickups();
 };
 
 

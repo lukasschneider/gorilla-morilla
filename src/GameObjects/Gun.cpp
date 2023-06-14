@@ -1,6 +1,6 @@
 #include "Gun.h"
 
-Gun::Gun(SDL_Renderer *render) :bullets(200), ammo(30) {
+Gun::Gun(SDL_Renderer *render) :bullets(200), ammo(100), magazin(100) {
     int width, height;
     SDL_Surface * surface = IMG_Load(path.c_str());
     srcRect = {0, 0, surface->w, surface->h};
@@ -50,7 +50,7 @@ void Gun::update(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_
         timeSinceLastReload += dt;
 
         if (timeSinceLastReload >= reloadTime) {
-            ammo = 30;
+            ammo = magazin;
             isReloading = false;
         }
     }
@@ -127,7 +127,7 @@ bool Gun::isEmpty() {
 }
 
 void Gun::reload() {
-    if (!isReloading && ammo < 30) {
+    if (!isReloading && ammo < magazin) {
         isReloading = true;
         timeSinceLastReload = 0.0f;
     }

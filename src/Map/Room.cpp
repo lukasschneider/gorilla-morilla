@@ -1,4 +1,5 @@
 #include "Room.h"
+#include "../lib/ph.h"
 #include <utility>
 
 /**
@@ -224,10 +225,25 @@ void Room::renderCollision(SDL_Renderer *render) {
 void Room::renderPickups(const SDL_FRect &vp) {
     if(!activePickups.empty()){
         for(auto pickup : activePickups){
-            pickup->render(RS::getInstance().get(),vp);
+            pickup->render(RS::getInstance().get(), vp);
         }
     }
 }
+
+void Room::updatePickups() {
+    Player * player = PS::getInstance().get();
+    for (int i = 0; i < activePickups.size(); ++i) {
+        if (activePickups[i]->checkCollision(player->dRect)) {
+            activePickups[i]->apply(player);
+            delete activePickups[i];
+            activePickups.erase(activePickups.begin() + i);
+            break;
+        }
+    }
+
+}
+
+
 
 
 

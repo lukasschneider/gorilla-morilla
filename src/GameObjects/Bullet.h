@@ -13,10 +13,6 @@ public:
 
     Bullet(float x, float y, float speed, float angle, SDL_Renderer* renderer, SDL_FRect *vp);
 
-    ~Bullet(){
-        SDL_DestroyTexture(texture);
-    };
-
     void deactivate();
 
     void update(float dt);

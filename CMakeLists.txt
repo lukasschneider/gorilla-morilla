@@ -2,12 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 project(gorillagame)
 
 set(CMAKE_CXX_STANDARD 17)
-
-if(NOT APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address,leak")
-endif ()
-
-    if (WIN32)
+if (WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
     # -Wno-unknown-attributes gibt es auf MSVC nicht.
@@ -19,7 +14,7 @@ else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter") # baseclass functions have plenty unused parameters
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-attributes")
-    set(CMAKE_CXX_FLAGS_DEBUG   "-Og")
+    #set(CMAKE_CXX_FLAGS_DEBUG   "-Og")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 endif ()
 
@@ -60,7 +55,13 @@ add_executable(${PROJECT_NAME}
         src/Map/RoomManager.cpp
         src/Map/RoomManager.h
         src/Map/Floor.cpp
-        src/Map/Floor.h src/lib/ph.cpp src/lib/ph.h src/lib/BulletRingBuffer.cpp src/lib/BulletRingBuffer.h)
+        src/Map/Floor.h
+        src/lib/ph.cpp
+        src/lib/ph.h
+        src/lib/BulletRingBuffer.cpp
+        src/lib/BulletRingBuffer.h
+        src/Map/FloorManager.cpp
+        src/Map/FloorManager.h)
 if (NOT WIN32)
     include(FindPkgConfig)
 endif ()

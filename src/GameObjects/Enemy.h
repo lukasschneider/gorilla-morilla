@@ -30,6 +30,8 @@ public:
     void render(SDL_Renderer *renderer, const SDL_FRect &viewport);
 
     void coll(BulletRingBuffer& bullets);
+
+    ~Enemy();
 };
 
 

@@ -34,6 +34,10 @@ struct Tile {
     TileType tileType;
     bool isSolid;
 
+    void destroy() {
+        SDL_DestroyTexture(texture);
+    }
+
     Tile(const std::string path, SDL_Renderer *render, TileType tileType, bool isSolid)
             : path(path), tileType(tileType), isSolid(isSolid) {
         texture = SDL_CreateTextureFromSurface(render, IMG_Load(path.c_str()));
@@ -78,6 +82,8 @@ public:
     [[nodiscard]] int checkTeleport(const SDL_Rect &rect) const;
 
     void renderPickups(const SDL_FRect &viewport);
+
+    ~Room();
 
     void updatePickups();
 };

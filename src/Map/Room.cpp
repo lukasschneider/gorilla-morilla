@@ -230,6 +230,18 @@ void Room::renderPickups(const SDL_FRect &vp) {
     }
 }
 
+Room::~Room() {
+
+    for (auto& tile : tiles) {
+        tile.destroy();
+    }
+
+    for (auto pickup : activePickups) {
+        delete pickup;
+    }
+    activePickups.clear();
+}
+
 void Room::updatePickups() {
     Player * player = PS::getInstance().get();
     for (int i = 0; i < activePickups.size(); ++i) {
@@ -242,8 +254,3 @@ void Room::updatePickups() {
     }
 
 }
-
-
-
-
-

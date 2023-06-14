@@ -4,7 +4,6 @@
 #include "../lib/global.h"
 #include "../lib/BulletRingBuffer.h"
 
-
 class Gun {
 public:
     int ammo;
@@ -42,6 +41,9 @@ public:
     bool isEmpty();
 
     void reload();
+
+    ~Gun();
+
 };
 
 

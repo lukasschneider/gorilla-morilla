@@ -18,6 +18,8 @@ public:
     void update(float dt);
 
     void render(SDL_Renderer *renderer, SDL_FRect *vp) const;
+
+    ~Bullet();
 };
 
 #endif //GORILLAGAME_BULLET_H

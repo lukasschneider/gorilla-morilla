@@ -132,3 +132,10 @@ void Gun::reload() {
         timeSinceLastReload = 0.0f;
     }
 }
+
+Gun::~Gun() {
+    while (!bullets.isEmpty()) {
+        Bullet* bullet = bullets.pop();
+        delete bullet;
+    }
+}

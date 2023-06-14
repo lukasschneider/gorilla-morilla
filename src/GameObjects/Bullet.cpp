@@ -27,3 +27,7 @@ Bullet::Bullet(float x, float y, float speed, float angle, SDL_Renderer *rendere
 void Bullet::deactivate() {
     isActive = false;
 }
+
+Bullet::~Bullet() {
+    SDL_DestroyTexture(texture);
+}

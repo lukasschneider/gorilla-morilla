@@ -182,3 +182,14 @@ SDL_Texture *ui::getCurrency() {
 
     return finalTexture;
 }
+
+ui::~ui() {
+    SDL_DestroyTexture(emotes);
+    SDL_DestroyTexture(backboard);
+    TTF_CloseFont(font);
+
+    for (SDL_Texture* heart : hearts) {
+        SDL_DestroyTexture(heart);
+    }
+}
+

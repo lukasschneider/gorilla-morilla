@@ -5,8 +5,7 @@
 #include "gamebase.h"
 #include "lib/recthelper.h"
 #include "GameObjects/Player.h"
-#include "Map/RoomManager.h"
-#include "Map/Floor.h"
+#include "Map/FloorManager.h"
 #include "GameObjects/Enemy.h"
 #include "lib/ui.h"
 
@@ -22,12 +21,10 @@ public:
 class MainState : public GameState {
 protected:
     Player *player;
-    Texture *image = nullptr;
     Room *room;
     Enemy *enemy;
-    ui * userinterface;
+    ui *userinterface;
     Floor floor;
-    //std::unique_ptr<Gun> gun;
 public:
     // ctor
     using GameState::GameState;

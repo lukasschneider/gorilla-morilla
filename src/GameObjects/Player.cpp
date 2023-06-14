@@ -94,6 +94,7 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
             }
             return;
         }
+
     }
 
     float length = std::sqrt(dirX * dirX + dirY * dirY);
@@ -139,10 +140,19 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
             speed = 0;
         }
     }
+    if (isHit) {
+        timeSinceLastDamage += deltaTime;
+
+        if (timeSinceLastDamage >= invincTimer) {
+            isHit = false;
+        }
+    }
 }
 
 void Player::takeDamage() {
-    if (state != PlayerState::Dodge) {
+    if (state != PlayerState::Dodge && !isHit) {
         health --;
+        isHit = true;
+        timeSinceLastDamage = 0;
     }
 }

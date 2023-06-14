@@ -129,10 +129,6 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
     enemy->render(render, camera);
-
-    player->gun->renderBullets(render, &camera);
-    SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
-    enemy->render(render, camera);
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();

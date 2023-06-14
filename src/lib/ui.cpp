@@ -73,6 +73,7 @@ void ui::drawUi() {
     // Draw Ammo
     SDL_Texture *ammoT = getAmmo();
     SDL_RenderCopy(render, ammoT, nullptr, &ammoCount);
+    SDL_DestroyTexture(ammoT);
 
     //Draw Hearts
     std::vector<SDL_Texture *> hp = getHearts();
@@ -86,7 +87,9 @@ void ui::drawUi() {
         SDL_RenderCopy(render, hp[i], nullptr, &newRect);
     }
     // Draw Currency
-    SDL_RenderCopy(render,getCurrency(), nullptr,&currencyCount);
+    auto curr = getCurrency();
+    SDL_RenderCopy(render, curr, nullptr, &currencyCount);
+    SDL_DestroyTexture(curr);
 }
 
 SDL_Texture *ui::getAmmo() {
@@ -116,7 +119,7 @@ SDL_Texture *ui::getAmmo() {
     SDL_RenderCopy(render, textTexture, NULL, &textRect);
     SDL_DestroyTexture(textTexture);
 
-    SDL_SetRenderTarget(render, NULL);
+    SDL_SetRenderTarget(render, nullptr);
     SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
 
     SDL_FreeSurface(textSurface);

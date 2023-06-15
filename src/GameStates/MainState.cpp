@@ -24,9 +24,11 @@ void MainState::Init() {
     crosshair = SDL_CreateTextureFromSurface(render, surface);
     SDL_FreeSurface(surface);
 
-    FloorManager fm;
-    this->floor = fm.createFloor(render, &camera);
-    this->room = floor.getStartRoom();
+    //FloorManager fm;
+    //this->floor = fm.createFloor(render, &camera);
+    //this->room = floor.getStartRoom();
+    RoomManager rm;
+    this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
 
     userinterface = new ui(render, player, &camera);
     enemy = new Enemy(500, 500, 100, &room->activePickups);

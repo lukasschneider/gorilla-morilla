@@ -8,6 +8,7 @@
 class RoomManager {
 public:
     enum class MapType {
+        TEST = 0,
         TP_RIGHT = 1,
         TP_TOP = 2,
         TP_BOTTOM_LEFT = 3,

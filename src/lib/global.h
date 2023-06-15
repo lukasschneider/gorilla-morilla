@@ -11,6 +11,8 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <set>
+#include <stack>
 #include <vector>
 
 #include <SDL_stdinc.h>

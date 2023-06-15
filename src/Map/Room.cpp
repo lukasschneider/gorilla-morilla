@@ -176,7 +176,7 @@ bool Room::checkCollision(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            if (map_layer[1][y][x] != -1 && tiles[map_layer[1][y][x]].isSolid) {
+            if (map_layer[1][y][x] != -1 /*&& tiles[map_layer[1][y][x]].isSolid*/) {
                 return true;
             }
         }

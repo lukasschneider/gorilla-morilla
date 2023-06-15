@@ -1,4 +1,13 @@
 #include "Enemy.h"
+#include "../lib/ph.h"
+
+void SDL_RenderDrawCircle(SDL_Renderer *renderer, int x, int y, int radius) {
+    for (double dy = 1; dy <= radius; dy += 1.0) {
+        double dx = floor(sqrt((2.0 * radius * dy) - (dy * dy)));
+        SDL_RenderDrawLine(renderer, x-dx, y+dy-radius, x+dx, y+dy-radius);
+        SDL_RenderDrawLine(renderer, x-dx, y-dy+radius, x+dx, y-dy+radius);
+    }
+}
 
 Enemy::Enemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
         : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {}
@@ -22,6 +31,9 @@ void Enemy::update(float dt) {
         body.x += speed * dt;
     } else {
         body.x -= speed * dt;
+    }
+    if (inRadius()){
+        attack();
     }
 }
 
@@ -92,4 +104,17 @@ Enemy::~Enemy() {
     activePowerUps->clear();
 }
 
+void Enemy::attack() {
+    Player* p = PS::getInstance().get();
+    p->takeDamage();
+}
+
+
+bool Enemy::inRadius() const {
+    Player* p = PS::getInstance().get();
+    float dx = (body.x + body.w / 2) - (p->dRect.x + p->dRect.w / 2);
+    float dy = (body.y + body.h / 2) - (p->dRect.y + p->dRect.h / 2);
+    float distance = std::sqrt(dx*dx + dy*dy);
+    return distance <= radius;
+}
 

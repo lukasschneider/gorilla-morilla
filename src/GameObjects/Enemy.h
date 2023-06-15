@@ -15,6 +15,7 @@ public:
     float maxHp;
     bool movingRight = true;
     float speed = 300.0f;
+    float radius = 50.0f;
     std::vector<Pickup*>* activePowerUps;
 
     Enemy(float x, float y, float maxHp,std::vector<Pickup*>* pickup);
@@ -31,7 +32,11 @@ public:
 
     void coll(BulletRingBuffer& bullets);
 
+    static void attack();
+
     ~Enemy();
+
+    [[nodiscard]] bool inRadius() const;
 };
 
 

@@ -122,14 +122,10 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     // Backboard includes tree area around room and green background
     room->renderBackboard(render);
     room->renderPickups(camera);
-    // Collision includes every tile the player can colide with
+    // Collision includes every tile the player can collide with
     room->renderCollision(render);
     player->renderPlayer(render);
     player->gun->render(render);
-    player->gun->renderBullets(render, &camera);
-    SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
-    enemy->render(render, camera);
-
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
     enemy->render(render, camera);

@@ -19,11 +19,9 @@ Pair convertToYXandGridPos(int x, int y, int cellSize) {
     return make_pair(gridY, gridX);
 }
 
-void unfuckPath(std::optional<std::vector<std::pair<int, int>>> &path) {
-    if (path) {
-        for(auto& pair : *path) {
-            std::swap(pair.first, pair.second);
-        }
+void unfuckPath(std::vector<std::pair<int, int>> &path) {
+    for (auto &pair: path) {
+        std::swap(pair.first, pair.second);
     }
 }
 
@@ -32,7 +30,6 @@ void drawPath(std::optional<std::vector<std::pair<int, int>>> &path, const SDL_F
     if (path == nullopt)
         return;
     Renderer *render = RS::getInstance().get();
-    unfuckPath(path);
     for (auto &pair: *path) {
         SDL_FRect tmp = {(float) pair.first * size - vp.x, (float) pair.second * size - vp.y, size, size};
         SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
@@ -285,6 +282,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
                 // If the successor is already on the closed
@@ -333,6 +331,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
                 // If the successor is already on the closed
@@ -380,6 +379,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
 
@@ -429,6 +429,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
 
@@ -479,6 +480,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
 
@@ -529,6 +531,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
 
@@ -578,6 +581,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
 
@@ -628,6 +632,7 @@ std::optional<std::vector<std::pair<int, int>>> aStarSearch(vector<vector<int>> 
                 printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 foundDest = true;
+                unfuckPath(path);
                 return path;
             }
 

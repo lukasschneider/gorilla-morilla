@@ -124,7 +124,7 @@ double calculateH8(int col, int row, Pair dest) {
 
 std::vector<std::pair<int, int>> tracePath(vector<vector<cell>> &cellDetails, Pair dest) {
     std::vector<std::pair<int, int>> final;
-    printf("\nThe Path is ");
+//    printf("\nThe Path is ");
     int col = dest.first;
     int row = dest.second;
 
@@ -144,7 +144,7 @@ std::vector<std::pair<int, int>> tracePath(vector<vector<cell>> &cellDetails, Pa
         pair<int, int> p = Path.top();
         Path.pop();
         final.push_back(p);
-        printf("-> (%d,%d) ", p.first, p.second);
+//        printf("-> (%d,%d) ", p.first, p.second);
     }
 
     return final;
@@ -157,26 +157,26 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
     Pair player = convertF(pl);
     Pair enemy = convertF(en);
     if (!isValid(grid, enemy.first, enemy.second)) {
-        printf("Source is invalid\n");
+//        printf("Source is invalid\n");
         return nullopt;
     }
 
     // If the destination is out of range
     if (!isValid(grid, player.first, player.second)) {
-        printf("Destination is invalid\n");
+//        printf("Destination is invalid\n");
         return nullopt;
     }
 
     // Either the source or the destination is blocked
     if (!isUnBlocked(grid, enemy.first, enemy.second)
         || !isUnBlocked(grid, player.first, player.second)) {
-        printf("Source or the destination is blocked\n");
+        //printf("Source or the destination is blocked\n");
         return nullopt;
     }
 
     // If the destination cell is the same as source cell
     if (isDestination(enemy.first, enemy.second, player)) {
-        printf("We are already at the destination\n");
+        //printf("We are already at the destination\n");
         return nullopt;
     }
 
@@ -270,7 +270,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y - 1][x].parent_i = y;
                 cellDetails[y - 1][x].parent_j = x;
-                printf("The destination cell is found\n");
+//                printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -321,7 +321,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y + 1][x].parent_i = y;
                 cellDetails[y + 1][x].parent_j = x;
-                printf("The destination cell is found\n");
+//                printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -371,7 +371,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y][x + 1].parent_i = y;
                 cellDetails[y][x + 1].parent_j = x;
-                printf("The destination cell is found\n");
+//                printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -424,7 +424,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y][x - 1].parent_i = y;
                 cellDetails[y][x - 1].parent_j = x;
-                printf("The destination cell is found\n");
+//                printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -479,7 +479,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y - 1][x + 1].parent_i = y;
                     cellDetails[y - 1][x + 1].parent_j = x;
-                    printf("The destination cell is found\n");
+//                    printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;
@@ -528,7 +528,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y - 1][x - 1].parent_i = y;
                     cellDetails[y - 1][x - 1].parent_j = x;
-                    printf("The destination cell is found\n");
+//                    printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;
@@ -576,7 +576,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y + 1][x + 1].parent_i = y;
                     cellDetails[y + 1][x + 1].parent_j = x;
-                    printf("The destination cell is found\n");
+//                    printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;
@@ -625,7 +625,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y + 1][x - 1].parent_i = y;
                     cellDetails[y + 1][x - 1].parent_j = x;
-                    printf("The destination cell is found\n");
+//                    printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;

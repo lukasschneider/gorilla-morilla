@@ -28,10 +28,10 @@ void MainState::Init() {
     //this->floor = fm.createFloor(render, &camera);
     //this->room = floor.getStartRoom();
     RoomManager rm;
-    this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
+    this->room = rm.create_room(0,render,RoomManager::MapType::TP_RIGHT,&camera);
 
     userinterface = new ui(render, player, &camera);
-    enemy = new Enemy(120, 120, 100, &room->activePickups);
+    enemy = new Enemy(800, 800, 100, &room->activePickups);
 
 
     RS::getInstance().init(render);
@@ -126,17 +126,23 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
 
     // Backboard includes tree area around room and green background
-    room->renderBackboard(render);
+    room->render_backboard(render);
+    room->render_backboard_styling(render);
+
     room->renderPickups(camera);
     // Collision includes every tile the player can collide with
-    room->renderCollision(render);
+    room->render_mapborder_open(render);
+
     player->renderPlayer(render);
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
     enemy->render(render, camera);
     // Forground renders every styling aspekt
-    room->renderForeground(render);
+
+    room->render_markup(render);
+    room->render_mapborder_styling(render);
+
     userinterface->drawUi();
     drawPath(enemy->path,camera,64);
 }

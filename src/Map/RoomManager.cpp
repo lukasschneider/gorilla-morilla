@@ -33,12 +33,16 @@ Vector<Vector<Vector<int>>> RoomManager::create_map_vector(MapType map_type) {
 
     Vector<Vector<Vector<int>>> map_layer;
     if(map_type != MapType::TEST){
-        map_layer.push_back(this->readCSVToArray(BasePath "maps/backboards/Default.csv"));
+        //map_layer.push_back(this->readCSVToArray(BasePath "maps/backboards/Default.csv"));
     }
     switch (map_type) {
         case MapType::TP_RIGHT:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/MapBorderStyling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/backboard_styling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/mapborder_closed.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/mapborder_open.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/markup.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/mapborder_styling.csv"));
             break;
         case MapType::TP_TOP:
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/MapBorder.csv"));

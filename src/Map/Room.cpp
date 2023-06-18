@@ -94,7 +94,7 @@ void Room::renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect,
     SDL_RenderCopy(render, tile.texture, &tile.srcRect, &offsetRect);
 }
 
-void Room::renderBackboard(SDL_Renderer *render) {
+void Room::render_backboard(SDL_Renderer *render) {
     const int BORDER_WIDTH = 1 + (BACK_PIXEL_WIDTH / TILE_SIZE);
     const int BORDER_HEIGHT = 1 + (BACK_PIXEL_HEIGHT / TILE_SIZE);
 
@@ -131,7 +131,96 @@ void Room::renderBackboard(SDL_Renderer *render) {
             }
         }
     }
+}
 
+void Room::render_backboard_styling(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[1][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_mapborder_closed(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[2][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_mapborder_open(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[3][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_markup(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[4][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_mapborder_styling(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[5][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
 }
 
 int Room::checkTeleport(const Rect &rect) const {
@@ -147,7 +236,7 @@ int Room::checkTeleport(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            switch (map_layer[1][y][x]) {
+            switch (map_layer[3][y][x]) {
                 case TELEPORT_TOP:
                     return TELEPORT_TOP;
                 case TELEPORT_LEFT:
@@ -176,7 +265,7 @@ bool Room::checkCollision(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            if (map_layer[1][y][x] != -1 /*&& tiles[map_layer[1][y][x]].isSolid*/) {
+            if (map_layer[3][y][x] != -1 /*&& tiles[map_layer[1][y][x]].isSolid*/) {
                 return true;
             }
         }
@@ -184,43 +273,6 @@ bool Room::checkCollision(const Rect &rect) const {
     return false;
 }
 
-void Room::renderForeground(SDL_Renderer *render) {
-    for (unsigned long z = 2; z < map_layer.size(); ++z) {
-        for (int y = 0; y < MAP_HEIGHT; ++y) {
-            for (int x = 0; x < MAP_WIDTH; ++x) {
-                int tileType = map_layer[z][y][x];
-                SDL_Rect dstRect = {
-                        x * TILE_SIZE,
-                        y * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE
-                };
-                if (tileType != -1) {
-                    const Tile &tile = this->tiles[tileType];
-                    renderTile(render, tile, dstRect, *vp);
-                }
-            }
-        }
-    }
-}
-
-void Room::renderCollision(SDL_Renderer *render) {
-    for (int y = 0; y < MAP_HEIGHT; ++y) {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            int tileType = map_layer[1][y][x];
-            SDL_Rect dstRect = {
-                    x * TILE_SIZE,
-                    y * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE
-            };
-            if (tileType != -1) {
-                const Tile &tile = this->tiles[tileType];
-                renderTile(render, tile, dstRect, *vp);
-            }
-        }
-    }
-}
 
 void Room::renderPickups(const SDL_FRect &vp) {
     if(!activePickups.empty()){

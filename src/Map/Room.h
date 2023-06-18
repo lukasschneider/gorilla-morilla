@@ -73,9 +73,20 @@ public:
 
     void renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect, SDL_FRect &viewport);
 
-    void renderBackboard(SDL_Renderer *render);
+    void render_backboard(SDL_Renderer *render);
+
+    void render_backboard_styling(SDL_Renderer *render);
+
+    void render_mapborder_closed(SDL_Renderer *render);
+
+    void render_mapborder_open(SDL_Renderer *render);
+
+    void render_markup(SDL_Renderer *render);
+
+    void render_mapborder_styling(SDL_Renderer *render);
 
     void renderCollision(SDL_Renderer *render);
+
 
     void renderForeground(SDL_Renderer *render);
 
@@ -86,6 +97,10 @@ public:
     ~Room();
 
     void updatePickups();
+
+    void renderMarkup(SDL_Renderer *render);
+
+
 };
 
 

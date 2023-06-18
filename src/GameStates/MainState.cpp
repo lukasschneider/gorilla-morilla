@@ -31,7 +31,7 @@ void MainState::Init() {
     this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
 
     userinterface = new ui(render, player, &camera);
-    enemy = new Enemy(600, 600, 100, &room->activePickups);
+    enemy = new Enemy(120, 120, 100, &room->activePickups);
 
 
     RS::getInstance().init(render);
@@ -115,8 +115,10 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->updateBullets(deltaT);
     room->updatePickups();
     enemy->coll(player->gun->bullets);
-    enemy->update(deltaT);
+    enemy->update(deltaT,*room);
     userinterface->update();
+    auto r = transformMatrix(room->map_layer[1]);
+    enemy->path = aStarSearch(r, &enemy->body, &player->dRect, true);
 
 
 }
@@ -136,14 +138,5 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();
-    int playerX = (int)player->dRect.x, playerY = (int)player->dRect.y;
-    int enemyX = (int)enemy->body.x, enemyY = (int)enemy->body.y;
-    Pair playerPos = convertToYXandGridPos(playerX,playerY,TILE_SIZE);
-    Pair enemyPos = convertToYXandGridPos(enemyX,enemyY,TILE_SIZE);
-    Pair ePos = make_pair(1,1);
-
-    //playerPos = make_pair(21,10);
-    auto r = transformMatrix(room->map_layer[1]);
-    auto path = aStarSearch(r, ePos, playerPos);
-    drawPath(path,camera, TILE_SIZE);
+    //drawPath(enemy->path,camera,64);
 }

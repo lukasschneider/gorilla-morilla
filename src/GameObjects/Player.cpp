@@ -2,7 +2,7 @@
 
 Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(5){
 
-    dRect = {static_cast<float>(500),static_cast<float>(500),48,48};
+    dRect = {static_cast<float>(64),static_cast<float>(500),48,48};
     SDL_Surface * surface = IMG_Load(playerPath.c_str());
     sRect = {0, 0, surface->w, surface->h};
     playerTexture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -45,7 +45,7 @@ int Player::handleTeleport(const Room &room) {
     }
     return 0;
 }
-/*
+
 void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room) {
     float dirX = 0.0f;
     float dirY = 0.0f;
@@ -136,76 +136,6 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
             }
         }
 
-    } else {
-        speed -= acceleration * deltaTime;
-        if (speed < 0) {
-            speed = 0;
-        }
-    }
-    if (isHit) {
-        timeSinceLastDamage += deltaTime;
-
-        if (timeSinceLastDamage >= invincTimer) {
-            isHit = false;
-        }
-    }
-}
-*/
-
-void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room) {
-    float dirX = 0.0f;
-    float dirY = 0.0f;
-
-    if (keyboardState[SDL_SCANCODE_UP] || keyboardState[SDL_SCANCODE_W]) {
-        dirY -= 1.0f;
-    }
-    if (keyboardState[SDL_SCANCODE_DOWN] || keyboardState[SDL_SCANCODE_S]) {
-        dirY += 1.0f;
-    }
-    if (keyboardState[SDL_SCANCODE_LEFT] || keyboardState[SDL_SCANCODE_A]) {
-        dirX -= 1.0f;
-        dir = LEFT;
-    }
-    if (keyboardState[SDL_SCANCODE_RIGHT] || keyboardState[SDL_SCANCODE_D]) {
-        dirX += 1.0f;
-        dir = RIGHT;
-    }
-    if (keyboardState[SDL_SCANCODE_LSHIFT] && state != PlayerState::Dodge) {
-        state = PlayerState::Dodge;
-        rollTimer = rollDuration;
-        if (dirX == 0.0f && dirY == 0.0f) {
-            rollDirection = (dir == RIGHT) ? SDL_FPoint{1.0f, 0.0f} : SDL_FPoint{-1.0f, 0.0f};
-        } else {
-            rollDirection = {dirX, dirY};
-        }
-    }
-
-    if (state == PlayerState::Dodge) {
-        rollTimer -= deltaTime;
-        if (rollTimer <= 0.0f) {
-            state = PlayerState::Damage;
-        } else {
-            float rollSpeed = rollMovementSpeed * deltaTime;
-            dRect.x += rollDirection.x * rollSpeed;
-            dRect.y += rollDirection.y * rollSpeed;
-            return;
-        }
-    }
-
-    float length = std::sqrt(dirX * dirX + dirY * dirY);
-    if (length > 0.0f) {
-        dirX /= length;
-        dirY /= length;
-
-        speed += acceleration * deltaTime;
-
-        if (speed > maxSpeed) {
-            speed = maxSpeed;
-        }
-
-        float moveSpeed = speed * deltaTime;
-        dRect.x += dirX * moveSpeed;
-        dRect.y += dirY * moveSpeed;
     } else {
         speed -= acceleration * deltaTime;
         if (speed < 0) {

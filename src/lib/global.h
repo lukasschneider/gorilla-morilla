@@ -30,6 +30,8 @@ using u8    = std::uint8_t;
 using i32   = std::int32_t;
 using u32   = std::uint32_t;
 
+using Path = std::optional<std::vector<std::pair<int, int>>>;
+
 using Color     = SDL_Color;
 using Event     = SDL_Event;
 using Point     = SDL_Point;

@@ -17,6 +17,7 @@ public:
     float speed = 300.0f;
     float radius = 50.0f;
     std::vector<Pickup*>* activePowerUps;
+    Path path;
 
     Enemy(float x, float y, float maxHp,std::vector<Pickup*>* pickup);
 
@@ -24,7 +25,7 @@ public:
 
     void die();
 
-    void update(float dt);
+    void update(float dt, Room &room);
 
     void respawn();
 

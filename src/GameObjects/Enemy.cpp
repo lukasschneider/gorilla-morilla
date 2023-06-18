@@ -10,28 +10,70 @@ void SDL_RenderDrawCircle(SDL_Renderer *renderer, int x, int y, int radius) {
 }
 
 Enemy::Enemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
-        : body({x, y, 50, 50}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {}
+        : body({x, y, 32, 32}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {}
 
-void Enemy::update(float dt) {
+void Enemy::update(float dt, Room &room) {
 
     if (hp <= 0) {
         respawn();
     }
 
-    if (body.x + body.w >= 14 * 64) {
-        movingRight = false;
-    }
-        // If the enemy hits the left boundary, change direction
-    else if (body.x <= 128) {
-        movingRight = true;
+    const float threshold = 16.0f;
+
+    if (path && !path->empty()) {
+        path->erase(path->begin());
+        std::pair<int, int> destination = path->front();
+
+        float destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - body.w / 2.0f;
+        float destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - body.h / 2.0f;
+
+        // Compute the direction vector
+        float dx = destinationX - body.x;
+        float dy = destinationY - body.y;
+
+        // Compute the distance to the destination
+        float distance = std::sqrt(dx * dx + dy * dy);
+
+        // If the enemy is close enough to the destination, move on to the next point
+        if (distance <= threshold) {
+            path->erase(path->begin());
+
+            if (!path->empty()) {
+                destination = path->front();
+                destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - body.w / 2.0f;
+                destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - body.h / 2.0f;
+
+                dx = destinationX - body.x;
+                dy = destinationY - body.y;
+                distance = std::sqrt(dx * dx + dy * dy);
+            }
+            else {
+                // The path is empty, the enemy can stand still
+                return;
+            }
+        }
+
+        // Normalize the direction vector
+        dx /= distance;
+        dy /= distance;
+
+        float moveSpeed = speed * dt;
+        float newX = body.x + dx * moveSpeed;
+        float newY = body.y + dy * moveSpeed;
+
+        // Perform collision checks and update the position if there is no collision
+        if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(body.y),
+                                  static_cast<int>(body.w), static_cast<int>(body.h)})) {
+            body.x = newX;
+        }
+
+        if (!room.checkCollision({static_cast<int>(body.x), static_cast<int>(newY),
+                                  static_cast<int>(body.w), static_cast<int>(body.h)})) {
+            body.y = newY;
+        }
     }
 
-    // Update the position based on the direction
-    if (movingRight) {
-        body.x += speed * dt;
-    } else {
-        body.x -= speed * dt;
-    }
+
     if (inRadius()){
         attack();
     }
@@ -39,8 +81,8 @@ void Enemy::update(float dt) {
 
 void Enemy::respawn() {
     die();
-    body.x = 500;
-    body.y = 500;
+    body.x = 64;
+    body.y = 64;
 
     hp = maxHp;
 }

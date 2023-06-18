@@ -4,6 +4,7 @@
 #include <cstdarg>
 #include <cstddef>
 
+#include <optional>
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -11,6 +12,8 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <set>
+#include <stack>
 #include <vector>
 
 #include <SDL_stdinc.h>
@@ -27,6 +30,8 @@ using uint  = unsigned int;
 using u8    = std::uint8_t;
 using i32   = std::int32_t;
 using u32   = std::uint32_t;
+
+using Path = std::optional<std::vector<std::pair<int, int>>>;
 
 using Color     = SDL_Color;
 using Event     = SDL_Event;

@@ -1,7 +1,7 @@
 #include "../gorillagame.h"
 #include "../lib/rh.h"
 #include "../lib/ph.h"
-
+#include "../lib/astar.h"
 SDL_FRect camera = {0, 0, 1280, 720};
 int mouseX, mouseY;
 SDL_Rect crossDrect;
@@ -24,12 +24,14 @@ void MainState::Init() {
     crosshair = SDL_CreateTextureFromSurface(render, surface);
     SDL_FreeSurface(surface);
 
-    FloorManager fm;
-    this->floor = fm.createFloor(render, &camera);
-    this->room = floor.getStartRoom();
+    //FloorManager fm;
+    //this->floor = fm.createFloor(render, &camera);
+    //this->room = floor.getStartRoom();
+    RoomManager rm;
+    this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
 
     userinterface = new ui(render, player, &camera);
-    enemy = new Enemy(500, 500, 100, &room->activePickups);
+    enemy = new Enemy(120, 120, 100, &room->activePickups);
 
 
     RS::getInstance().init(render);
@@ -113,8 +115,12 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->updateBullets(deltaT);
     room->updatePickups();
     enemy->coll(player->gun->bullets);
-    enemy->update(deltaT);
+    enemy->update(deltaT,*room);
     userinterface->update();
+    auto r = transformMatrix(room->map_layer[1]);
+    enemy->path = aStarSearch(r, &enemy->body, &player->dRect, false);
+
+
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -132,4 +138,5 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();
+    drawPath(enemy->path,camera,64);
 }

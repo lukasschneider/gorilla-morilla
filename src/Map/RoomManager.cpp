@@ -32,7 +32,9 @@ Vector<Vector<int>> RoomManager::readCSVToArray(const std::string &filename) {
 Vector<Vector<Vector<int>>> RoomManager::create_map_vector(MapType map_type) {
 
     Vector<Vector<Vector<int>>> map_layer;
-    map_layer.push_back(this->readCSVToArray(BasePath "maps/backboards/Default.csv"));
+    if(map_type != MapType::TEST){
+        map_layer.push_back(this->readCSVToArray(BasePath "maps/backboards/Default.csv"));
+    }
     switch (map_type) {
         case MapType::TP_RIGHT:
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/MapBorder.csv"));
@@ -66,6 +68,10 @@ Vector<Vector<Vector<int>>> RoomManager::create_map_vector(MapType map_type) {
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/MapBorder.csv"));
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/MapBorderStyling.csv"));
             break;
+        case MapType::TEST:
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/test/test_Backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/test/test_Collision.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/test/test_Style.csv"));
         default:
             perror("No Valid Enum");
     }

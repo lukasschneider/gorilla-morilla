@@ -118,7 +118,7 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     enemy->update(deltaT,*room);
     userinterface->update();
     auto r = transformMatrix(room->map_layer[1]);
-    enemy->path = aStarSearch(r, &enemy->body, &player->dRect, true);
+    enemy->path = aStarSearch(r, &enemy->body, &player->dRect, false);
 
 
 }
@@ -138,5 +138,5 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();
-    //drawPath(enemy->path,camera,64);
+    drawPath(enemy->path,camera,64);
 }

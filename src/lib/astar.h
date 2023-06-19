@@ -13,11 +13,12 @@ typedef pair<double, pair<int, int> > pPair;
 
 
 Pair convertF(SDL_FRect * obj, int cellSize = 64) {
-    int gridX = (int)obj->x / cellSize;
-    int gridY = (int)obj->y / cellSize;
+    int gridX = static_cast<int>(obj->x + obj->w / 2.0f) / cellSize;
+    int gridY = static_cast<int>(obj->y + obj->h / 2.0f) / cellSize;
 
     return make_pair(gridY, gridX);
 }
+
 
 void unfuckPath(std::vector<std::pair<int, int>> &path) {
     for (auto &pair: path) {
@@ -280,7 +281,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y - 1][x]
                      && isUnBlocked(grid, y - 1, x)) {
-                gNew = cellDetails[y][x].g + 1.0;
+                gNew = cellDetails[y][x].g + 10;
                 if (vier) {
                     hNew = calculateH4(y - 1, x, player);
                 } else {
@@ -331,7 +332,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y + 1][x]
                      && isUnBlocked(grid, y + 1, x)) {
-                gNew = cellDetails[y][x].g + 1.0;
+                gNew = cellDetails[y][x].g + 10;
                 if (vier) {
                     hNew = calculateH4(y + 1, x, player);
                 } else {
@@ -382,7 +383,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y][x + 1]
                      && isUnBlocked(grid, y, x + 1)) {
-                gNew = cellDetails[y][x].g + 1.0;
+                gNew = cellDetails[y][x].g + 10;
                 if (vier) {
                     hNew = calculateH4(y, x + 1, player);
                 } else {
@@ -435,7 +436,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y][x - 1]
                      && isUnBlocked(grid, y, x - 1)) {
-                gNew = cellDetails[y][x].g + 1.0;
+                gNew = cellDetails[y][x].g + 10;
                 if (vier) {
                     hNew = calculateH4(y, x - 1, player);
                 } else {
@@ -490,7 +491,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y - 1][x + 1]
                          && isUnBlocked(grid, y - 1, x + 1)) {
-                    gNew = cellDetails[y][x].g + 1.414;
+                    gNew = cellDetails[y][x].g + 14;
                     hNew = calculateH8(y - 1, x + 1, player);
                     fNew = gNew + hNew;
 
@@ -539,7 +540,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y - 1][x - 1]
                          && isUnBlocked(grid, y - 1, x - 1)) {
-                    gNew = cellDetails[y][x].g + 1.414;
+                    gNew = cellDetails[y][x].g + 14;
                     hNew = calculateH8(y - 1, x - 1, player);
                     fNew = gNew + hNew;
 
@@ -587,7 +588,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y + 1][x + 1]
                          && isUnBlocked(grid, y + 1, x + 1)) {
-                    gNew = cellDetails[y][x].g + 1.414;
+                    gNew = cellDetails[y][x].g + 14;
                     hNew = calculateH8(y + 1, x + 1, player);
                     fNew = gNew + hNew;
 
@@ -636,7 +637,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y + 1][x - 1]
                          && isUnBlocked(grid, y + 1, x - 1)) {
-                    gNew = cellDetails[y][x].g + 1.414;
+                    gNew = cellDetails[y][x].g + 14;
                     hNew = calculateH8(y + 1, x - 1, player);
                     fNew = gNew + hNew;
 

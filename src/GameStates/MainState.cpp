@@ -31,7 +31,8 @@ void MainState::Init() {
     this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
 
     userinterface = new ui(render, player, &camera);
-    enemy = new Enemy(120, 120, 100, &room->activePickups);
+    m = new MeleeEnemy(120, 120, 100, &room->activePickups);
+
 
 
     RS::getInstance().init(render);
@@ -39,10 +40,11 @@ void MainState::Init() {
 }
 
 void MainState::UnInit() {
-    delete enemy;
+    delete m;
     delete player;
     delete room;
     delete userinterface;
+    delete m;
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -114,11 +116,11 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
-    enemy->coll(player->gun->bullets);
-    enemy->update(deltaT,*room);
+    m->coll(player->gun->bullets);
+    m->update(deltaT,*room);
     userinterface->update();
     auto r = transformMatrix(room->map_layer[1]);
-    enemy->path = aStarSearch(r, &enemy->body, &player->dRect, false);
+    m->path = aStarSearch(r, &m->dRect, &player->dRect, false);
 
 
 }
@@ -134,9 +136,9 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
-    enemy->render(render, camera);
+    m->render(render, camera);
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();
-    drawPath(enemy->path,camera,64);
+    drawPath(m->path,camera,64);
 }

@@ -7,7 +7,9 @@
 #include "GameObjects/Player.h"
 #include "Map/FloorManager.h"
 #include "GameObjects/Enemy.h"
+#include "GameObjects/BaseEnemy.h"
 #include "lib/ui.h"
+#include "GameObjects/MeleeEnemy.h"
 
 class ExampleGame;
 
@@ -23,6 +25,7 @@ protected:
     Player *player;
     Room *room;
     Enemy *enemy;
+    MeleeEnemy * m;
     ui *userinterface;
     Floor floor;
 public:

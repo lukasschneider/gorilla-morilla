@@ -4,6 +4,7 @@
 #include "global.h"
 #include <fstream>
 #include "rh.h"
+#include "../GameObjects/Enemy.h"
 
 using namespace std;
 
@@ -36,6 +37,16 @@ void drawPath(Path &path, const SDL_FRect &vp, float size) {
         SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
         SDL_RenderDrawRectF(render, &tmp);
     }
+}
+
+double enemyWeight(int y, int x, const std::vector<Enemy*>& enemies) {
+    for (const auto& enemy : enemies) {
+        auto conv = convertF(&enemy->body);
+        if (conv.second == x && conv.first == y) {
+            return FLT_MAX;
+        }
+    }
+    return 0.0;
 }
 
 struct cell {
@@ -125,7 +136,7 @@ double calculateH8(int col, int row, Pair dest) {
 
 std::vector<std::pair<int, int>> tracePath(vector<vector<cell>> &cellDetails, Pair dest) {
     std::vector<std::pair<int, int>> final;
-    printf("\nThe Path is ");
+    //printf("\nThe Path is ");
     int col = dest.first;
     int row = dest.second;
 
@@ -145,39 +156,39 @@ std::vector<std::pair<int, int>> tracePath(vector<vector<cell>> &cellDetails, Pa
         pair<int, int> p = Path.top();
         Path.pop();
         final.push_back(p);
-        printf("-> (%d,%d) ", p.first, p.second);
+        //printf("-> (%d,%d) ", p.first, p.second);
     }
 
     return final;
 }
 
 
-Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool vier) {
+Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool vier, const vector<Enemy*>& enemies) {
     // If the source is out of range
     // y : x
     Pair player = convertF(pl);
     Pair enemy = convertF(en);
     if (!isValid(grid, enemy.first, enemy.second)) {
-        printf("Source is invalid\n");
+        //printf("Source is invalid\n");
         return nullopt;
     }
 
     // If the destination is out of range
     if (!isValid(grid, player.first, player.second)) {
-        printf("Destination is invalid\n");
+        //printf("Destination is invalid\n");
         return nullopt;
     }
 
     // Either the source or the destination is blocked
     if (!isUnBlocked(grid, enemy.first, enemy.second)
         || !isUnBlocked(grid, player.first, player.second)) {
-        printf("Source or the destination is blocked\n");
+        //printf("Source or the destination is blocked\n");
         return nullopt;
     }
 
     // If the destination cell is the same as source cell
     if (isDestination(enemy.first, enemy.second, player)) {
-        printf("We are already at the destination\n");
+        //printf("We are already at the destination\n");
         return nullopt;
     }
 
@@ -271,7 +282,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y - 1][x].parent_i = y;
                 cellDetails[y - 1][x].parent_j = x;
-                printf("The destination cell is found\n");
+                //printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -281,7 +292,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y - 1][x]
                      && isUnBlocked(grid, y - 1, x)) {
-                gNew = cellDetails[y][x].g + 10;
+                gNew = cellDetails[y][x].g + 10 + enemyWeight(y - 1, x,enemies);
                 if (vier) {
                     hNew = calculateH4(y - 1, x, player);
                 } else {
@@ -322,7 +333,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y + 1][x].parent_i = y;
                 cellDetails[y + 1][x].parent_j = x;
-                printf("The destination cell is found\n");
+                //printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -332,7 +343,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y + 1][x]
                      && isUnBlocked(grid, y + 1, x)) {
-                gNew = cellDetails[y][x].g + 10;
+                gNew = cellDetails[y][x].g + 10 + enemyWeight(y + 1, x,enemies);
                 if (vier) {
                     hNew = calculateH4(y + 1, x, player);
                 } else {
@@ -372,7 +383,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y][x + 1].parent_i = y;
                 cellDetails[y][x + 1].parent_j = x;
-                printf("The destination cell is found\n");
+                //printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -383,7 +394,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y][x + 1]
                      && isUnBlocked(grid, y, x + 1)) {
-                gNew = cellDetails[y][x].g + 10;
+                gNew = cellDetails[y][x].g + 10 + enemyWeight(y, x + 1,enemies);
                 if (vier) {
                     hNew = calculateH4(y, x + 1, player);
                 } else {
@@ -425,7 +436,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Set the Parent of the destination cell
                 cellDetails[y][x - 1].parent_i = y;
                 cellDetails[y][x - 1].parent_j = x;
-                printf("The destination cell is found\n");
+                //printf("The destination cell is found\n");
                 auto path = tracePath(cellDetails, player);
                 unfuckPath(path);
                 return path;
@@ -436,7 +447,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                 // Else do the following
             else if (!closedList[y][x - 1]
                      && isUnBlocked(grid, y, x - 1)) {
-                gNew = cellDetails[y][x].g + 10;
+                gNew = cellDetails[y][x].g + 10 + enemyWeight(y, x - 1,enemies);
                 if (vier) {
                     hNew = calculateH4(y, x - 1, player);
                 } else {
@@ -480,7 +491,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y - 1][x + 1].parent_i = y;
                     cellDetails[y - 1][x + 1].parent_j = x;
-                    printf("The destination cell is found\n");
+                    //printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;
@@ -491,7 +502,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y - 1][x + 1]
                          && isUnBlocked(grid, y - 1, x + 1)) {
-                    gNew = cellDetails[y][x].g + 14;
+                    gNew = cellDetails[y][x].g + 14 + enemyWeight(y - 1, x + 1, enemies);
                     hNew = calculateH8(y - 1, x + 1, player);
                     fNew = gNew + hNew;
 
@@ -529,7 +540,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y - 1][x - 1].parent_i = y;
                     cellDetails[y - 1][x - 1].parent_j = x;
-                    printf("The destination cell is found\n");
+                    //printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;
@@ -540,7 +551,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y - 1][x - 1]
                          && isUnBlocked(grid, y - 1, x - 1)) {
-                    gNew = cellDetails[y][x].g + 14;
+                    gNew = cellDetails[y][x].g + 14 + enemyWeight(y - 1, x - 1, enemies);
                     hNew = calculateH8(y - 1, x - 1, player);
                     fNew = gNew + hNew;
 
@@ -577,7 +588,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y + 1][x + 1].parent_i = y;
                     cellDetails[y + 1][x + 1].parent_j = x;
-                    printf("The destination cell is found\n");
+                    //printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;
@@ -588,7 +599,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y + 1][x + 1]
                          && isUnBlocked(grid, y + 1, x + 1)) {
-                    gNew = cellDetails[y][x].g + 14;
+                    gNew = cellDetails[y][x].g + 14 + enemyWeight(y + 1, x + 1, enemies);
                     hNew = calculateH8(y + 1, x + 1, player);
                     fNew = gNew + hNew;
 
@@ -626,7 +637,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Set the Parent of the destination cell
                     cellDetails[y + 1][x - 1].parent_i = y;
                     cellDetails[y + 1][x - 1].parent_j = x;
-                    printf("The destination cell is found\n");
+                    //printf("The destination cell is found\n");
                     auto path = tracePath(cellDetails, player);
                     unfuckPath(path);
                     return path;
@@ -637,7 +648,7 @@ Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool
                     // Else do the following
                 else if (!closedList[y + 1][x - 1]
                          && isUnBlocked(grid, y + 1, x - 1)) {
-                    gNew = cellDetails[y][x].g + 14;
+                    gNew = cellDetails[y][x].g + 14 + enemyWeight(y + 1, x - 1, enemies);
                     hNew = calculateH8(y + 1, x - 1, player);
                     fNew = gNew + hNew;
 

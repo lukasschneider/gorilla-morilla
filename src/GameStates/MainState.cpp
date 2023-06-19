@@ -17,6 +17,8 @@ SDL_Texture *crosshair;
 
 void MainState::Init() {
 
+    RS::getInstance().init(render);
+
     SDL_ShowCursor(SDL_DISABLE);
     auto gun = std::make_unique<Gun>(render);
     player = new Player(render, std::move(gun));
@@ -31,20 +33,20 @@ void MainState::Init() {
     this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
 
     userinterface = new ui(render, player, &camera);
-    m = new MeleeEnemy(120, 120, 100, &room->activePickups);
+    m = new MeleeEnemy(120, 120, 250, &room->activePickups);
 
+    eVec.emplace_back(new Enemy(200, 2000, 100, &room->activePickups));
+    eVec.emplace_back(new Enemy(320, 320, 100, &room->activePickups));
+    eVec.emplace_back(new Enemy(120, 120, 100, &room->activePickups));
 
-
-    RS::getInstance().init(render);
     PS::getInstance().init(player);
 }
 
 void MainState::UnInit() {
-    delete m;
     delete player;
     delete room;
     delete userinterface;
-    delete m;
+    //delete m;
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -70,6 +72,11 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 
     if(keyboardState[SDL_SCANCODE_R]) {
         player->gun->reload();
+    }
+    if(keyboardState[SDL_SCANCODE_L]){
+        for(auto e : eVec){
+            e->hp = 0;
+        }
     }
 
     player->handleMovement(keyboardState, deltaT, *room);
@@ -120,7 +127,12 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     m->update(deltaT,*room);
     userinterface->update();
     auto r = transformMatrix(room->map_layer[1]);
-    m->path = aStarSearch(r, &m->dRect, &player->dRect, false);
+    m->path = aStarSearch(r, &m->dRect, &player->dRect, false , eVec);
+    for(auto e : eVec){
+        e->path = aStarSearch(r,&e->body,&player->dRect,false,eVec);
+        e->update(deltaT,*room);
+        e->coll(player->gun->bullets);
+    }
 
 
 }
@@ -137,8 +149,11 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
     m->render(render, camera);
+    for(auto e : eVec){
+        e->render(render,camera);
+    }
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();
-    drawPath(m->path,camera,64);
+    //drawPath(m->path,camera,64);
 }

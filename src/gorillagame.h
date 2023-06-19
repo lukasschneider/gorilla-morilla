@@ -7,9 +7,9 @@
 #include "GameObjects/Player.h"
 #include "Map/FloorManager.h"
 #include "GameObjects/Enemy.h"
-#include "GameObjects/BaseEnemy.h"
+#include "GameObjects/Enemy/BaseEnemy.h"
 #include "lib/ui.h"
-#include "GameObjects/MeleeEnemy.h"
+#include "GameObjects/Enemy/MeleeEnemy.h"
 
 class ExampleGame;
 
@@ -28,6 +28,7 @@ protected:
     MeleeEnemy * m;
     ui *userinterface;
     Floor floor;
+    std::vector<Enemy*> eVec;
 public:
     // ctor
     using GameState::GameState;

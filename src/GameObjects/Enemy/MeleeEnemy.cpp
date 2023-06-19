@@ -3,7 +3,7 @@
 //
 
 #include "MeleeEnemy.h"
-#include "../lib/ph.h"
+#include "../../lib/ph.h"
 
 void MeleeEnemy::attack() {
     Player* p = PS::getInstance().get();

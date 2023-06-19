@@ -1,13 +1,20 @@
 #include "BaseEnemy.h"
-#include "../lib/ph.h"
-#include "../lib/rh.h"
+#include "../../lib/ph.h"
+#include "../../lib/rh.h"
 
 BaseEnemy::BaseEnemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
         : dRect({x, y, 32, 32}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {
     Renderer * renderer = RS::getInstance().get();
     dRect = {static_cast<float>(64),static_cast<float>(500),48,48};
     SDL_Surface * surface = IMG_Load(enemyPath.c_str());
+    if (!surface) {
+        std::cout << "Failed to load image: " << IMG_GetError() << std::endl;
+    }
+
     enemyTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!enemyTexture) {
+        std::cout << "Failed to create texture: " << SDL_GetError() << std::endl;
+    }
     SDL_FreeSurface(surface);
 }
 
@@ -16,6 +23,14 @@ void BaseEnemy::update(float dt, Room &room) {
 
     if (hp <= 0) {
         respawn();
+    }
+
+    if (isHit) {
+        hitTime += dt;
+        if (hitTime >= hitDuration) {
+            hitTime = 0.0f;
+            isHit = false;
+        }
     }
 
     const float threshold = 0.0f;
@@ -76,6 +91,13 @@ void BaseEnemy::respawn() {
 }
 
 void BaseEnemy::render(SDL_Renderer *renderer, const SDL_FRect &viewport) {
+
+    if (isHit) {
+        int alpha = 255 * (0.5f + 0.5f * sin(10.0f * hitTime)); // Flashing effect
+        SDL_SetTextureAlphaMod(enemyTexture, alpha);
+    } else {
+        SDL_SetTextureAlphaMod(enemyTexture, 255);
+    }
     SDL_FRect enemyRect = {
             (dRect.x - viewport.x),
             (dRect.y - viewport.y),
@@ -84,29 +106,49 @@ void BaseEnemy::render(SDL_Renderer *renderer, const SDL_FRect &viewport) {
     };
     SDL_RenderCopyF(renderer,enemyTexture, nullptr,&enemyRect);
 
-    SDL_FRect hpBar = {
+    // Render total health bar in red
+    SDL_FRect totalHealthBar = {
+            dRect.x - viewport.x,
+            dRect.y - viewport.y - 10,
+            dRect.w,
+            5
+    };
+    SDL_Rect totalHealthBarRect = {
+            static_cast<int>(totalHealthBar.x),
+            static_cast<int>(totalHealthBar.y),
+            static_cast<int>(totalHealthBar.w),
+            static_cast<int>(totalHealthBar.h)
+    };
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red
+    SDL_RenderFillRect(renderer, &totalHealthBarRect);
+
+// Render current health bar in green
+    SDL_FRect currentHealthBar = {
             dRect.x - viewport.x,
             dRect.y - viewport.y - 10,
             dRect.w * (hp / maxHp),
             5
     };
-    SDL_Rect hpBarRect = {
-            static_cast<int>(hpBar.x),
-            static_cast<int>(hpBar.y),
-            static_cast<int>(hpBar.w),
-            static_cast<int>(hpBar.h)
+    SDL_Rect currentHealthBarRect = {
+            static_cast<int>(currentHealthBar.x),
+            static_cast<int>(currentHealthBar.y),
+            static_cast<int>(currentHealthBar.w),
+            static_cast<int>(currentHealthBar.h)
     };
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    SDL_RenderFillRect(renderer, &hpBarRect);
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Green
+    SDL_RenderFillRect(renderer, &currentHealthBarRect);
+
+
 }
 
 void BaseEnemy::coll(BulletRingBuffer &bullets) {
     for (int i = 0; i < bullets.size(); ++i) {
         Bullet *bullet = bullets.get(i);
         if (!bullet->isActive) continue;
-        if (SDL_HasIntersectionF(&bullet->rect, &dRect)) {
+        if (SDL_HasIntersectionF(&bullet->rect, &dRect) /*&& !isHit*/) {
             hp -= 20;
             bullet->deactivate();
+            getHit();
         }
     }
 }
@@ -122,6 +164,11 @@ void BaseEnemy::die() {
         activePowerUps->push_back(new Banana(tmp, renderer));
     }
 }
+
+void BaseEnemy::getHit() {
+    isHit = true;
+}
+
 
 
 

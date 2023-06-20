@@ -36,7 +36,7 @@ public:
     float rollTimer = 0.0f;
     float rollMovementSpeed = 550.0f;
     bool isHit = false;
-    float invincTimer = 0.3f;
+    float invincTimer = 1.0f;
     float timeSinceLastDamage = 0.0f;
 
     Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);

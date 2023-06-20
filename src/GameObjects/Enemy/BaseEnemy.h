@@ -15,7 +15,6 @@ public:
     float hp;
     float maxHp;
     float speed = 250.0f;
-    float radius = 64.0f;
     std::vector<Pickup*>* activePowerUps;
     Path path;
     Texture * enemyTexture;
@@ -34,7 +33,7 @@ public:
 
     virtual void respawn();
 
-    virtual void render(SDL_Renderer *renderer, const SDL_FRect &viewport);
+    virtual void render(const SDL_FRect &viewport);
 
     virtual void coll(BulletRingBuffer& bullets);
 

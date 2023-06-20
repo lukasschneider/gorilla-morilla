@@ -91,8 +91,8 @@ void BaseEnemy::respawn() {
     hp = maxHp;
 }
 
-void BaseEnemy::render(SDL_Renderer *renderer, const SDL_FRect &viewport) {
-
+void BaseEnemy::render(const SDL_FRect &viewport) {
+    Renderer * renderer = RS::getInstance().get();
     if (isHit) {
         int alpha = 255 * (0.5f + 0.5f * sin(10.0f * hitTime)); // Flashing effect
         SDL_SetTextureAlphaMod(enemyTexture, alpha);

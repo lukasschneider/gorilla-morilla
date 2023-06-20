@@ -35,12 +35,11 @@ void MainState::Init() {
     userinterface = new ui(render, player, &camera);
 
     for(int i = 0; i < 1; i++)
-    eVec.emplace_back(new MeleeEnemy(200, 64 * i, 100, &room->activePickups));
-
+    eVec.emplace_back(new MeleeEnemy(200, 64 * i, 200, &room->activePickups));
+    knife = new Knife();
 
     PS::getInstance().init(player);
 }
-
 void MainState::UnInit() {
     delete player;
     delete room;
@@ -64,7 +63,7 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     }
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     // Check if the left mouse button is being held down
-    Uint32 mouseState = SDL_GetMouseState(NULL, NULL);
+    Uint32 mouseState = SDL_GetMouseState(nullptr, nullptr);
     if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
         player->gun->fire(render, &camera);
     }
@@ -127,6 +126,7 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
         m->coll(player->gun->bullets);
         m->update(deltaT,*room);
         m->path = aStarSearch(r, &m->dRect, &player->dRect, false , eVec);
+        m->attackUpdate();
     }
 
     userinterface->update();
@@ -151,12 +151,13 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->renderPlayer(render);
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
-    SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
+    SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
     for(auto e : eVec){
-        e->render(render,camera);
+        e->render(camera);
     }
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();
+    knife->renderKnife(camera);
     //drawPath(m->path,camera,64);
 }

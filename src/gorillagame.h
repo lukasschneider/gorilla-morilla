@@ -10,6 +10,8 @@
 #include "GameObjects/Enemy/BaseEnemy.h"
 #include "lib/ui.h"
 #include "GameObjects/Enemy/MeleeEnemy.h"
+#include "GameObjects/Weapons/Knife.h"
+
 
 class ExampleGame;
 
@@ -27,6 +29,7 @@ protected:
     Enemy *enemy;
     ui *userinterface;
     Floor floor;
+    Knife * knife;
     std::vector<MeleeEnemy*> eVec;
 public:
     // ctor

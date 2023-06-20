@@ -25,10 +25,9 @@ protected:
     Player *player;
     Room *room;
     Enemy *enemy;
-    MeleeEnemy * m;
     ui *userinterface;
     Floor floor;
-    std::vector<Enemy*> eVec;
+    std::vector<MeleeEnemy*> eVec;
 public:
     // ctor
     using GameState::GameState;

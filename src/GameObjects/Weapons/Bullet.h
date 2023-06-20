@@ -1,7 +1,7 @@
 #ifndef GORILLAGAME_BULLET_H
 #define GORILLAGAME_BULLET_H
 
-#include "../lib/global.h"
+#include "../../lib/global.h"
 class Bullet {
 public:
     std::string path = BasePath "asset/graphic/bullets/basic_bullet.png";

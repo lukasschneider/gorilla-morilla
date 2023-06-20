@@ -1,7 +1,7 @@
 #ifndef SDL_BASEGAME_PLAYER_H
 #define SDL_BASEGAME_PLAYER_H
 #include "../lib/global.h"
-#include "Gun.h"
+#include "Weapons/Gun.h"
 #include "../Map/Room.h"
 
 class Room;

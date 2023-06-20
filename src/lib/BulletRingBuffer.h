@@ -1,7 +1,7 @@
 #ifndef GORILLAGAME_BULLETRINGBUFFER_H
 #define GORILLAGAME_BULLETRINGBUFFER_H
 
-#include "../GameObjects/Bullet.h"
+#include "../GameObjects/Weapons/Bullet.h"
 
 
 class BulletRingBuffer {

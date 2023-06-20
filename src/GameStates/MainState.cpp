@@ -33,11 +33,10 @@ void MainState::Init() {
     this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
 
     userinterface = new ui(render, player, &camera);
-    m = new MeleeEnemy(120, 120, 250, &room->activePickups);
 
-    eVec.emplace_back(new Enemy(200, 2000, 100, &room->activePickups));
-    eVec.emplace_back(new Enemy(320, 320, 100, &room->activePickups));
-    eVec.emplace_back(new Enemy(120, 120, 100, &room->activePickups));
+    for(int i = 0; i < 1; i++)
+    eVec.emplace_back(new MeleeEnemy(200, 64 * i, 100, &room->activePickups));
+
 
     PS::getInstance().init(player);
 }
@@ -123,13 +122,18 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
-    m->coll(player->gun->bullets);
-    m->update(deltaT,*room);
-    userinterface->update();
     auto r = transformMatrix(room->map_layer[1]);
-    m->path = aStarSearch(r, &m->dRect, &player->dRect, false , eVec);
+    for(auto m : eVec){
+        m->coll(player->gun->bullets);
+        m->update(deltaT,*room);
+        m->path = aStarSearch(r, &m->dRect, &player->dRect, false , eVec);
+    }
+
+    userinterface->update();
+
+
     for(auto e : eVec){
-        e->path = aStarSearch(r,&e->body,&player->dRect,false,eVec);
+        e->path = aStarSearch(r,&e->dRect,&player->dRect,false,eVec);
         e->update(deltaT,*room);
         e->coll(player->gun->bullets);
     }
@@ -148,7 +152,6 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
-    m->render(render, camera);
     for(auto e : eVec){
         e->render(render,camera);
     }

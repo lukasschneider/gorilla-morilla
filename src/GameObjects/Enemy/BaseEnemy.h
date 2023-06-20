@@ -4,8 +4,8 @@
 
 #include "../../lib/global.h"
 #include "../../lib/rh.h"
-#include "../Bullet.h"
-#include "../Gun.h"
+#include "../Weapons/Bullet.h"
+#include "../Weapons/Gun.h"
 #include "../Pickups.h"
 
 
@@ -14,7 +14,7 @@ public:
     SDL_FRect dRect;
     float hp;
     float maxHp;
-    float speed = 450.0f;
+    float speed = 250.0f;
     float radius = 64.0f;
     std::vector<Pickup*>* activePowerUps;
     Path path;
@@ -44,6 +44,7 @@ public:
 
     virtual void getHit();
 
+    virtual bool lineOfSightCheck(const Player &player, const std::vector<std::vector<int>> &collisionLayer);
 };
 
 #endif //GORILLAGAME_BASEENEMY_H

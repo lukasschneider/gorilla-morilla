@@ -5,6 +5,7 @@
 #include <fstream>
 #include "rh.h"
 #include "../GameObjects/Enemy.h"
+#include "../GameObjects/Enemy/MeleeEnemy.h"
 
 using namespace std;
 
@@ -39,9 +40,9 @@ void drawPath(Path &path, const SDL_FRect &vp, float size) {
     }
 }
 
-double enemyWeight(int y, int x, const std::vector<Enemy*>& enemies) {
+double enemyWeight(int y, int x, const std::vector<MeleeEnemy*>& enemies) {
     for (const auto& enemy : enemies) {
-        auto conv = convertF(&enemy->body);
+        auto conv = convertF(&enemy->dRect);
         if (conv.second == x && conv.first == y) {
             return FLT_MAX;
         }
@@ -163,7 +164,7 @@ std::vector<std::pair<int, int>> tracePath(vector<vector<cell>> &cellDetails, Pa
 }
 
 
-Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool vier, const vector<Enemy*>& enemies) {
+Path aStarSearch(vector<vector<int>> &grid, SDL_FRect * en, SDL_FRect * pl, bool vier, const vector<MeleeEnemy*>& enemies) {
     // If the source is out of range
     // y : x
     Pair player = convertF(pl);

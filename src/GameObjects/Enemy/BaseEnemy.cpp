@@ -33,6 +33,7 @@ void BaseEnemy::update(float dt, Room &room) {
         }
     }
 
+
     const float threshold = 0.0f;
 
     if (path && !path->empty()) {
@@ -154,7 +155,7 @@ void BaseEnemy::coll(BulletRingBuffer &bullets) {
 }
 
 bool BaseEnemy::PickupRate() {
-    return rand() % 5 == 0;
+    return rand() % 10 == 0;
 }
 
 void BaseEnemy::die() {
@@ -168,6 +169,46 @@ void BaseEnemy::die() {
 void BaseEnemy::getHit() {
     isHit = true;
 }
+
+bool BaseEnemy::lineOfSightCheck(const Player& player, const std::vector<std::vector<int>>& collisionLayer) {
+    // Calculate the start and end points in tile coordinates
+    int startX = static_cast<int>(dRect.x / TILE_SIZE);
+    int startY = static_cast<int>(dRect.y / TILE_SIZE);
+    int endX = static_cast<int>(player.dRect.x / TILE_SIZE);
+    int endY = static_cast<int>(player.dRect.y / TILE_SIZE);
+
+    // Bresenham's Line Algorithm
+    int dx = abs(endX - startX);
+    int dy = abs(endY - startY);
+
+    int sx = (startX < endX) ? 1 : -1;
+    int sy = (startY < endY) ? 1 : -1;
+
+    int err = dx - dy;
+
+    while (true) {
+        if (startX == endX && startY == endY) {
+            return true;
+        }
+
+        if (collisionLayer[startY][startX] != -1) {
+            return false;
+        }
+
+        int e2 = 2 * err;
+        if (e2 > -dy) {
+            err -= dy;
+            startX += sx;
+        }
+        if (e2 < dx) {
+            err += dx;
+            startY += sy;
+        }
+    }
+
+    return false;
+}
+
 
 
 

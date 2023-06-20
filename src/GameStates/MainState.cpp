@@ -29,7 +29,7 @@ void MainState::Init() {
     this->room = floor.getStartRoom();
 
     userinterface = new ui(render, player, &camera);
-    enemy = new Enemy(800, 800, 100, &room->activePickups);
+    //enemy = new Enemy(800, 800, 100, &room->activePickups);
 
 
     RS::getInstance().init(render);
@@ -37,7 +37,7 @@ void MainState::Init() {
 }
 
 void MainState::UnInit() {
-    delete enemy;
+    //delete enemy;
     delete player;
     delete room;
     delete userinterface;
@@ -103,12 +103,15 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
-    enemy->coll(player->gun->bullets);
-    enemy->update(deltaT,*room);
-    userinterface->update();
-    auto r = transformMatrix(room->map_layer[1]);
-    enemy->path = aStarSearch(r, &enemy->body, &player->dRect, false);
 
+    for(Enemy *e : room->enemies) {
+        e->coll(player->gun->bullets);
+        e->update(deltaT,*room);
+        auto r = transformMatrix(room->map_layer[3]);
+        e->path = aStarSearch(r, &e->body, &player->dRect, false);
+    }
+
+    userinterface->update();
 
 }
 
@@ -120,18 +123,28 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
 
     room->renderPickups(camera);
     // Collision includes every tile the player can collide with
-    room->render_mapborder_open(render);
+
+    if(room->enemies.empty()) {
+        room->render_mapborder_open(render);
+    } else {
+        room->render_mapborder_closed(render);
+    }
+
 
     player->renderPlayer(render);
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
-    enemy->render(render, camera);
+    for(Enemy *e: room->enemies) {
+        e->render(render, camera);
+        drawPath(e->path,camera,64);
+    }
+
+    //enemy->render(render, camera);
     // Forground renders every styling aspekt
 
-    //room->render_markup(render);
     room->render_mapborder_styling(render);
 
     userinterface->drawUi();
-    drawPath(enemy->path,camera,64);
+
 }

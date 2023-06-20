@@ -89,6 +89,7 @@ Vector<Vector<Vector<int>>> RoomManager::create_map_vector(MapType map_type) {
 }
 
 Room *RoomManager::create_room(int id, Renderer *render, MapType map_type, SDL_FRect *viewport) {
+
     std::vector<std::vector<std::vector<int>>> map_vector = this->create_map_vector(map_type);
     Room *room = new Room(id, render, map_vector, viewport);
     return room;

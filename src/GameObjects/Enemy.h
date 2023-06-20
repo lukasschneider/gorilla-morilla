@@ -7,6 +7,8 @@
 #include "Gun.h"
 #include "Pickups.h"
 
+class Room;
+class Pickup;
 
 class Enemy {
 public:
@@ -19,11 +21,11 @@ public:
     std::vector<Pickup*>* activePowerUps;
     Path path;
 
-    Enemy(float x, float y, float maxHp,std::vector<Pickup*>* pickup);
+    Enemy(float x, float y, float maxHp, std::vector<Pickup*>* pickup);
 
     bool spawnrate();
 
-    void die();
+    Enemy* die();
 
     void update(float dt, Room &room);
 

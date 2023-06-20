@@ -15,7 +15,13 @@ Enemy::Enemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
 void Enemy::update(float dt, Room &room) {
 
     if (hp <= 0) {
-        respawn();
+        Enemy *e = die();
+
+        auto it = std::find(room.enemies.begin(), room.enemies.end(), e);
+
+        if (it != room.enemies.end()) {
+            room.enemies.erase(it);
+        }
     }
 
     const float threshold = 16.0f;
@@ -130,12 +136,13 @@ bool Enemy::spawnrate() {
     return rand() % 1 == 0;
 }
 
-void Enemy::die() {
+Enemy* Enemy::die() {
     if (spawnrate()) {
         SDL_Renderer *renderer = RS::getInstance().get();
         SDL_FRect tmp = {body.x + body.w / 2 - 16, body.y + body.h / 2 - 16, 32, 32};
         activePowerUps->push_back(new Banana(tmp, renderer));
     }
+    return this;
 }
 
 

@@ -67,6 +67,11 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
     }
 
+    this->enemies.push_back(new Enemy(500,500, 200, &this->activePickups));
+    this->enemies.push_back(new Enemy(600,500, 200, &this->activePickups));
+    this->enemies.push_back(new Enemy(700,500, 200, &this->activePickups));
+    this->enemies.push_back(new Enemy(700,500, 200, &this->activePickups));
+
     this->MAP_WIDTH = this->map_layer[0][0].size();
     this->MAP_HEIGHT = this->map_layer[0].size();
 

@@ -4,6 +4,7 @@
 #include "../lib/global.h"
 #include "../GameObjects/Pickups.h"
 #include "../lib/rh.h"
+#include "../GameObjects/Enemy.h"
 
 /**
  * Room Layout is always the same
@@ -15,6 +16,7 @@
  */
 
 class Pickup;
+class Enemy;
 
 const int TILE_SIZE = 64;
 
@@ -61,16 +63,9 @@ public:
     std::vector<Tile> tiles;
     std::vector<Pickup*> activePickups;
 
-//    struct map_layer {
-//        std::vector<std::vector<int>> backboard;
-//        std::vector<std::vector<int>> backboard_styling;
-//        std::vector<std::vector<int>> mapborder_closed;
-//        std::vector<std::vector<int>> mapborder_open;
-//        std::vector<std::vector<int>> mapborder_styling;
-//    };
-
     std::vector<std::vector<std::vector<int>>> map_layer;
 
+    std::vector<Enemy *> enemies;
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport);
 
@@ -89,8 +84,6 @@ public:
     void render_mapborder_closed(SDL_Renderer *render);
 
     void render_mapborder_open(SDL_Renderer *render);
-
-    void render_markup(SDL_Renderer *render);
 
     void render_mapborder_styling(SDL_Renderer *render);
 

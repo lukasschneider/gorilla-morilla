@@ -45,7 +45,6 @@ void MainState::UnInit() {
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
 
-
     SDL_PumpEvents();
 
     Event event;
@@ -140,8 +139,6 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
         drawPath(e->path,camera,64);
     }
 
-    //enemy->render(render, camera);
-    // Forground renders every styling aspekt
 
     room->render_mapborder_styling(render);
 

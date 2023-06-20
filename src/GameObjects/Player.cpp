@@ -35,16 +35,12 @@ int Player::handleTeleport(const Room &room) {
     };
     switch (room.checkTeleport(rect)) {
         case TELEPORT_TOP:
-            printf("TOP");
             return TELEPORT_TOP;
         case TELEPORT_RIGHT:
-            printf("RIGHT");
             return TELEPORT_RIGHT;
         case TELEPORT_BOTTOM:
-            printf("BOTTOm");
             return TELEPORT_BOTTOM;
         case TELEPORT_LEFT:
-            printf("LEFT");
             return TELEPORT_LEFT;
     }
     return 0;

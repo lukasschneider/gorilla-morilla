@@ -36,7 +36,6 @@ void MainState::Init() {
 
     for(int i = 0; i < 1; i++)
     eVec.emplace_back(new MeleeEnemy(200, 64 * i, 200, &room->activePickups));
-    knife = new Knife();
 
     PS::getInstance().init(player);
 }
@@ -44,7 +43,6 @@ void MainState::UnInit() {
     delete player;
     delete room;
     delete userinterface;
-    //delete m;
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -158,6 +156,5 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     // Forground renders every styling aspekt
     room->renderForeground(render);
     userinterface->drawUi();
-    knife->renderKnife(camera);
     //drawPath(m->path,camera,64);
 }

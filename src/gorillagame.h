@@ -29,7 +29,6 @@ protected:
     Enemy *enemy;
     ui *userinterface;
     Floor floor;
-    Knife * knife;
     std::vector<MeleeEnemy*> eVec;
 public:
     // ctor

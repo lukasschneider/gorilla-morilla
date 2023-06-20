@@ -3,8 +3,8 @@
 
 #include "../lib/global.h"
 #include "../lib/rh.h"
-#include "Bullet.h"
-#include "Gun.h"
+#include "Weapons/Bullet.h"
+#include "Weapons/Gun.h"
 #include "Pickups.h"
 
 class Room;

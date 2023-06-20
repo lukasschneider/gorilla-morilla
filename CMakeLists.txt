@@ -42,10 +42,10 @@ add_executable(${PROJECT_NAME}
         src/GameObjects/Enemy.h
         src/Map/Room.cpp
         src/Map/Room.h
-        src/GameObjects/Gun.cpp
-        src/GameObjects/Gun.h
-        src/GameObjects/Bullet.cpp
-        src/GameObjects/Bullet.h
+        src/GameObjects/Weapons/Gun.cpp
+        src/GameObjects/Weapons/Gun.h
+        src/GameObjects/Weapons/Bullet.cpp
+        src/GameObjects/Weapons/Bullet.h
         src/lib/ui.cpp
         src/lib/ui.h
         src/GameObjects/Pickups.cpp
@@ -61,7 +61,7 @@ add_executable(${PROJECT_NAME}
         src/lib/BulletRingBuffer.cpp
         src/lib/BulletRingBuffer.h
         src/Map/FloorManager.cpp
-        src/Map/FloorManager.h src/lib/astar.h)
+        src/Map/FloorManager.h src/lib/astar.h src/GameObjects/Enemy/BaseEnemy.h src/GameObjects/Enemy/BaseEnemy.cpp src/GameObjects/Enemy/MeleeEnemy.h src/GameObjects/Enemy/MeleeEnemy.cpp src/GameObjects/Weapons/Knife.h src/GameObjects/Weapons/Knife.cpp)
 if (NOT WIN32)
     include(FindPkgConfig)
 endif ()

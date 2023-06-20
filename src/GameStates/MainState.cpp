@@ -17,6 +17,8 @@ SDL_Texture *crosshair;
 
 void MainState::Init() {
 
+    RS::getInstance().init(render);
+
     SDL_ShowCursor(SDL_DISABLE);
     auto gun = std::make_unique<Gun>(render);
     player = new Player(render, std::move(gun));
@@ -31,11 +33,11 @@ void MainState::Init() {
     userinterface = new ui(render, player, &camera);
     //enemy = new Enemy(800, 800, 100, &room->activePickups);
 
+    for(int i = 0; i < 1; i++)
+    eVec.emplace_back(new MeleeEnemy(200, 64 * i, 200, &room->activePickups));
 
-    RS::getInstance().init(render);
     PS::getInstance().init(player);
 }
-
 void MainState::UnInit() {
     //delete enemy;
     delete player;
@@ -58,7 +60,7 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     }
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     // Check if the left mouse button is being held down
-    Uint32 mouseState = SDL_GetMouseState(NULL, NULL);
+    Uint32 mouseState = SDL_GetMouseState(nullptr, nullptr);
     if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
         player->gun->fire(render, &camera);
     }
@@ -66,6 +68,11 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     if(keyboardState[SDL_SCANCODE_R]) {
         player->gun->reload();
     }
+//    if(keyboardState[SDL_SCANCODE_L]){
+//        for(auto e : eVec){
+//            e->hp = 0;
+//        }
+//    }
 
     player->handleMovement(keyboardState, deltaT, *room);
 
@@ -102,15 +109,23 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
-
-    for(Enemy *e : room->enemies) {
-        e->coll(player->gun->bullets);
-        e->update(deltaT,*room);
-        auto r = transformMatrix(room->map_layer[3]);
-        e->path = aStarSearch(r, &e->body, &player->dRect, false);
+    auto r = transformMatrix(room->map_layer[1]);
+    for(auto m : eVec){
+        m->coll(player->gun->bullets);
+        m->update(deltaT,*room);
+        m->path = aStarSearch(r, &m->dRect, &player->dRect, false , eVec);
+        m->attackUpdate();
     }
 
     userinterface->update();
+
+
+    for(auto e : eVec){
+        e->path = aStarSearch(r,&e->dRect,&player->dRect,false,eVec);
+        e->update(deltaT,*room);
+        e->coll(player->gun->bullets);
+    }
+
 
 }
 
@@ -139,9 +154,15 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
         drawPath(e->path,camera,64);
     }
 
+    SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
+    for(auto e : eVec){
+        e->render(camera);
+    }
 
     room->render_mapborder_styling(render);
 
-    userinterface->drawUi();
 
+    // Forground renders every styling aspekt
+    userinterface->drawUi();
+    //drawPath(m->path,camera,64);
 }

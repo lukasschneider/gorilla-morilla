@@ -1,8 +1,8 @@
 #ifndef GORILLAGAME_GUN_H
 #define GORILLAGAME_GUN_H
 
-#include "../lib/global.h"
-#include "../lib/BulletRingBuffer.h"
+#include "../../lib/global.h"
+#include "../../lib/BulletRingBuffer.h"
 
 class Gun {
 public:

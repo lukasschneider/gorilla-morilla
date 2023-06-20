@@ -24,7 +24,7 @@ void Enemy::update(float dt, Room &room) {
         }
     }
 
-    const float threshold = 16.0f;
+    const float threshold = 32.0f;
 
     if (path && !path->empty()) {
         path->erase(path->begin());

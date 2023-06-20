@@ -57,6 +57,7 @@ private:
             BACK_PIXEL_WIDTH,
             BACK_PIXEL_HEIGHT;
     SDL_FRect *vp;
+
 public:
 
     int id;
@@ -67,7 +68,7 @@ public:
 
     std::vector<Enemy *> enemies;
 
-    Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport);
+    Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport, int map_type);
 
     [[nodiscard]] bool checkCollision(const SDL_Rect &rect) const;
 

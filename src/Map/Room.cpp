@@ -11,7 +11,7 @@
  * ...
  */
 
-Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FRect *viewport) {
+Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FRect *viewport, int map_type) {
 
     this->id = id;
     this->map_layer = std::move(map);
@@ -67,10 +67,60 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
     }
 
-    this->enemies.push_back(new Enemy(500,500, 200, &this->activePickups));
-    this->enemies.push_back(new Enemy(600,500, 200, &this->activePickups));
-    this->enemies.push_back(new Enemy(700,500, 200, &this->activePickups));
-    this->enemies.push_back(new Enemy(700,500, 200, &this->activePickups));
+    switch (map_type) {
+
+        case 1:
+            /* Start Room RIGHT */
+            this->enemies.clear();
+            break;
+
+        case 2:
+            /* Shop Room TOP */
+            this->enemies.clear();
+            break;
+
+        case 3:
+            /* BOTTOM_LEFT */
+            this->enemies.push_back(new Enemy(1280, 384, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1280, 512, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(576, 320, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(832, 320, 100, &this->activePickups));
+
+            break;
+        case 4:
+            /* BOTTOM RIGHT */
+            this->enemies.push_back(new Enemy(128, 256, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(320, 256, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(256, 832, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(448, 1024, 100, &this->activePickups));
+            break;
+        case 5:
+            /* TOP BOTTOM */
+            this->enemies.push_back(new Enemy(1408, 320, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1600, 896, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(448, 320, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(320, 960, 100, &this->activePickups));
+            break;
+        case 6:
+            /* TOP LEFT */
+            this->enemies.push_back(new Enemy(1536, 256, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1600, 960, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(192, 1088, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(256, 128, 100, &this->activePickups));
+            break;
+        case 7:
+            /* TOP LEFT BOTTOM RIGHT */
+            this->enemies.push_back(new Enemy(256, 192, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1536, 192, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(192, 1024, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(448, 1088, 100, &this->activePickups));
+            break;
+            break;
+        default:
+            perror("No valid enum - Room Constructor");
+            return;
+    }
+
 
     this->MAP_WIDTH = this->map_layer[0][0].size();
     this->MAP_HEIGHT = this->map_layer[0].size();
@@ -230,16 +280,12 @@ int Room::checkTeleport(const Rect &rect) const {
         for (int x = startX; x <= endX; ++x) {
             switch (map_layer[3][y][x]) {
                 case TELEPORT_TOP:
-                    printf("Teleport TOP");
                     return TELEPORT_TOP;
                 case TELEPORT_LEFT:
-                    printf("Teleport LEFT");
                     return TELEPORT_LEFT;
                 case TELEPORT_BOTTOM:
-                    printf("Teleport BOTTOm");
                     return TELEPORT_BOTTOM;
                 case TELEPORT_RIGHT:
-                    printf("Teleport RIGHT");
                     return TELEPORT_RIGHT;
             }
         }
@@ -269,8 +315,8 @@ bool Room::checkCollision(const Rect &rect) const {
 }
 
 void Room::renderPickups(const SDL_FRect &vp) {
-    if(!activePickups.empty()){
-        for(auto pickup : activePickups){
+    if (!activePickups.empty()) {
+        for (auto pickup: activePickups) {
             pickup->render(RS::getInstance().get(), vp);
         }
     }
@@ -278,18 +324,23 @@ void Room::renderPickups(const SDL_FRect &vp) {
 
 Room::~Room() {
 
-    for (auto& tile : tiles) {
+    for (auto &tile: tiles) {
         tile.destroy();
     }
 
-    for (auto pickup : activePickups) {
+    for (auto e: enemies) {
+        delete e;
+    }
+    enemies.clear();
+
+    for (auto pickup: activePickups) {
         delete pickup;
     }
     activePickups.clear();
 }
 
 void Room::updatePickups() {
-    Player * player = PS::getInstance().get();
+    Player *player = PS::getInstance().get();
     for (int i = 0; i < activePickups.size(); ++i) {
         if (activePickups[i]->checkCollision(player->dRect)) {
             activePickups[i]->apply(player);

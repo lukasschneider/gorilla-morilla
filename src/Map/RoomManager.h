@@ -5,6 +5,9 @@
 #include "../Map/Room.h"
 #include <string>
 
+class Enemy;
+class Pickup;
+
 class RoomManager {
 public:
     enum class MapType {

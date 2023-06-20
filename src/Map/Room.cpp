@@ -121,7 +121,6 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
             return;
     }
 
-
     this->MAP_WIDTH = this->map_layer[0][0].size();
     this->MAP_HEIGHT = this->map_layer[0].size();
 
@@ -306,8 +305,14 @@ bool Room::checkCollision(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            if (map_layer[3][y][x] != -1 && tiles[map_layer[3][y][x]].isSolid) {
-                return true;
+            if(this->enemies.empty()) {
+                if (map_layer[3][y][x] != -1 && tiles[map_layer[3][y][x]].isSolid) {
+                    return true;
+                }
+            } else {
+                if (map_layer[2][y][x] != -1 && tiles[map_layer[2][y][x]].isSolid) {
+                    return true;
+                }
             }
         }
     }

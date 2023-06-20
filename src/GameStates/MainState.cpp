@@ -73,26 +73,26 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     if (player->handleTeleport(*room) == TELEPORT_TOP) {
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 100;
+        player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 125;
         this->room = neighbors[0];
     }
     if (player->handleTeleport(*room) == TELEPORT_RIGHT) {
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 200;
+        player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 225;
         this->room = neighbors[1];
     }
     if (player->handleTeleport(*room) == TELEPORT_BOTTOM) {
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 100;
+        player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 125;
         this->room = neighbors[2];
 
     }
     if (player->handleTeleport(*room) == TELEPORT_LEFT) {
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 100;
+        player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 125;
         this->room = neighbors[3];
     }
 }

@@ -34,25 +34,27 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
             tile_rect.h = tile_size;
 
             auto tileType = static_cast<TileType>(tiles.size());
-            bool isSolid = false;
+            bool isSolid;
 
             switch (static_cast<TileType>(tiles.size())) {
-                case FOREST_MIDDLE_MID:
-                    tileType = FOREST_MIDDLE_MID;
-                    isSolid = true;
-                    break;
                 case TELEPORT_BOTTOM:
                     tileType = TELEPORT_BOTTOM;
+                    isSolid = false;
                     break;
                 case TELEPORT_LEFT:
                     tileType = TELEPORT_LEFT;
+                    isSolid = false;
                     break;
                 case TELEPORT_TOP:
                     tileType = TELEPORT_TOP;
+                    isSolid = false;
                     break;
                 case TELEPORT_RIGHT:
                     tileType = TELEPORT_RIGHT;
+                    isSolid = false;
                     break;
+                default:
+                    isSolid = true;
             }
 
 
@@ -95,26 +97,6 @@ void Room::renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect,
 }
 
 void Room::render_backboard(SDL_Renderer *render) {
-    const int BORDER_WIDTH = 1 + (BACK_PIXEL_WIDTH / TILE_SIZE);
-    const int BORDER_HEIGHT = 1 + (BACK_PIXEL_HEIGHT / TILE_SIZE);
-
-    // Render the border
-    for (int y = -BORDER_HEIGHT / 2; y < (MAP_HEIGHT + BORDER_HEIGHT / 2); ++y) {
-        for (int x = -BORDER_WIDTH / 2; x < (MAP_WIDTH + BORDER_WIDTH / 2); ++x) {
-            SDL_Rect dstRect = {
-                    x * TILE_SIZE,
-                    y * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE
-            };
-
-            if (!(dstRect.x >= 0 && dstRect.x < MAP_PIXEL_WIDTH && dstRect.y >= 0 &&
-                  dstRect.y < MAP_PIXEL_HEIGHT)) {
-                const Tile &tile = this->tiles[FOREST_MIDDLE_MID];
-                renderTile(render, tile, dstRect, *vp);
-            }
-        }
-    }
 
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
@@ -187,7 +169,12 @@ void Room::render_mapborder_open(SDL_Renderer *render) {
     }
 }
 
-void Room::render_markup(SDL_Renderer *render) {
+void Room::render_mapborder_styling(SDL_Renderer *render) {
+
+    const int BORDER_WIDTH = 1 + (BACK_PIXEL_WIDTH / TILE_SIZE);
+    const int BORDER_HEIGHT = 1 + (BACK_PIXEL_HEIGHT / TILE_SIZE);
+
+
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         for (int x = 0; x < MAP_WIDTH; ++x) {
             int tileType = map_layer[4][y][x];
@@ -203,20 +190,20 @@ void Room::render_markup(SDL_Renderer *render) {
             }
         }
     }
-}
 
-void Room::render_mapborder_styling(SDL_Renderer *render) {
-    for (int y = 0; y < MAP_HEIGHT; ++y) {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            int tileType = map_layer[5][y][x];
+    // Render the border
+    for (int y = -BORDER_HEIGHT / 2; y < (MAP_HEIGHT + BORDER_HEIGHT / 2); ++y) {
+        for (int x = -BORDER_WIDTH / 2; x < (MAP_WIDTH + BORDER_WIDTH / 2); ++x) {
             SDL_Rect dstRect = {
                     x * TILE_SIZE,
                     y * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE
             };
-            if (tileType != -1) {
-                const Tile &tile = this->tiles[tileType];
+
+            if (!(dstRect.x >= 0 && dstRect.x < MAP_PIXEL_WIDTH && dstRect.y >= 0 &&
+                  dstRect.y < MAP_PIXEL_HEIGHT)) {
+                const Tile &tile = this->tiles[FOREST_MIDDLE_MID];
                 renderTile(render, tile, dstRect, *vp);
             }
         }
@@ -238,19 +225,22 @@ int Room::checkTeleport(const Rect &rect) const {
         for (int x = startX; x <= endX; ++x) {
             switch (map_layer[3][y][x]) {
                 case TELEPORT_TOP:
+                    printf("Teleport TOP");
                     return TELEPORT_TOP;
                 case TELEPORT_LEFT:
+                    printf("Teleport LEFT");
                     return TELEPORT_LEFT;
                 case TELEPORT_BOTTOM:
+                    printf("Teleport BOTTOm");
                     return TELEPORT_BOTTOM;
                 case TELEPORT_RIGHT:
+                    printf("Teleport RIGHT");
                     return TELEPORT_RIGHT;
             }
         }
     }
     return 0;
 }
-
 
 bool Room::checkCollision(const Rect &rect) const {
     int startX = static_cast<int>(rect.x) / TILE_SIZE;
@@ -265,14 +255,13 @@ bool Room::checkCollision(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            if (map_layer[3][y][x] != -1 /*&& tiles[map_layer[1][y][x]].isSolid*/) {
+            if (map_layer[3][y][x] != -1 && tiles[map_layer[3][y][x]].isSolid) {
                 return true;
             }
         }
     }
     return false;
 }
-
 
 void Room::renderPickups(const SDL_FRect &vp) {
     if(!activePickups.empty()){

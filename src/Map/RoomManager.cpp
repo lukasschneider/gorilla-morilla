@@ -32,50 +32,56 @@ Vector<Vector<int>> RoomManager::readCSVToArray(const std::string &filename) {
 Vector<Vector<Vector<int>>> RoomManager::create_map_vector(MapType map_type) {
 
     Vector<Vector<Vector<int>>> map_layer;
-    if(map_type != MapType::TEST){
-        //map_layer.push_back(this->readCSVToArray(BasePath "maps/backboards/Default.csv"));
-    }
     switch (map_type) {
         case MapType::TP_RIGHT:
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/backboard.csv"));
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/backboard_styling.csv"));
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/mapborder_closed.csv"));
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/mapborder_open.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/markup.csv"));
             map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_right/mapborder_styling.csv"));
             break;
         case MapType::TP_TOP:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/MapBorderStyling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/backboard_styling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/mapborder_closed.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/mapborder_open.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top/mapborder_styling.csv"));
             break;
         case MapType::TP_BOTTOM_LEFT:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left/MapBorderStyling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left/backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left/backboard_styling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left/mapborder_closed.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left/mapborder_open.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left/mapborder_styling.csv"));
             break;
         case MapType::TP_BOTTOM_RIGHT:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_right/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_right/MapBorderStyling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_right/backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_right/backboard_styling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_right/mapborder_closed.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_right/mapborder_open.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_right/mapborder_styling.csv"));
             break;
         case MapType::TP_TOP_BOTTOM:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_bottom/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_bottom/MapBorderStyling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_bottom/backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_bottom/backboard_styling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_bottom/mapborder_closed.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_bottom/mapborder_open.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_bottom/mapborder_styling.csv"));
             break;
         case MapType::TP_TOP_LEFT:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left/MapBorderStyling.csv"));
-            break;
-        case MapType::TP_BOTTOM_LEFT_RIGHT:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left_right/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_bottom_left_right/MapBorderStyling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left/backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left/backboard_styling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left/mapborder_closed.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left/mapborder_open.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left/mapborder_styling.csv"));
             break;
         case MapType::TP_TOP_LEFT_BOTTOM_RIGHT:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/MapBorder.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/MapBorderStyling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/backboard.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/backboard_styling.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/mapborder_closed.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/mapborder_open.csv"));
+            map_layer.push_back(this->readCSVToArray(BasePath "maps/tp_top_left_bottom_right/mapborder_styling.csv"));
             break;
-        case MapType::TEST:
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/test/test_Backboard.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/test/test_Collision.csv"));
-            map_layer.push_back(this->readCSVToArray(BasePath "maps/test/test_Style.csv"));
         default:
             perror("No Valid Enum");
     }

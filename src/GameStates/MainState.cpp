@@ -24,11 +24,9 @@ void MainState::Init() {
     crosshair = SDL_CreateTextureFromSurface(render, surface);
     SDL_FreeSurface(surface);
 
-    //FloorManager fm;
-    //this->floor = fm.createFloor(render, &camera);
-    //this->room = floor.getStartRoom();
-    RoomManager rm;
-    this->room = rm.create_room(0,render,RoomManager::MapType::TP_RIGHT,&camera);
+    FloorManager fm;
+    this->floor = fm.createFloor(render, &camera);
+    this->room = floor.getStartRoom();
 
     userinterface = new ui(render, player, &camera);
     enemy = new Enemy(800, 800, 100, &room->activePickups);
@@ -72,37 +70,28 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 
     player->handleMovement(keyboardState, deltaT, *room);
 
-
     if (player->handleTeleport(*room) == TELEPORT_TOP) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        printf("TELEPORT ACTION TOP: \n");
         player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 100;
         this->room = neighbors[0];
     }
     if (player->handleTeleport(*room) == TELEPORT_RIGHT) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
-        printf("TELEPORT ACTION RIGHT: \n");
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
         player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 200;
         this->room = neighbors[1];
     }
     if (player->handleTeleport(*room) == TELEPORT_BOTTOM) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        printf("TELEPORT ACTION LEFT: \n");
         player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 100;
         this->room = neighbors[2];
 
     }
     if (player->handleTeleport(*room) == TELEPORT_LEFT) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        printf("TELEPORT ACTION LEFT: \n");
         player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 100;
         this->room = neighbors[3];
     }
@@ -140,7 +129,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     enemy->render(render, camera);
     // Forground renders every styling aspekt
 
-    room->render_markup(render);
+    //room->render_markup(render);
     room->render_mapborder_styling(render);
 
     userinterface->drawUi();

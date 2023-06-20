@@ -60,6 +60,15 @@ public:
     int id;
     std::vector<Tile> tiles;
     std::vector<Pickup*> activePickups;
+
+//    struct map_layer {
+//        std::vector<std::vector<int>> backboard;
+//        std::vector<std::vector<int>> backboard_styling;
+//        std::vector<std::vector<int>> mapborder_closed;
+//        std::vector<std::vector<int>> mapborder_open;
+//        std::vector<std::vector<int>> mapborder_styling;
+//    };
+
     std::vector<std::vector<std::vector<int>>> map_layer;
 
 
@@ -85,11 +94,6 @@ public:
 
     void render_mapborder_styling(SDL_Renderer *render);
 
-    void renderCollision(SDL_Renderer *render);
-
-
-    void renderForeground(SDL_Renderer *render);
-
     [[nodiscard]] int checkTeleport(const SDL_Rect &rect) const;
 
     void renderPickups(const SDL_FRect &viewport);
@@ -97,9 +101,6 @@ public:
     ~Room();
 
     void updatePickups();
-
-    void renderMarkup(SDL_Renderer *render);
-
 
 };
 

@@ -14,7 +14,7 @@ public:
     SDL_FRect dRect;
     float hp;
     float maxHp;
-    float speed = 250.0f;
+    float speed = 500.0f;
     std::vector<Pickup*>* activePowerUps;
     Path path;
     Texture * enemyTexture;

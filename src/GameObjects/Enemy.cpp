@@ -1,28 +1,42 @@
 #include "Enemy.h"
 #include "../lib/ph.h"
 
-void SDL_RenderDrawCircle(SDL_Renderer *renderer, int x, int y, int radius) {
-    for (double dy = 1; dy <= radius; dy += 1.0) {
-        double dx = floor(sqrt((2.0 * radius * dy) - (dy * dy)));
-        SDL_RenderDrawLine(renderer, x-dx, y+dy-radius, x+dx, y+dy-radius);
-        SDL_RenderDrawLine(renderer, x-dx, y-dy+radius, x+dx, y-dy+radius);
-    }
-}
 
 Enemy::Enemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
-        : body({x, y, 32, 32}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {}
-
+        : dRect({x, y, 32, 32}), knife(std::make_unique<Knife>()), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {
+    Renderer * renderer = RS::getInstance().get();
+    dRect = {static_cast<float>(64),static_cast<float>(500),48,48};
+    SDL_Surface * surface = IMG_Load(enemyPath.c_str());
+    if (!surface) {
+        std::cout << "Failed to load image: " << IMG_GetError() << std::endl;
+    }
+    enemyTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!enemyTexture) {
+        std::cout << "Failed to create texture: " << SDL_GetError() << std::endl;
+    }
+    SDL_FreeSurface(surface);
+}
 void Enemy::update(float dt, Room &room) {
-
+    if (knife) {
+        knife->updateKnife(dRect, dt);
+    }
+    attackUpdate();
     if (hp <= 0) {
         Enemy *e = die();
-
         auto it = std::find(room.enemies.begin(), room.enemies.end(), e);
-
         if (it != room.enemies.end()) {
             room.enemies.erase(it);
         }
     }
+
+    if (isHit) {
+        hitTime += dt;
+        if (hitTime >= hitDuration) {
+            hitTime = 0.0f;
+            isHit = false;
+        }
+    }
+
 
     const float threshold = 32.0f;
 
@@ -30,12 +44,12 @@ void Enemy::update(float dt, Room &room) {
         path->erase(path->begin());
         std::pair<int, int> destination = path->front();
 
-        float destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - body.w / 2.0f;
-        float destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - body.h / 2.0f;
+        float destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f;
+        float destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f;
 
         // Compute the direction vector
-        float dx = destinationX - body.x;
-        float dy = destinationY - body.y;
+        float dx = destinationX - dRect.x;
+        float dy = destinationY - dRect.y;
 
         // Compute the distance to the destination
         float distance = std::sqrt(dx * dx + dy * dy);
@@ -46,11 +60,11 @@ void Enemy::update(float dt, Room &room) {
 
             if (!path->empty()) {
                 destination = path->front();
-                destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - body.w / 2.0f;
-                destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - body.h / 2.0f;
+                destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f;
+                destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f;
 
-                dx = destinationX - body.x;
-                dy = destinationY - body.y;
+                dx = destinationX - dRect.x;
+                dy = destinationY - dRect.y;
                 distance = std::sqrt(dx * dx + dy * dy);
             }
             else {
@@ -64,18 +78,18 @@ void Enemy::update(float dt, Room &room) {
         dy /= distance;
 
         float moveSpeed = speed * dt;
-        float newX = body.x + dx * moveSpeed;
-        float newY = body.y + dy * moveSpeed;
+        float newX = dRect.x + dx * moveSpeed;
+        float newY = dRect.y + dy * moveSpeed;
 
         // Perform collision checks and update the position if there is no collision
-        if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(body.y),
-                                  static_cast<int>(body.w), static_cast<int>(body.h)})) {
-            body.x = newX;
+        if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y),
+                                  static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+            dRect.x = newX;
         }
 
-        if (!room.checkCollision({static_cast<int>(body.x), static_cast<int>(newY),
-                                  static_cast<int>(body.w), static_cast<int>(body.h)})) {
-            body.y = newY;
+        if (!room.checkCollision({static_cast<int>(dRect.x), static_cast<int>(newY),
+                                  static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
+            dRect.y = newY;
         }
     }
 
@@ -87,59 +101,88 @@ void Enemy::update(float dt, Room &room) {
 
 void Enemy::respawn() {
     die();
-    body.x = 64;
-    body.y = 64;
+    dRect.x = 64;
+    dRect.y = 64;
 
     hp = maxHp;
 }
 
 void Enemy::render(SDL_Renderer *renderer, const SDL_FRect &viewport) {
-
-    SDL_Rect enemyRect = {
-            static_cast<int>(body.x - viewport.x),
-            static_cast<int>(body.y - viewport.y),
-            static_cast<int>(body.w),
-            static_cast<int>(body.h)
+    if (knife) { // make sure the knife exists
+        knife->renderKnife(viewport);
+    }
+    //Renderer * renderer = RS::getInstance().get();
+    if (isHit) {
+        int alpha = 255 * (0.5f + 0.5f * sin(10.0f * hitTime)); // Flashing effect
+        SDL_SetTextureAlphaMod(enemyTexture, alpha);
+    } else {
+        SDL_SetTextureAlphaMod(enemyTexture, 255);
+    }
+    SDL_FRect enemyRect = {
+            (dRect.x - viewport.x),
+            (dRect.y - viewport.y),
+            (dRect.w),
+            (dRect.h)
     };
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderDrawRect(renderer, &enemyRect);
+    SDL_RenderCopyF(renderer,enemyTexture, nullptr,&enemyRect);
 
-    // Draw HP bar
-    SDL_FRect hpBar = {
-            body.x - viewport.x,
-            body.y - viewport.y - 10,
-            body.w * (hp / maxHp),
+    // Render total health bar in red
+    SDL_FRect totalHealthBar = {
+            dRect.x - viewport.x,
+            dRect.y - viewport.y - 10,
+            dRect.w,
             5
     };
-    SDL_Rect hpBarRect = {
-            static_cast<int>(hpBar.x),
-            static_cast<int>(hpBar.y),
-            static_cast<int>(hpBar.w),
-            static_cast<int>(hpBar.h)
+    SDL_Rect totalHealthBarRect = {
+            static_cast<int>(totalHealthBar.x),
+            static_cast<int>(totalHealthBar.y),
+            static_cast<int>(totalHealthBar.w),
+            static_cast<int>(totalHealthBar.h)
     };
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    SDL_RenderFillRect(renderer, &hpBarRect);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red
+    SDL_RenderFillRect(renderer, &totalHealthBarRect);
+
+// Render current health bar in green
+    SDL_FRect currentHealthBar = {
+            dRect.x - viewport.x,
+            dRect.y - viewport.y - 10,
+            dRect.w * (hp / maxHp),
+            5
+    };
+    SDL_Rect currentHealthBarRect = {
+            static_cast<int>(currentHealthBar.x),
+            static_cast<int>(currentHealthBar.y),
+            static_cast<int>(currentHealthBar.w),
+            static_cast<int>(currentHealthBar.h)
+    };
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Green
+    SDL_RenderFillRect(renderer, &currentHealthBarRect);
 }
 
 void Enemy::coll(BulletRingBuffer &bullets) {
     for (int i = 0; i < bullets.size(); ++i) {
         Bullet *bullet = bullets.get(i);
-        if (!bullet->isActive) continue; // Skip inactive bullets
-        if (SDL_HasIntersectionF(&bullet->rect, &body)) {
+        if (!bullet->isActive) continue;
+        if (SDL_HasIntersectionF(&bullet->rect, &dRect) /*&& !isHit*/) {
             hp -= 20;
-            bullet->deactivate(); // Deactivate the bullet on hit
+            bullet->deactivate();
+            getHit();
         }
     }
 }
 
+void Enemy::getHit() {
+    isHit = true;
+}
+
 bool Enemy::spawnrate() {
-    return rand() % 1 == 0;
+    return rand() % 2 == 0;
 }
 
 Enemy* Enemy::die() {
     if (spawnrate()) {
         SDL_Renderer *renderer = RS::getInstance().get();
-        SDL_FRect tmp = {body.x + body.w / 2 - 16, body.y + body.h / 2 - 16, 32, 32};
+        SDL_FRect tmp = {dRect.x + dRect.w / 2 - 16, dRect.y + dRect.h / 2 - 16, 32, 32};
         activePowerUps->push_back(new Banana(tmp, renderer));
     }
     return this;
@@ -161,9 +204,14 @@ void Enemy::attack() {
 
 bool Enemy::inRadius() const {
     Player* p = PS::getInstance().get();
-    float dx = (body.x + body.w / 2) - (p->dRect.x + p->dRect.w / 2);
-    float dy = (body.y + body.h / 2) - (p->dRect.y + p->dRect.h / 2);
+    float dx = (dRect.x + dRect.w / 2) - (p->dRect.x + p->dRect.w / 2);
+    float dy = (dRect.y + dRect.h / 2) - (p->dRect.y + p->dRect.h / 2);
     float distance = std::sqrt(dx*dx + dy*dy);
     return distance <= radius;
+}
+
+void Enemy::attackUpdate() {
+    if(inRadius())
+        attack();
 }
 

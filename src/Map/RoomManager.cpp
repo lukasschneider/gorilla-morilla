@@ -92,8 +92,6 @@ Room *RoomManager::create_room(int id, Renderer *render, MapType map_type, SDL_F
 
     std::vector<std::vector<std::vector<int>>> map_vector = this->create_map_vector(map_type);
 
-    std::vector<Pickup*> activePickups;
-
     Room *room = new Room(id, render, map_vector, viewport, (int) map_type);
     return room;
 }

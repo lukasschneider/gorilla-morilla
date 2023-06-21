@@ -109,23 +109,18 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
-    auto r = transformMatrix(room->map_layer[1]);
-    for(auto m : eVec){
+    auto r = transformMatrix(room->map_layer[3]);
+
+    for(auto m : room->enemies){
         m->coll(player->gun->bullets);
         m->update(deltaT,*room);
-        m->path = aStarSearch(r, &m->dRect, &player->dRect, false , eVec);
-        m->attackUpdate();
+        m->path = aStarSearch(r, &m->dRect, &player->dRect, false , room->enemies);
+        //m->attackUpdate();
     }
+
+
 
     userinterface->update();
-
-
-    for(auto e : eVec){
-        e->path = aStarSearch(r,&e->dRect,&player->dRect,false,eVec);
-        e->update(deltaT,*room);
-        e->coll(player->gun->bullets);
-    }
-
 
 }
 
@@ -155,8 +150,8 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     }
 
     SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
-    for(auto e : eVec){
-        e->render(camera);
+    for(auto e : room->enemies){
+        e->render(render, camera);
     }
 
     room->render_mapborder_styling(render);

@@ -6,13 +6,19 @@
 #include "Weapons/Bullet.h"
 #include "Weapons/Gun.h"
 #include "Pickups.h"
+#include "Weapons/Knife.h"
 
 class Room;
 class Pickup;
+class Knife;
+
 
 class Enemy {
 public:
-    SDL_FRect body;
+    std::string enemyPath = BasePath "asset/graphic/enemy/green.png";
+    SDL_FRect dRect;
+    Texture * enemyTexture;
+    std::unique_ptr<Knife> knife;
     float hp;
     float maxHp;
     bool movingRight = true;
@@ -20,6 +26,9 @@ public:
     float radius = 64.0f;
     std::vector<Pickup*>* activePowerUps;
     Path path;
+    bool isHit = false;
+    float hitTime = 0.0f;
+    float hitDuration = 0.2f;
 
     Enemy(float x, float y, float maxHp, std::vector<Pickup*>* pickup);
 
@@ -40,6 +49,10 @@ public:
     ~Enemy();
 
     [[nodiscard]] bool inRadius() const;
+
+    void getHit();
+
+    void attackUpdate();
 };
 
 

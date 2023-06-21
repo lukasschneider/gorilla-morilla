@@ -41,36 +41,6 @@ void MeleeEnemy::update(float dt, Room &room) {
 }
 #include <cmath>
 
-void drawCircle(SDL_Renderer* renderer, int centerX, int centerY, int radius) {
-    int x = radius - 1;
-    int y = 0;
-    int dx = 1;
-    int dy = 1;
-    int err = dx - (radius << 1);
-
-    while (x >= y) {
-        SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
-        SDL_RenderDrawPoint(renderer, centerX + y, centerY + x);
-        SDL_RenderDrawPoint(renderer, centerX - y, centerY + x);
-        SDL_RenderDrawPoint(renderer, centerX - x, centerY + y);
-        SDL_RenderDrawPoint(renderer, centerX - x, centerY - y);
-        SDL_RenderDrawPoint(renderer, centerX - y, centerY - x);
-        SDL_RenderDrawPoint(renderer, centerX + y, centerY - x);
-        SDL_RenderDrawPoint(renderer, centerX + x, centerY - y);
-
-        if (err <= 0) {
-            y++;
-            err += dy;
-            dy += 2;
-        }
-
-        if (err > 0) {
-            x--;
-            dx += 2;
-            err += dx - (radius << 1);
-        }
-    }
-}
 
 void MeleeEnemy::render(const SDL_FRect &viewport) {
     if (knife) { // make sure the knife exists
@@ -80,16 +50,7 @@ void MeleeEnemy::render(const SDL_FRect &viewport) {
 
     // Draw the circle (radius)
     Renderer * render = RS::getInstance().get();
-    int centerX = static_cast<int>(dRect.x + dRect.w / 2 - viewport.x);
-    int centerY = static_cast<int>(dRect.y + dRect.h / 2 - viewport.y);
-    int radius = static_cast<int>(this->radius);
 
-    // Set the color of the radius (here it is set to red, you can change it as needed)
-    SDL_SetRenderDrawColor(render, 255, 0, 0, 255); // RGBA
-    // Draw the circle
-    drawCircle(render, centerX, centerY, radius);
-    // Reset the render color
-    SDL_SetRenderDrawColor(render, 0, 0, 0, 255); // Black
 
 }
 

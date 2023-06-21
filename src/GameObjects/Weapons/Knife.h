@@ -5,6 +5,8 @@
 #include "../../lib/rh.h"
 #include "../../lib/ph.h"
 
+class Player;
+
 class Knife {
 public:
     float angle = 0.0f;

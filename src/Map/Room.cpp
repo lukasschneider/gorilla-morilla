@@ -11,7 +11,7 @@
  * ...
  */
 
-Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FRect *viewport) {
+Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FRect *viewport, int map_type) {
 
     this->id = id;
     this->map_layer = std::move(map);
@@ -34,25 +34,27 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
             tile_rect.h = tile_size;
 
             auto tileType = static_cast<TileType>(tiles.size());
-            bool isSolid = false;
+            bool isSolid;
 
             switch (static_cast<TileType>(tiles.size())) {
-                case FOREST_MIDDLE_MID:
-                    tileType = FOREST_MIDDLE_MID;
-                    isSolid = true;
-                    break;
                 case TELEPORT_BOTTOM:
                     tileType = TELEPORT_BOTTOM;
+                    isSolid = false;
                     break;
                 case TELEPORT_LEFT:
                     tileType = TELEPORT_LEFT;
+                    isSolid = false;
                     break;
                 case TELEPORT_TOP:
                     tileType = TELEPORT_TOP;
+                    isSolid = false;
                     break;
                 case TELEPORT_RIGHT:
                     tileType = TELEPORT_RIGHT;
+                    isSolid = false;
                     break;
+                default:
+                    isSolid = true;
             }
 
 
@@ -63,6 +65,62 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
         }
 
+    }
+
+    switch (map_type) {
+
+        case 1:
+            /* Start Room RIGHT */
+            this->enemies.clear();
+            break;
+
+        case 2:
+            /* Shop Room TOP */
+            this->enemies.clear();
+            this->activePickups.emplace_back(new DMGBuff({576, 896, 64,64}, render));
+            this->activePickups.emplace_back(new Firerate({384, 896, 64,64}, render));
+            this->activePickups.emplace_back(new Magbuff({192, 896, 64,64}, render));
+            break;
+        case 3:
+            /* BOTTOM_LEFT */
+            this->enemies.push_back(new Enemy(1280, 384, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1280, 512, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(576, 320, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(832, 320, 100, &this->activePickups));
+
+            break;
+        case 4:
+            /* BOTTOM RIGHT */
+            this->enemies.push_back(new Enemy(128, 256, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(320, 256, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(256, 832, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(448, 1024, 100, &this->activePickups));
+            break;
+        case 5:
+            /* TOP BOTTOM */
+            this->enemies.push_back(new Enemy(1408, 320, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1600, 896, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(448, 320, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(320, 960, 100, &this->activePickups));
+            break;
+        case 6:
+            /* TOP LEFT */
+            this->enemies.push_back(new Enemy(1536, 256, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1600, 960, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(192, 1088, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(256, 128, 100, &this->activePickups));
+            break;
+        case 7:
+            /* TOP LEFT BOTTOM RIGHT */
+            this->enemies.push_back(new Enemy(256, 192, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(1536, 192, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(192, 1024, 100, &this->activePickups));
+            this->enemies.push_back(new Enemy(448, 1088, 100, &this->activePickups));
+            break;
+            break;
+        default:
+            perror("No valid enum - Room Constructor");
+            return;
     }
 
     this->MAP_WIDTH = this->map_layer[0][0].size();
@@ -94,9 +152,100 @@ void Room::renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect,
     SDL_RenderCopy(render, tile.texture, &tile.srcRect, &offsetRect);
 }
 
-void Room::renderBackboard(SDL_Renderer *render) {
+void Room::render_backboard(SDL_Renderer *render) {
+
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[0][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_backboard_styling(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[1][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_mapborder_closed(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[2][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_mapborder_open(SDL_Renderer *render) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[3][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
+}
+
+void Room::render_mapborder_styling(SDL_Renderer *render) {
+
     const int BORDER_WIDTH = 1 + (BACK_PIXEL_WIDTH / TILE_SIZE);
     const int BORDER_HEIGHT = 1 + (BACK_PIXEL_HEIGHT / TILE_SIZE);
+
+
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        for (int x = 0; x < MAP_WIDTH; ++x) {
+            int tileType = map_layer[4][y][x];
+            SDL_Rect dstRect = {
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+            };
+            if (tileType != -1) {
+                const Tile &tile = this->tiles[tileType];
+                renderTile(render, tile, dstRect, *vp);
+            }
+        }
+    }
 
     // Render the border
     for (int y = -BORDER_HEIGHT / 2; y < (MAP_HEIGHT + BORDER_HEIGHT / 2); ++y) {
@@ -115,23 +264,6 @@ void Room::renderBackboard(SDL_Renderer *render) {
             }
         }
     }
-
-    for (int y = 0; y < MAP_HEIGHT; ++y) {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            int tileType = map_layer[0][y][x];
-            SDL_Rect dstRect = {
-                    x * TILE_SIZE,
-                    y * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE
-            };
-            if (tileType != -1) {
-                const Tile &tile = this->tiles[tileType];
-                renderTile(render, tile, dstRect, *vp);
-            }
-        }
-    }
-
 }
 
 int Room::checkTeleport(const Rect &rect) const {
@@ -147,7 +279,7 @@ int Room::checkTeleport(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            switch (map_layer[1][y][x]) {
+            switch (map_layer[3][y][x]) {
                 case TELEPORT_TOP:
                     return TELEPORT_TOP;
                 case TELEPORT_LEFT:
@@ -162,7 +294,6 @@ int Room::checkTeleport(const Rect &rect) const {
     return 0;
 }
 
-
 bool Room::checkCollision(const Rect &rect) const {
     int startX = static_cast<int>(rect.x) / TILE_SIZE;
     int startY = static_cast<int>(rect.y) / TILE_SIZE;
@@ -176,55 +307,23 @@ bool Room::checkCollision(const Rect &rect) const {
 
     for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
-            if (map_layer[1][y][x] != -1 /*&& tiles[map_layer[1][y][x]].isSolid*/) {
-                return true;
+            if(this->enemies.empty()) {
+                if (map_layer[3][y][x] != -1 && tiles[map_layer[3][y][x]].isSolid) {
+                    return true;
+                }
+            } else {
+                if (map_layer[2][y][x] != -1 && tiles[map_layer[2][y][x]].isSolid) {
+                    return true;
+                }
             }
         }
     }
     return false;
 }
 
-void Room::renderForeground(SDL_Renderer *render) {
-    for (unsigned long z = 2; z < map_layer.size(); ++z) {
-        for (int y = 0; y < MAP_HEIGHT; ++y) {
-            for (int x = 0; x < MAP_WIDTH; ++x) {
-                int tileType = map_layer[z][y][x];
-                SDL_Rect dstRect = {
-                        x * TILE_SIZE,
-                        y * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE
-                };
-                if (tileType != -1) {
-                    const Tile &tile = this->tiles[tileType];
-                    renderTile(render, tile, dstRect, *vp);
-                }
-            }
-        }
-    }
-}
-
-void Room::renderCollision(SDL_Renderer *render) {
-    for (int y = 0; y < MAP_HEIGHT; ++y) {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            int tileType = map_layer[1][y][x];
-            SDL_Rect dstRect = {
-                    x * TILE_SIZE,
-                    y * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE
-            };
-            if (tileType != -1) {
-                const Tile &tile = this->tiles[tileType];
-                renderTile(render, tile, dstRect, *vp);
-            }
-        }
-    }
-}
-
 void Room::renderPickups(const SDL_FRect &vp) {
-    if(!activePickups.empty()){
-        for(auto pickup : activePickups){
+    if (!activePickups.empty()) {
+        for (auto pickup: activePickups) {
             pickup->render(RS::getInstance().get(), vp);
         }
     }
@@ -232,24 +331,31 @@ void Room::renderPickups(const SDL_FRect &vp) {
 
 Room::~Room() {
 
-    for (auto& tile : tiles) {
+    for (auto &tile: tiles) {
         tile.destroy();
     }
 
-    for (auto pickup : activePickups) {
+    for (auto e: enemies) {
+        delete e;
+    }
+    enemies.clear();
+
+    for (auto pickup: activePickups) {
         delete pickup;
     }
     activePickups.clear();
 }
 
 void Room::updatePickups() {
-    Player * player = PS::getInstance().get();
+    Player *player = PS::getInstance().get();
     for (int i = 0; i < activePickups.size(); ++i) {
         if (activePickups[i]->checkCollision(player->dRect)) {
-            activePickups[i]->apply(player);
-            delete activePickups[i];
-            activePickups.erase(activePickups.begin() + i);
-            break;
+            if(player->currency >= activePickups[i]->cost){
+                activePickups[i]->apply(player);
+                delete activePickups[i];
+                activePickups.erase(activePickups.begin() + i);
+                break;
+            }
         }
     }
 

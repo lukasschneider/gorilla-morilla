@@ -5,18 +5,19 @@
 #include "../Map/Room.h"
 #include <string>
 
+class Enemy;
+class Pickup;
+
 class RoomManager {
 public:
     enum class MapType {
-        TEST = 0,
         TP_RIGHT = 1,
         TP_TOP = 2,
         TP_BOTTOM_LEFT = 3,
         TP_BOTTOM_RIGHT = 4,
         TP_TOP_BOTTOM = 5,
         TP_TOP_LEFT = 6,
-        TP_BOTTOM_LEFT_RIGHT = 7,
-        TP_TOP_LEFT_BOTTOM_RIGHT = 8
+        TP_TOP_LEFT_BOTTOM_RIGHT = 7
     };
 
     Room *create_room(int id, SDL_Renderer *render, MapType map_type, SDL_FRect *viewport);

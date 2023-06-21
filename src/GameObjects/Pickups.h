@@ -8,7 +8,8 @@ class Player;
 
 
 class Pickup {
-protected:
+public:
+    int cost = 0;
     SDL_FRect pos;
     SDL_Texture *texture{};
 public:
@@ -37,5 +38,24 @@ public:
 
 };
 
+class DMGBuff : public Pickup {
+public:
+    std::string path = BasePath "asset/graphic/pickups/powerup.png";
+    DMGBuff(SDL_FRect pos, SDL_Renderer *renderer);
+    void apply(Player * player) override;
+};
 
+class Firerate : public Pickup {
+public:
+    std::string path = BasePath "asset/graphic/pickups/powerup.png";
+    Firerate(SDL_FRect pos, SDL_Renderer *renderer);
+    void apply(Player * player) override;
+};
+
+class Magbuff : public Pickup {
+public:
+    std::string path = BasePath "asset/graphic/pickups/powerup.png";
+    Magbuff(SDL_FRect pos, SDL_Renderer *renderer);
+    void apply(Player * player) override;
+};
 #endif //GORILLAGAME_PICKUPS_H

@@ -2,6 +2,8 @@
 #define PH_H
 #include "../GameObjects/Player.h"
 
+class Player;
+
 class PS {
 private:
     Player* player = nullptr;

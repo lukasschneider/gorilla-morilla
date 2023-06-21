@@ -17,6 +17,8 @@ SDL_Texture *crosshair;
 
 void MainState::Init() {
 
+    RS::getInstance().init(render);
+
     SDL_ShowCursor(SDL_DISABLE);
     auto gun = std::make_unique<Gun>(render);
     player = new Player(render, std::move(gun));
@@ -24,29 +26,24 @@ void MainState::Init() {
     crosshair = SDL_CreateTextureFromSurface(render, surface);
     SDL_FreeSurface(surface);
 
-    //FloorManager fm;
-    //this->floor = fm.createFloor(render, &camera);
-    //this->room = floor.getStartRoom();
-    RoomManager rm;
-    this->room = rm.create_room(0,render,RoomManager::MapType::TEST,&camera);
+    FloorManager fm;
+    this->floor = fm.createFloor(render, &camera);
+    this->room = floor.getStartRoom();
 
     userinterface = new ui(render, player, &camera);
-    enemy = new Enemy(120, 120, 100, &room->activePickups);
+    //enemy = new Enemy(800, 800, 100, &room->activePickups);
 
 
-    RS::getInstance().init(render);
     PS::getInstance().init(player);
 }
-
 void MainState::UnInit() {
-    delete enemy;
+    //delete enemy;
     delete player;
     delete room;
     delete userinterface;
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
-
 
     SDL_PumpEvents();
 
@@ -61,7 +58,7 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     }
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     // Check if the left mouse button is being held down
-    Uint32 mouseState = SDL_GetMouseState(NULL, NULL);
+    Uint32 mouseState = SDL_GetMouseState(nullptr, nullptr);
     if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
         player->gun->fire(render, &camera);
     }
@@ -70,73 +67,92 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         player->gun->reload();
     }
 
+
     player->handleMovement(keyboardState, deltaT, *room);
 
-
     if (player->handleTeleport(*room) == TELEPORT_TOP) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        printf("TELEPORT ACTION TOP: \n");
-        player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 100;
+        player->dRect.y = player->dRect.y + ((float) room->getMapPixelHeight() - 128) - 125;
         this->room = neighbors[0];
     }
     if (player->handleTeleport(*room) == TELEPORT_RIGHT) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
-        printf("TELEPORT ACTION RIGHT: \n");
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 200;
+        player->dRect.x = player->dRect.x - ((float) room->getMapPixelWidth() - 128) + 225;
         this->room = neighbors[1];
     }
     if (player->handleTeleport(*room) == TELEPORT_BOTTOM) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        printf("TELEPORT ACTION LEFT: \n");
-        player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 100;
+        player->dRect.y = player->dRect.y - ((float) room->getMapPixelHeight() - 128) + 125;
         this->room = neighbors[2];
 
     }
     if (player->handleTeleport(*room) == TELEPORT_LEFT) {
-        cout << "AKTUELLER RAUM: " << room->id << endl;
         std::array<Room *, 4> neighbors{};
         neighbors = floor.getNeighbors(room);
-        printf("TELEPORT ACTION LEFT: \n");
-        player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 100;
+        player->dRect.x = player->dRect.x + ((float) room->getMapPixelWidth() - 128) - 125;
         this->room = neighbors[3];
     }
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
+    if(player->health == 0){
+        MainState::UnInit();
+        MainState::Init();
+    }
     adjustViewportToPlayer(camera,player->dRect,1280,720);
     player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
-    enemy->coll(player->gun->bullets);
-    enemy->update(deltaT,*room);
-    userinterface->update();
-    auto r = transformMatrix(room->map_layer[1]);
-    enemy->path = aStarSearch(r, &enemy->body, &player->dRect, false);
+    auto r = transformMatrix(room->map_layer[3]);
 
+    for(auto m : room->enemies){
+        m->coll(player->gun->bullets);
+        m->update(deltaT,*room);
+        m->path = aStarSearch(r, &m->dRect, &player->dRect, false , room->enemies);
+        m->attackUpdate();
+
+    }
+
+
+
+    userinterface->update();
 
 }
 
 void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT) {
 
     // Backboard includes tree area around room and green background
-    room->renderBackboard(render);
+    room->render_backboard(render);
+    room->render_backboard_styling(render);
+
     room->renderPickups(camera);
     // Collision includes every tile the player can collide with
-    room->renderCollision(render);
+
+    if(room->enemies.empty()) {
+        room->render_mapborder_open(render);
+    } else {
+        room->render_mapborder_closed(render);
+    }
+
+
     player->renderPlayer(render);
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
-    enemy->render(render, camera);
+
+    SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
+    for(auto e : room->enemies){
+        e->render(render, camera);
+    }
+
+    room->render_mapborder_styling(render);
+
+
     // Forground renders every styling aspekt
-    room->renderForeground(render);
     userinterface->drawUi();
-    drawPath(enemy->path,camera,64);
+    //drawPath(m->path,camera,64);
 }

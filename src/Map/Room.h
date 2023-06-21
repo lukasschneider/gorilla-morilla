@@ -4,6 +4,7 @@
 #include "../lib/global.h"
 #include "../GameObjects/Pickups.h"
 #include "../lib/rh.h"
+#include "../GameObjects/Enemy.h"
 
 /**
  * Room Layout is always the same
@@ -15,6 +16,7 @@
  */
 
 class Pickup;
+class Enemy;
 
 const int TILE_SIZE = 64;
 
@@ -55,15 +57,18 @@ private:
             BACK_PIXEL_WIDTH,
             BACK_PIXEL_HEIGHT;
     SDL_FRect *vp;
+
 public:
 
     int id;
     std::vector<Tile> tiles;
     std::vector<Pickup*> activePickups;
+
     std::vector<std::vector<std::vector<int>>> map_layer;
 
+    std::vector<Enemy*>enemies;
 
-    Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport);
+    Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport, int map_type);
 
     [[nodiscard]] bool checkCollision(const SDL_Rect &rect) const;
 
@@ -73,11 +78,15 @@ public:
 
     void renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect, SDL_FRect &viewport);
 
-    void renderBackboard(SDL_Renderer *render);
+    void render_backboard(SDL_Renderer *render);
 
-    void renderCollision(SDL_Renderer *render);
+    void render_backboard_styling(SDL_Renderer *render);
 
-    void renderForeground(SDL_Renderer *render);
+    void render_mapborder_closed(SDL_Renderer *render);
+
+    void render_mapborder_open(SDL_Renderer *render);
+
+    void render_mapborder_styling(SDL_Renderer *render);
 
     [[nodiscard]] int checkTeleport(const SDL_Rect &rect) const;
 
@@ -86,6 +95,7 @@ public:
     ~Room();
 
     void updatePickups();
+
 };
 
 

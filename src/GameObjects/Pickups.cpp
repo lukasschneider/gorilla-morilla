@@ -27,3 +27,45 @@ Banana::Banana(SDL_FRect pos, SDL_Renderer *renderer)
 void Banana::apply(Player * player) {
     player->currency += value;
 }
+
+DMGBuff::DMGBuff(SDL_FRect pos, SDL_Renderer *renderer)
+    :Pickup(pos) {
+    SDL_Surface *sheet = IMG_Load(path.c_str());
+    texture = SDL_CreateTextureFromSurface(renderer, sheet);
+    SDL_FreeSurface(sheet);
+    cost = 10;
+}
+
+void DMGBuff::apply(Player * player) {
+    player->dmg += 10;
+    player->currency -= 10;
+}
+
+Firerate::Firerate(SDL_FRect pos, SDL_Renderer *renderer) :Pickup(pos) {
+    SDL_Surface *sheet = IMG_Load(path.c_str());
+    texture = SDL_CreateTextureFromSurface(renderer, sheet);
+    SDL_FreeSurface(sheet);
+    cost = 10;
+
+}
+
+void Firerate::apply(Player * player) {
+    if(player->gun->timeSinceLastShot > 0) {
+        player->gun->timeSinceLastShot -= 0.02;
+        player->currency -= 10;
+    }
+
+}
+
+Magbuff::Magbuff(SDL_FRect pos, SDL_Renderer *renderer) :Pickup(pos) {
+    SDL_Surface *sheet = IMG_Load(path.c_str());
+    texture = SDL_CreateTextureFromSurface(renderer, sheet);
+    SDL_FreeSurface(sheet);
+    cost = 10;
+
+}
+
+void Magbuff::apply(Player * player) {
+    player->gun->magazin += 10;
+    player->currency -= 10;
+}

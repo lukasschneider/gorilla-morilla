@@ -3,27 +3,38 @@
 
 #include "../lib/global.h"
 #include "../lib/rh.h"
-#include "Bullet.h"
-#include "Gun.h"
+#include "Weapons/Bullet.h"
+#include "Weapons/Gun.h"
 #include "Pickups.h"
+#include "Weapons/Knife.h"
+
+class Room;
+class Pickup;
+class Knife;
 
 
 class Enemy {
 public:
-    SDL_FRect body;
+    std::string enemyPath = BasePath "asset/graphic/enemy/green.png";
+    SDL_FRect dRect;
+    Texture * enemyTexture;
+    std::unique_ptr<Knife> knife;
     float hp;
     float maxHp;
     bool movingRight = true;
-    float speed = 300.0f;
-    float radius = 64.0f;
+    float speed = 500.0f;
+    float radius = 75.0f;
     std::vector<Pickup*>* activePowerUps;
     Path path;
+    bool isHit = false;
+    float hitTime = 0.0f;
+    float hitDuration = 0.2f;
 
-    Enemy(float x, float y, float maxHp,std::vector<Pickup*>* pickup);
+    Enemy(float x, float y, float maxHp, std::vector<Pickup*>* pickup);
 
     bool spawnrate();
 
-    void die();
+    Enemy* die();
 
     void update(float dt, Room &room);
 
@@ -38,6 +49,10 @@ public:
     ~Enemy();
 
     [[nodiscard]] bool inRadius() const;
+
+    void getHit();
+
+    void attackUpdate() const;
 };
 
 

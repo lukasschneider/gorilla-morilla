@@ -77,8 +77,10 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
         case 2:
             /* Shop Room TOP */
             this->enemies.clear();
+            this->activePickups.emplace_back(new DMGBuff({576, 896, 64,64}, render));
+            this->activePickups.emplace_back(new Firerate({384, 896, 64,64}, render));
+            this->activePickups.emplace_back(new Magbuff({192, 896, 64,64}, render));
             break;
-
         case 3:
             /* BOTTOM_LEFT */
             this->enemies.push_back(new Enemy(1280, 384, 100, &this->activePickups));
@@ -348,10 +350,12 @@ void Room::updatePickups() {
     Player *player = PS::getInstance().get();
     for (int i = 0; i < activePickups.size(); ++i) {
         if (activePickups[i]->checkCollision(player->dRect)) {
-            activePickups[i]->apply(player);
-            delete activePickups[i];
-            activePickups.erase(activePickups.begin() + i);
-            break;
+            if(player->currency >= activePickups[i]->cost){
+                activePickups[i]->apply(player);
+                delete activePickups[i];
+                activePickups.erase(activePickups.begin() + i);
+                break;
+            }
         }
     }
 

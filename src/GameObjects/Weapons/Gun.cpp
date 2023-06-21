@@ -1,6 +1,6 @@
 #include "Gun.h"
 
-Gun::Gun(SDL_Renderer *render) :bullets(200), ammo(100), magazin(100) {
+Gun::Gun(SDL_Renderer *render) :bullets(200), ammo(30), magazin(30) {
     int width, height;
     SDL_Surface * surface = IMG_Load(path.c_str());
     srcRect = {0, 0, surface->w, surface->h};

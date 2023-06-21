@@ -67,6 +67,7 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         player->gun->reload();
     }
 
+
     player->handleMovement(keyboardState, deltaT, *room);
 
     if (player->handleTeleport(*room) == TELEPORT_TOP) {
@@ -97,6 +98,10 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
+    if(player->health == 0){
+        MainState::UnInit();
+        MainState::Init();
+    }
     adjustViewportToPlayer(camera,player->dRect,1280,720);
     player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
     crossDrect = {mouseX-50,mouseY-50,100,100};

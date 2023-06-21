@@ -162,7 +162,7 @@ void Enemy::coll(BulletRingBuffer &bullets) {
         Bullet *bullet = bullets.get(i);
         if (!bullet->isActive) continue;
         if (SDL_HasIntersectionF(&bullet->rect, &dRect) /*&& !isHit*/) {
-            hp -= 20;
+            hp -= PS::getInstance().get()->dmg;
             bullet->deactivate();
             getHit();
         }

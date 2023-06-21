@@ -22,7 +22,7 @@ public:
     float hp;
     float maxHp;
     bool movingRight = true;
-    float speed = 300.0f;
+    float speed = 500.0f;
     float radius = 75.0f;
     std::vector<Pickup*>* activePowerUps;
     Path path;

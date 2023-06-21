@@ -3,9 +3,8 @@
 
 
 Enemy::Enemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
-        : dRect({x, y, 32, 32}), knife(std::make_unique<Knife>()), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {
+        : dRect({x, y, 48, 48}), knife(std::make_unique<Knife>()), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {
     Renderer * renderer = RS::getInstance().get();
-    dRect = {static_cast<float>(64),static_cast<float>(500),48,48};
     SDL_Surface * surface = IMG_Load(enemyPath.c_str());
     if (!surface) {
         std::cout << "Failed to load image: " << IMG_GetError() << std::endl;
@@ -68,7 +67,6 @@ void Enemy::update(float dt, Room &room) {
                 distance = std::sqrt(dx * dx + dy * dy);
             }
             else {
-                // The path is empty, the enemy can stand still
                 return;
             }
         }
@@ -210,7 +208,8 @@ bool Enemy::inRadius() const {
     return distance <= radius;
 }
 
-void Enemy::attackUpdate() {
+
+void Enemy::attackUpdate() const {
     if(inRadius())
         attack();
 }

@@ -66,7 +66,7 @@ public:
 
     std::vector<std::vector<std::vector<int>>> map_layer;
 
-    std::vector<Enemy *> enemies;
+    std::vector<Enemy*>enemies;
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport, int map_type);
 

@@ -23,7 +23,7 @@ public:
     float maxHp;
     bool movingRight = true;
     float speed = 300.0f;
-    float radius = 64.0f;
+    float radius = 75.0f;
     std::vector<Pickup*>* activePowerUps;
     Path path;
     bool isHit = false;
@@ -52,7 +52,7 @@ public:
 
     void getHit();
 
-    void attackUpdate();
+    void attackUpdate() const;
 };
 
 

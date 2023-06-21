@@ -33,8 +33,6 @@ void MainState::Init() {
     userinterface = new ui(render, player, &camera);
     //enemy = new Enemy(800, 800, 100, &room->activePickups);
 
-    for(int i = 0; i < 1; i++)
-    eVec.emplace_back(new MeleeEnemy(200, 64 * i, 200, &room->activePickups));
 
     PS::getInstance().init(player);
 }
@@ -68,11 +66,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     if(keyboardState[SDL_SCANCODE_R]) {
         player->gun->reload();
     }
-//    if(keyboardState[SDL_SCANCODE_L]){
-//        for(auto e : eVec){
-//            e->hp = 0;
-//        }
-//    }
 
     player->handleMovement(keyboardState, deltaT, *room);
 
@@ -115,7 +108,8 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
         m->coll(player->gun->bullets);
         m->update(deltaT,*room);
         m->path = aStarSearch(r, &m->dRect, &player->dRect, false , room->enemies);
-        //m->attackUpdate();
+        m->attackUpdate();
+
     }
 
 
@@ -144,10 +138,6 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
-    for(Enemy *e: room->enemies) {
-        e->render(render, camera);
-        drawPath(e->path,camera,64);
-    }
 
     SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
     for(auto e : room->enemies){

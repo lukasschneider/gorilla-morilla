@@ -41,7 +41,7 @@ void drawPath(Path &path, const SDL_FRect &vp, float size) {
 }
 
 double enemyWeight(int y, int x, const std::vector<Enemy*>& enemies) {
-    for (const auto& enemy : enemies) {
+    for (auto& enemy : enemies) {
         auto conv = convertF(&enemy->dRect);
         if (conv.second == x && conv.first == y) {
             return FLT_MAX;
@@ -49,6 +49,22 @@ double enemyWeight(int y, int x, const std::vector<Enemy*>& enemies) {
     }
     return 0.0;
 }
+/*
+double enemyWeight(int y, int x, const std::vector<Enemy*>& enemies) {
+    double weight = 0.0;
+    for (auto& enemy : enemies) {
+        auto conv = convertF(&enemy->dRect);
+        int dx = abs(conv.second - x);
+        int dy = abs(conv.first - y);
+        if (dx == 0 && dy == 0) {
+            return FLT_MAX;
+        }
+        double distance = std::sqrt(dx * dx + dy * dy);
+        weight += 1.0 / distance;
+    }
+    return weight;
+}
+ * */
 
 struct cell {
     int parent_i, parent_j;

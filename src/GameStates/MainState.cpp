@@ -107,7 +107,7 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     crossDrect = {mouseX-50,mouseY-50,100,100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
-    auto r = transformMatrix(room->map_layer[3]);
+    auto r = transformMatrix(room->map_layer[2]);
 
     for(auto m : room->enemies){
         m->coll(player->gun->bullets);

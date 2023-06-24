@@ -3,6 +3,7 @@
 #include "../lib/global.h"
 #include "Weapons/Gun.h"
 #include "../Map/Room.h"
+#include "../lib/sh.h"
 
 class Room;
 

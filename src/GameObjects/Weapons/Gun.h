@@ -3,6 +3,7 @@
 
 #include "../../lib/global.h"
 #include "../../lib/BulletRingBuffer.h"
+#include "../../lib/SoundManager.h"
 
 class Gun {
 public:
@@ -20,7 +21,7 @@ public:
     BulletRingBuffer bullets;
 
     float timeSinceLastShot = 0.0f;
-    const float shotDelay = 0.14f;
+    const float shotDelay = 0.2f;
     float angle = 0.0f;
 
     Gun(SDL_Renderer * render);
@@ -32,7 +33,7 @@ public:
     void update(int mouseX, int mouseY, const SDL_FRect &playerRect, const SDL_FRect &viewport, float dt);
 
     // Bullet Logic
-    void fire(Renderer* renderer, SDL_FRect *vp);
+    void fire(Renderer* renderer, SDL_FRect *vp, SoundManager * sm);
 
     void updateBullets(float dt);
 

@@ -2,8 +2,8 @@
 
 Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(50){
 
-    dRect = {static_cast<float>(448),static_cast<float>(700),48,48};
-    SDL_Surface * surface = IMG_Load(playerPath.c_str());
+    dRect = {static_cast<float>(448), static_cast<float>(700), 48, 48};
+    SDL_Surface *surface = IMG_Load(playerPath.c_str());
     sRect = {0, 0, surface->w, surface->h};
     playerTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);

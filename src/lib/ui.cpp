@@ -19,6 +19,11 @@ ui::ui(SDL_Renderer *r, Player *p, SDL_FRect *vp) : player(p), render(r), viewpo
     ammoT = SDL_CreateTextureFromSurface(render, ammoSurface);
     SDL_FreeSurface(ammoSurface);
 
+    //Blood Overlay when dead
+    SDL_Surface *deadScreenSurface = IMG_Load(deadScreenPath.c_str());
+    deadScreen = SDL_CreateTextureFromSurface(render, deadScreenSurface);
+    SDL_FreeSurface(deadScreenSurface);
+
     for (int i = 3; i >= 0; i--) {
         SDL_Rect newRect = {3 * 16, i * 16, 16, 16};
         reloadFrames.push_back(newRect);
@@ -45,6 +50,9 @@ ui::ui(SDL_Renderer *r, Player *p, SDL_FRect *vp) : player(p), render(r), viewpo
     hearts.push_back(SDL_CreateTextureFromSurface(render, full_heart));
     SDL_FreeSurface(full_heart);
 
+
+
+
 }
 
 void ui::update() {
@@ -62,6 +70,16 @@ int ui::getReloadIndex() const {
 void ui::drawUi() {
 
     if(player->health == 0) {
+        SDL_FRect dstRect = {
+                0,
+                0,
+                viewport->w,
+                viewport->h
+        };
+        SDL_Texture *dead = deadScreen;
+        SDL_SetTextureAlphaMod(dead, 255);
+        SDL_RenderCopyF(render, dead, nullptr, &dstRect);
+
         SDL_Texture* loss = getLossScreen();
         SDL_RenderCopy(render, loss, nullptr, &winLossScreen);
         SDL_DestroyTexture(loss);
@@ -69,6 +87,25 @@ void ui::drawUi() {
         SDL_Texture *info = getInfoScreen();
         SDL_RenderCopy(render, info, nullptr, &infoScreen);
         SDL_DestroyTexture(info);
+
+    }
+    if(player->isHit) {
+        SDL_FRect dstRect = {
+                0,
+                0,
+                viewport->w,
+                viewport->h
+        };
+
+        SDL_Texture *dead = deadScreen;
+        int alpha = 192;
+
+        SDL_SetTextureAlphaMod(dead, alpha);
+
+        SDL_RenderCopyF(render, dead, nullptr, &dstRect);
+        if(player->invincTimer == 0.0f) {
+            SDL_DestroyTexture(deadScreen);
+        }
     }
 
     if(won) {

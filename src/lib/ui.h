@@ -15,7 +15,7 @@ public:
     SDL_Rect ammoCount;
     SDL_Rect currencyCount;
     SDL_Rect winLossScreen;
-    SDL_Rect  infoScreen;
+    SDL_Rect infoScreen;
     bool won = false;
 
     //stores heart texutres
@@ -38,6 +38,9 @@ public:
 
     std::string ammoPath = BasePath "asset/graphic/pickups/ammo.png";
     SDL_Texture * ammoT;
+
+    std::string deadScreenPath = BasePath "asset/graphic/ui/BloodOverlay.png";
+    SDL_Texture *deadScreen;
 
     ui(SDL_Renderer *r, Player *p, SDL_FRect *vp);
 

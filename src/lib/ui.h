@@ -15,6 +15,7 @@ public:
     SDL_Rect ammoCount;
     SDL_Rect currencyCount;
     SDL_Rect winLossScreen;
+    SDL_Rect  infoScreen;
     bool won = false;
 
     //stores heart texutres
@@ -61,6 +62,7 @@ private:
     SDL_Texture* getLossScreen();
 
 
+    SDL_Texture *getInfoScreen();
 };
 
 #endif //GORILLAGAME_UI_H

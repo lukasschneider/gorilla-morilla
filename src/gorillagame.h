@@ -28,7 +28,6 @@ protected:
     Room *room;
     ui *userinterface;
     Floor floor;
-    std::vector<MeleeEnemy*> eVec;
 
 public:
     // ctor

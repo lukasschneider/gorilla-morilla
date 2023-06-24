@@ -2,6 +2,7 @@
 #include "../lib/rh.h"
 #include "../lib/ph.h"
 #include "../lib/astar.h"
+
 SDL_FRect camera = {0, 0, 1280, 720};
 int mouseX, mouseY;
 SDL_Rect crossDrect;
@@ -34,6 +35,7 @@ void MainState::Init() {
 
     PS::getInstance().init(player);
 }
+
 void MainState::UnInit() {
     delete player;
     delete room;
@@ -60,8 +62,15 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         player->gun->fire(render, &camera);
     }
 
-    if(keyboardState[SDL_SCANCODE_R]) {
+    if (keyboardState[SDL_SCANCODE_R]) {
         player->gun->reload();
+    }
+
+    if (player->health == 0 || userinterface->won) {
+        if(keyboardState[SDL_SCANCODE_SPACE]) {
+            MainState::UnInit();
+            MainState::Init();
+        }
     }
 
     player->handleMovement(keyboardState, deltaT, *room);
@@ -94,30 +103,31 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
 }
 
 void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT) {
-    if(player->health == 0){
-        MainState::UnInit();
-        MainState::Init();
+
+    if (player->health == 0) {
+        player->maxSpeed = 0;
+        player->gun->ammo = 0;
     }
 
-    if(room->enemies.empty()) {
+    if (room->enemies.empty()) {
         room->cleared = true;
     }
 
-    if(floor.checkCleared()) {
+    if (floor.checkCleared()) {
         userinterface->won = true;
     }
 
-    adjustViewportToPlayer(camera,player->dRect,1280,720);
-    player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
-    crossDrect = {mouseX-50,mouseY-50,100,100};
+    adjustViewportToPlayer(camera, player->dRect, 1280, 720);
+    player->gun->update(mouseX, mouseY, player->dRect, camera, deltaT);
+    crossDrect = {mouseX - 50, mouseY - 50, 100, 100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();
     auto r = transformMatrix(room->map_layer[2]);
 
-    for(auto m : room->enemies){
+    for (auto m: room->enemies) {
         m->coll(player->gun->bullets);
-        m->update(deltaT,*room);
-        m->path = aStarSearch(r, &m->dRect, &player->dRect, false , room->enemies);
+        m->update(deltaT, *room);
+        m->path = aStarSearch(r, &m->dRect, &player->dRect, false, room->enemies);
         m->attackUpdate();
 
     }
@@ -135,7 +145,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     room->renderPickups(camera);
     // Collision includes every tile the player can collide with
 
-    if(room->enemies.empty()) {
+    if (room->enemies.empty()) {
         room->render_mapborder_open(render);
     } else {
         room->render_mapborder_closed(render);
@@ -148,7 +158,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
 
     SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
-    for(auto e : room->enemies){
+    for (auto e: room->enemies) {
         e->render(render, camera);
     }
 

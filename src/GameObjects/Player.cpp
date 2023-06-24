@@ -154,6 +154,9 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
 void Player::takeDamage() {
     if (state != PlayerState::Dodge && !isHit) {
         health --;
+        if(health <= 0) {
+            health = 0;
+        }
         isHit = true;
         timeSinceLastDamage = 0;
     }

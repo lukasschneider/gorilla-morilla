@@ -64,7 +64,6 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         dirX += 1.0f;
         dir = RIGHT;
     }
-
     timeSinceLastRoll += deltaTime;
     if (keyboardState[SDL_SCANCODE_LSHIFT] && state != PlayerState::Dodge) {
         if(timeSinceLastRoll >= cooldownRoll) {

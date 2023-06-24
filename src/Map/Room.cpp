@@ -19,7 +19,7 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
     SDL_Surface *spritesheetSurface = IMG_Load(BasePath "asset/graphic/tilemap/tilemap.png");
     SDL_FreeSurface(spritesheetSurface);
-    font = TTF_OpenFont(BasePath "asset/font/Kenney_Blocks.ttf", 24);
+    font = TTF_OpenFont(BasePath "asset/font/MonkeyIsland-1991-refined.ttf", 24);
     if (font == nullptr) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }

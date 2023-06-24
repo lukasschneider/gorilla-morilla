@@ -1,5 +1,6 @@
 #ifndef SDL_BASEGAME_PLAYER_H
 #define SDL_BASEGAME_PLAYER_H
+
 #include "../lib/global.h"
 #include "Weapons/Gun.h"
 #include "../Map/Room.h"
@@ -7,12 +8,12 @@
 
 class Room;
 
-enum PlayerState{
+enum PlayerState {
     Dodge,
     Damage
 };
 
-enum Dir{
+enum Dir {
     LEFT,
     RIGHT
 };
@@ -25,7 +26,7 @@ public:
     FRect dRect;
     Dir dir = LEFT;
     std::unique_ptr<Gun> gun;
-    SDL_Texture * playerTexture;
+    SDL_Texture *playerTexture;
     PlayerState state = Damage;
     float speed = 0.0f;
     float acceleration = 15000.0f;
@@ -39,15 +40,17 @@ public:
     bool isHit = false;
     float invincTimer = 0.5f;
     float timeSinceLastDamage = 0.0f;
+    float cooldownRoll = 5.0f;
+    float timeSinceLastRoll = 1000.0f;
     int dmg = 20;
 
-    Player(SDL_Renderer * renderer, std::unique_ptr<Gun> gun);
+    Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun);
 
     void setPlayerPosition(float x, float y);
 
     void takeDamage();
 
-    void renderPlayer(SDL_Renderer * renderer);
+    void renderPlayer(SDL_Renderer *renderer);
 
     void handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room);
 

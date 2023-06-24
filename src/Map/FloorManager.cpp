@@ -12,6 +12,19 @@ Floor FloorManager::createFloor(SDL_Renderer *render, SDL_FRect *camera) {
     Room *room5 = rm.create_room(5, render, RoomManager::MapType::TP_TOP_BOTTOM, camera);
     Room *room6 = rm.create_room(6, render, RoomManager::MapType::TP_TOP, camera);
 
+    room->isStart = true;
+    room->cleared = true;
+    room6->isShop = true;
+    room6->cleared = true;
+
+    floor.addNode(room);
+    floor.addNode(room1);
+    floor.addNode(room2);
+    floor.addNode(room3);
+    floor.addNode(room4);
+    floor.addNode(room5);
+    floor.addNode(room6);
+
     /* Room 0 */
     floor.addEdge(room, room, 0);
     floor.addEdge(room, room1, 1);

@@ -14,6 +14,8 @@ public:
     TTF_Font* font;
     SDL_Rect ammoCount;
     SDL_Rect currencyCount;
+    SDL_Rect winLossScreen;
+    bool won = false;
 
     //stores heart texutres
     std::vector<SDL_Texture*> hearts;
@@ -36,9 +38,6 @@ public:
     std::string ammoPath = BasePath "asset/graphic/pickups/ammo.png";
     SDL_Texture * ammoT;
 
-
-
-
     ui(SDL_Renderer *r, Player *p, SDL_FRect *vp);
 
     void update();
@@ -54,7 +53,14 @@ public:
     std::vector<SDL_Texture*> getHearts();
 
     ~ui();
-};
 
+private:
+
+    SDL_Texture* getWinScreen();
+
+    SDL_Texture* getLossScreen();
+
+
+};
 
 #endif //GORILLAGAME_UI_H

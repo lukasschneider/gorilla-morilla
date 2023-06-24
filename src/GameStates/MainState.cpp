@@ -31,13 +31,10 @@ void MainState::Init() {
     this->room = floor.getStartRoom();
 
     userinterface = new ui(render, player, &camera);
-    //enemy = new Enemy(800, 800, 100, &room->activePickups);
-
 
     PS::getInstance().init(player);
 }
 void MainState::UnInit() {
-    //delete enemy;
     delete player;
     delete room;
     delete userinterface;
@@ -66,7 +63,6 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
     if(keyboardState[SDL_SCANCODE_R]) {
         player->gun->reload();
     }
-
 
     player->handleMovement(keyboardState, deltaT, *room);
 
@@ -102,6 +98,15 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
         MainState::UnInit();
         MainState::Init();
     }
+
+    if(room->enemies.empty()) {
+        room->cleared = true;
+    }
+
+    if(floor.checkCleared()) {
+        userinterface->won = true;
+    }
+
     adjustViewportToPlayer(camera,player->dRect,1280,720);
     player->gun->update(mouseX, mouseY, player->dRect, camera,deltaT);
     crossDrect = {mouseX-50,mouseY-50,100,100};
@@ -116,8 +121,6 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
         m->attackUpdate();
 
     }
-
-
 
     userinterface->update();
 

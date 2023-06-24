@@ -1,6 +1,7 @@
 #include "Floor.h"
 
-void Floor::addEdge(Room* src, Room* dst, int index) {
+void Floor::addEdge(Room *src, Room *dst, int index) {
+
     if (adjacency_list.empty()) {
         Edge edge{};
         edge.start = src;
@@ -9,7 +10,7 @@ void Floor::addEdge(Room* src, Room* dst, int index) {
         return;
     }
 
-    for (auto & i : adjacency_list) {
+    for (auto &i: adjacency_list) {
         if (src->id == i.start->id) {
             i.neighbors[index] = dst;
             return;
@@ -36,6 +37,23 @@ Room *Floor::getStartRoom() {
         return nullptr;
     }
     return adjacency_list[0].start;
+}
+
+bool Floor::checkCleared() {
+    int count = 0;
+    for (auto n: nodes) {
+        if (n->cleared) {
+            count++;
+        }
+    }
+    if(count == (int) nodes.size()) {
+        return true;
+    }
+    return false;
+}
+
+void Floor::addNode(Room *n) {
+    nodes.push_back(n);
 }
 
 

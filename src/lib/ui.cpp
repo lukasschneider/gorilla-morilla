@@ -60,6 +60,19 @@ int ui::getReloadIndex() const {
 }
 
 void ui::drawUi() {
+
+    if(player->health == 0) {
+        SDL_Texture* loss = getLossScreen();
+        SDL_RenderCopy(render, loss, nullptr, &winLossScreen);
+        SDL_DestroyTexture(loss);
+    }
+
+    if(won) {
+        SDL_Texture* win = getWinScreen();
+        SDL_RenderCopy(render, win, nullptr, &winLossScreen);
+        SDL_DestroyTexture(win);
+    }
+
     if (player->gun->isReloading) {
         SDL_Rect srcRect = reloadFrames[reloadIndex];
         SDL_FRect dstRect = {
@@ -194,5 +207,61 @@ ui::~ui() {
     for (SDL_Texture* heart : hearts) {
         SDL_DestroyTexture(heart);
     }
+}
+
+SDL_Texture *ui::getLossScreen() {
+    std::string WinText = "Du bist gestorben";
+
+    SDL_Color white = {255, 0, 0, 255};
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, WinText.c_str(), white);
+    if (textSurface == nullptr) {
+        printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    winLossScreen = {500, 280 - textSurface->h, 600, 200};
+
+    SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
+    SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+    SDL_SetRenderTarget(render, NULL);
+    SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_FreeSurface(textSurface);
+
+    return finalTexture;
+}
+
+SDL_Texture *ui::getWinScreen() {
+    std::string WinText = "Du hast gewonnen";
+
+    SDL_Color white = {0, 128, 255, 255};
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, WinText.c_str(), white);
+    if (textSurface == nullptr) {
+        printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    winLossScreen = {500, 280 - textSurface->h, 600, 200};
+
+    SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
+    SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+    SDL_SetRenderTarget(render, NULL);
+    SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_FreeSurface(textSurface);
+
+    return finalTexture;
 }
 

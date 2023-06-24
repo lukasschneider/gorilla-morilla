@@ -59,6 +59,8 @@ private:
     SDL_FRect *vp;
 
 public:
+    std::string currentPickupDesc;
+    TTF_Font* font;
     int id;
     bool isShop = false;
     bool isStart = false;

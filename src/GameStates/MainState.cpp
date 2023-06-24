@@ -1,6 +1,7 @@
 #include "../gorillagame.h"
 #include "../lib/rh.h"
 #include "../lib/ph.h"
+#include "../lib/sh.h"
 #include "../lib/astar.h"
 
 SDL_FRect camera = {0, 0, 1280, 720};
@@ -17,10 +18,13 @@ SDL_Texture *crosshair;
 
 
 void MainState::Init() {
-
+    soundManager = new SoundManager;
+    soundManager->loadSounds();
     RS::getInstance().init(render);
 
     SDL_ShowCursor(SDL_DISABLE);
+    //SDL_SetRelativeMouseMode(SDL_TRUE);
+
     auto gun = std::make_unique<Gun>(render);
     player = new Player(render, std::move(gun));
     surface = IMG_Load(BasePath"asset/graphic/ui/crosshair.png");
@@ -32,14 +36,20 @@ void MainState::Init() {
     this->room = floor.getStartRoom();
 
     userinterface = new ui(render, player, &camera);
+    //enemy = new Enemy(800, 800, 100, &room->activePickups);
+
+    soundManager->playSound(SoundId::MUSIC, -1,2);
+    soundManager->playSound(SoundId::AMBIENT,-1, 3);
 
     PS::getInstance().init(player);
+    SMS::getInstance().init(soundManager);
 }
 
 void MainState::UnInit() {
     delete player;
     delete room;
     delete userinterface;
+    delete soundManager;
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {
@@ -54,12 +64,16 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
             mouseX = event.motion.x;
             mouseY = event.motion.y;
         }
+        else if (event.button.button == SDL_BUTTON_RIGHT) {
+            player->gun->reload();
+        }
     }
     const Uint8 *keyboardState = SDL_GetKeyboardState(nullptr);
     // Check if the left mouse button is being held down
     Uint32 mouseState = SDL_GetMouseState(nullptr, nullptr);
     if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-        player->gun->fire(render, &camera);
+        player->gun->fire(render, &camera , soundManager);
+
     }
 
     if (keyboardState[SDL_SCANCODE_R]) {
@@ -142,8 +156,6 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     room->render_backboard(render);
     room->render_backboard_styling(render);
 
-    room->renderPickups(camera);
-    // Collision includes every tile the player can collide with
 
     if (room->enemies.empty()) {
         room->render_mapborder_open(render);
@@ -155,10 +167,8 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     player->renderPlayer(render);
     player->gun->render(render);
     player->gun->renderBullets(render, &camera);
-    SDL_RenderCopy(render, crosshair, NULL, &crossDrect);
 
-    SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
-    for (auto e: room->enemies) {
+    for(auto e : room->enemies){
         e->render(render, camera);
     }
 
@@ -167,5 +177,10 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
 
     // Forground renders every styling aspekt
     userinterface->drawUi();
+
+    room->renderPickups(camera);
+
+
+    SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);
     //drawPath(m->path,camera,64);
 }

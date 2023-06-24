@@ -23,7 +23,7 @@ void MainState::Init() {
     RS::getInstance().init(render);
 
     SDL_ShowCursor(SDL_DISABLE);
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetRelativeMouseMode(SDL_TRUE);
 
     auto gun = std::make_unique<Gun>(render);
     player = new Player(render, std::move(gun));

@@ -19,7 +19,10 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
     SDL_Surface *spritesheetSurface = IMG_Load(BasePath "asset/graphic/tilemap/tilemap.png");
     SDL_FreeSurface(spritesheetSurface);
-
+    font = TTF_OpenFont(BasePath "asset/font/Kenney_Blocks.ttf", 24);
+    if (font == nullptr) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+    }
     int spritesheet_height = 176;
     int spritesheet_width = 192;
     int tile_size = 16;
@@ -325,9 +328,48 @@ void Room::renderPickups(const SDL_FRect &vp) {
     if (!activePickups.empty()) {
         for (auto pickup: activePickups) {
             pickup->render(RS::getInstance().get(), vp);
+            if (dynamic_cast<Banana*>(pickup) == nullptr && pickup->checkCollision(PS::getInstance().get()->dRect, 32)) {
+                std::string currentPickupDesc = pickup->description;
+
+                std::string textToRender = std::to_string(pickup->cost) + " :\n"+ currentPickupDesc;
+
+                SDL_Color textColor = { 255, 255, 255 };
+                SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped(font, textToRender.c_str(), textColor, 300);
+                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(RS::getInstance().get(), textSurface);
+
+                int textW, textH;
+                SDL_QueryTexture(textTexture, NULL, NULL, &textW, &textH);
+
+                SDL_FPoint centerPoint = {175, 300};
+
+                SDL_FRect textRect;
+                textRect.x = centerPoint.x - textW / 2;
+                textRect.y = centerPoint.y - textH / 2;
+                textRect.w = textW;
+                textRect.h = textH;
+
+                SDL_RenderCopyF(RS::getInstance().get(), textTexture, nullptr, &textRect);
+
+                SDL_Surface * banana  = IMG_Load(BasePath "asset/graphic/pickups/banana.png");
+                SDL_Texture* pickupTexture = SDL_CreateTextureFromSurface(RS::getInstance().get(), banana);
+                SDL_FreeSurface(banana);
+
+                SDL_FRect pickupRect;
+                pickupRect.x = textRect.x + 56;
+                pickupRect.y = textRect.y + 2;
+                pickupRect.w = 32;
+                pickupRect.h = 32;
+
+
+                SDL_RenderCopyF(RS::getInstance().get(), pickupTexture, nullptr, &pickupRect);
+
+                SDL_DestroyTexture(textTexture);
+                SDL_FreeSurface(textSurface);
+            }
         }
     }
 }
+
 
 Room::~Room() {
 
@@ -348,15 +390,30 @@ Room::~Room() {
 
 void Room::updatePickups() {
     Player *player = PS::getInstance().get();
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+    currentPickupDesc = "";
     for (int i = 0; i < activePickups.size(); ++i) {
-        if (activePickups[i]->checkCollision(player->dRect)) {
-            if(player->currency >= activePickups[i]->cost){
+        if (dynamic_cast<Banana*>(activePickups[i]) != nullptr) {
+            if (activePickups[i]->checkCollision(player->dRect, 0)) {
+                SMS::getInstance().get()->playSound(SoundId::COIN,0);
                 activePickups[i]->apply(player);
                 delete activePickups[i];
                 activePickups.erase(activePickups.begin() + i);
                 break;
             }
+        } else if (activePickups[i]->checkCollision(player->dRect, 48)) {
+            currentPickupDesc = activePickups[i]->description;
+            if(player->currency >= activePickups[i]->cost){
+                if(state[SDL_SCANCODE_E]) {
+                    SMS::getInstance().get()->playSound(SoundId::POWERUP,0);
+                    activePickups[i]->apply(player);
+                    delete activePickups[i];
+                    activePickups.erase(activePickups.begin() + i);
+                    break;
+                }
+            }
         }
     }
-
 }
+
+

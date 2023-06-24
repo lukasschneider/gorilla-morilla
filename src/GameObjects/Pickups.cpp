@@ -4,9 +4,11 @@
 Pickup::Pickup(SDL_FRect pos) : pos(pos) {
 }
 
-bool Pickup::checkCollision(const SDL_FRect &playerRect) {
-    return SDL_HasIntersectionF(&pos, &playerRect) == SDL_TRUE;
+bool Pickup::checkCollision(const SDL_FRect &playerRect, float range) {
+    SDL_FRect rangeRect = {pos.x - range, pos.y - range, pos.w + 2 * range, pos.h + 2 * range};
+    return SDL_HasIntersectionF(&rangeRect, &playerRect) == SDL_TRUE;
 }
+
 
 Pickup::~Pickup() {
     SDL_DestroyTexture(texture);
@@ -34,6 +36,8 @@ DMGBuff::DMGBuff(SDL_FRect pos, SDL_Renderer *renderer)
     texture = SDL_CreateTextureFromSurface(renderer, sheet);
     SDL_FreeSurface(sheet);
     cost = 10;
+    description = "Increases damage by 10.";
+
 }
 
 void DMGBuff::apply(Player * player) {
@@ -46,7 +50,7 @@ Firerate::Firerate(SDL_FRect pos, SDL_Renderer *renderer) :Pickup(pos) {
     texture = SDL_CreateTextureFromSurface(renderer, sheet);
     SDL_FreeSurface(sheet);
     cost = 10;
-
+    description = "Increases fire rate.";
 }
 
 void Firerate::apply(Player * player) {
@@ -54,7 +58,6 @@ void Firerate::apply(Player * player) {
         player->gun->timeSinceLastShot -= 0.02;
         player->currency -= 10;
     }
-
 }
 
 Magbuff::Magbuff(SDL_FRect pos, SDL_Renderer *renderer) :Pickup(pos) {
@@ -62,7 +65,7 @@ Magbuff::Magbuff(SDL_FRect pos, SDL_Renderer *renderer) :Pickup(pos) {
     texture = SDL_CreateTextureFromSurface(renderer, sheet);
     SDL_FreeSurface(sheet);
     cost = 10;
-
+    description = "Increases magazine size by 10.";
 }
 
 void Magbuff::apply(Player * player) {

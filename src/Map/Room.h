@@ -59,14 +59,19 @@ private:
     SDL_FRect *vp;
 
 public:
-
+    std::string currentPickupDesc;
+    TTF_Font* font;
     int id;
+    bool isShop = false;
+    bool isStart = false;
     std::vector<Tile> tiles;
     std::vector<Pickup*> activePickups;
 
     std::vector<std::vector<std::vector<int>>> map_layer;
 
     std::vector<Enemy*>enemies;
+
+    bool cleared = false;
 
     Room(int id, SDL_Renderer *render, std::vector<std::vector<std::vector<int>>> map, SDL_FRect *viewport, int map_type);
 

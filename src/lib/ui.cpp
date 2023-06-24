@@ -28,7 +28,7 @@ ui::ui(SDL_Renderer *r, Player *p, SDL_FRect *vp) : player(p), render(r), viewpo
     if (TTF_Init() == -1) {
         printf("TTF_Init: %s\n", TTF_GetError());
     }
-    font = TTF_OpenFont(BasePath "asset/font/Kenney_Blocks.ttf", 32);
+    font = TTF_OpenFont(BasePath "asset/font/MonkeyIsland-1991-refined.ttf", 32);
     if (font == nullptr) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
@@ -60,6 +60,27 @@ int ui::getReloadIndex() const {
 }
 
 void ui::drawUi() {
+
+    if(player->health == 0) {
+        SDL_Texture* loss = getLossScreen();
+        SDL_RenderCopy(render, loss, nullptr, &winLossScreen);
+        SDL_DestroyTexture(loss);
+
+        SDL_Texture *info = getInfoScreen();
+        SDL_RenderCopy(render, info, nullptr, &infoScreen);
+        SDL_DestroyTexture(info);
+    }
+
+    if(won) {
+        SDL_Texture* win = getWinScreen();
+        SDL_RenderCopy(render, win, nullptr, &winLossScreen);
+        SDL_DestroyTexture(win);
+
+        SDL_Texture *info = getInfoScreen();
+        SDL_RenderCopy(render, info, nullptr, &infoScreen);
+        SDL_DestroyTexture(info);
+    }
+
     if (player->gun->isReloading) {
         SDL_Rect srcRect = reloadFrames[reloadIndex];
         SDL_FRect dstRect = {
@@ -111,7 +132,7 @@ SDL_Texture *ui::getAmmo() {
     SDL_SetRenderTarget(render, finalTexture);
 
     SDL_Rect ammoRect = {0, 0, ammoW, ammoH};
-    SDL_Rect textRect = {ammoW+ 5, 0, textSurface->w, textSurface->h};
+    SDL_Rect textRect = {ammoW+ 5, 5, textSurface->w, textSurface->h};
 
     SDL_RenderCopy(render, ammoT, NULL, &ammoRect);
 
@@ -168,7 +189,7 @@ SDL_Texture *ui::getCurrency() {
     SDL_SetRenderTarget(render, finalTexture);
 
     SDL_Rect bananaRect = {0, 0, bananaW, bananaH};
-    SDL_Rect textRect = {bananaW + 5, 0, textSurface->w, textSurface->h};
+    SDL_Rect textRect = {bananaW + 5, 5, textSurface->w, textSurface->h};
 
     SDL_RenderCopy(render, bananaT, NULL, &bananaRect);
 
@@ -196,3 +217,98 @@ ui::~ui() {
     }
 }
 
+SDL_Texture *ui::getLossScreen() {
+    std::string winText = "DU BIST GESTORBEN";
+
+    SDL_Color white = {255, 0, 0, 255};
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, winText.c_str(), white);
+
+    if (textSurface == nullptr) {
+        printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    winLossScreen = {400, 200, 600, 200};
+
+
+    SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
+    SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
+
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+
+    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+
+    SDL_DestroyTexture(textTexture);
+
+    SDL_SetRenderTarget(render, NULL);
+    SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_FreeSurface(textSurface);
+
+    return finalTexture;
+}
+
+SDL_Texture *ui::getWinScreen() {
+    std::string WinText = "DU HAST GEWONNEN";
+
+    SDL_Color white = {0, 128, 255, 255};
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, WinText.c_str(), white);
+    if (textSurface == nullptr) {
+        printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    winLossScreen = {400, 200, 600, 200};
+
+    SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
+    SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_DestroyTexture(textTexture);
+    SDL_SetRenderTarget(render, NULL);
+    SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_FreeSurface(textSurface);
+
+    return finalTexture;
+}
+
+SDL_Texture *ui::getInfoScreen() {
+    std::string infoText = "LEER FUER NEUSTART";
+
+    SDL_Color white = {255, 255, 255, 255};
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, infoText.c_str(), white);
+
+    if (textSurface == nullptr) {
+        printf("TTF_RenderText_Blended: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    infoScreen = {400, 500, 600, 200};
+
+
+    SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
+    SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
+
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
+
+    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+
+    SDL_DestroyTexture(textTexture);
+
+    SDL_SetRenderTarget(render, NULL);
+    SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_FreeSurface(textSurface);
+
+    return finalTexture;
+}

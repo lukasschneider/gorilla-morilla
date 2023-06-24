@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(5){
+Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(50){
 
     dRect = {static_cast<float>(448),static_cast<float>(700),48,48};
     SDL_Surface * surface = IMG_Load(playerPath.c_str());
@@ -153,6 +153,7 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
 
 void Player::takeDamage() {
     if (state != PlayerState::Dodge && !isHit) {
+        SMS::getInstance().get()->playMonkeySound();
         health --;
         isHit = true;
         timeSinceLastDamage = 0;

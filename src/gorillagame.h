@@ -11,6 +11,7 @@
 #include "lib/ui.h"
 #include "GameObjects/Enemy/MeleeEnemy.h"
 #include "GameObjects/Weapons/Knife.h"
+#include "lib/SoundManager.h"
 
 
 class ExampleGame;
@@ -29,6 +30,7 @@ protected:
     Enemy *enemy;
     ui *userinterface;
     Floor floor;
+    SoundManager * soundManager;
     std::vector<MeleeEnemy*> eVec;
 public:
     // ctor

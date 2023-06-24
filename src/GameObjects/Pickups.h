@@ -12,19 +12,18 @@ public:
     int cost = 0;
     SDL_FRect pos;
     SDL_Texture *texture{};
+    std::string description;
 public:
     explicit Pickup(SDL_FRect pos);
 
     virtual void apply(Player * player) = 0;
-
-    bool checkCollision(const SDL_FRect& playerRect);
-
 
     virtual ~Pickup();
 
     void render(SDL_Renderer *renderer, const SDL_FRect &vp);;
 
 
+    virtual bool checkCollision(const SDL_FRect &playerRect, float range);
 };
 
 class Banana : public Pickup {
@@ -35,6 +34,10 @@ public:
     Banana(SDL_FRect pos, SDL_Renderer *renderer);
 
     void apply(Player * player) override;
+
+    bool checkCollision(const SDL_FRect& playerRect, float range) override {
+        return SDL_HasIntersectionF(&pos, &playerRect) == SDL_TRUE;
+    }
 
 };
 

@@ -59,7 +59,8 @@ private:
     SDL_FRect *vp;
 
 public:
-
+    std::string currentPickupDesc;
+    TTF_Font* font;
     int id;
     std::vector<Tile> tiles;
     std::vector<Pickup*> activePickups;

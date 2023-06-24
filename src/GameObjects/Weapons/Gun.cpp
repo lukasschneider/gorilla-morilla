@@ -88,8 +88,9 @@ SDL_FPoint Gun::getBulletExitPosition() const {
 
 
 
-void Gun::fire(Renderer * renderer, SDL_FRect *vp) {
+void Gun::fire(Renderer * renderer, SDL_FRect *vp, SoundManager * sm) {
     if (timeSinceLastShot >= shotDelay && !isEmpty() && !isReloading) {
+        sm->playSound(SoundId::SHOOTING,0,4);
         SDL_FPoint pos = getBulletExitPosition();
         float x = pos.x;
         float y = pos.y;

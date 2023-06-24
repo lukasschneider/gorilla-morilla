@@ -1,9 +1,9 @@
 #include "Player.h"
 
-Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(5){
+Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(5) {
 
-    dRect = {static_cast<float>(448),static_cast<float>(700),48,48};
-    SDL_Surface * surface = IMG_Load(playerPath.c_str());
+    dRect = {static_cast<float>(448), static_cast<float>(700), 48, 48};
+    SDL_Surface *surface = IMG_Load(playerPath.c_str());
     sRect = {0, 0, surface->w, surface->h};
     playerTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
@@ -64,13 +64,18 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         dirX += 1.0f;
         dir = RIGHT;
     }
+
+    timeSinceLastRoll += deltaTime;
     if (keyboardState[SDL_SCANCODE_LSHIFT] && state != PlayerState::Dodge) {
-        state = PlayerState::Dodge;
-        rollTimer = rollDuration;
-        if (dirX == 0.0f && dirY == 0.0f) {
-            rollDirection = (dir == RIGHT) ? SDL_FPoint{1.0f, 0.0f} : SDL_FPoint{-1.0f, 0.0f};
-        } else {
-            rollDirection = {dirX, dirY};
+        if(timeSinceLastRoll >= cooldownRoll) {
+            state = PlayerState::Dodge;
+            rollTimer = rollDuration;
+            if (dirX == 0.0f && dirY == 0.0f) {
+                rollDirection = (dir == RIGHT) ? SDL_FPoint{1.0f, 0.0f} : SDL_FPoint{-1.0f, 0.0f};
+            } else {
+                rollDirection = {dirX, dirY};
+            }
+            timeSinceLastRoll = 0.0f;
         }
     }
 
@@ -153,7 +158,7 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
 
 void Player::takeDamage() {
     if (state != PlayerState::Dodge && !isHit) {
-        health --;
+        health--;
         isHit = true;
         timeSinceLastDamage = 0;
     }

@@ -64,13 +64,17 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         dirX += 1.0f;
         dir = RIGHT;
     }
+    timeSinceLastRoll += deltaTime;
     if (keyboardState[SDL_SCANCODE_LSHIFT] && state != PlayerState::Dodge) {
-        state = PlayerState::Dodge;
-        rollTimer = rollDuration;
-        if (dirX == 0.0f && dirY == 0.0f) {
-            rollDirection = (dir == RIGHT) ? SDL_FPoint{1.0f, 0.0f} : SDL_FPoint{-1.0f, 0.0f};
-        } else {
-            rollDirection = {dirX, dirY};
+        if(timeSinceLastRoll >= cooldownRoll) {
+            state = PlayerState::Dodge;
+            rollTimer = rollDuration;
+            if (dirX == 0.0f && dirY == 0.0f) {
+                rollDirection = (dir == RIGHT) ? SDL_FPoint{1.0f, 0.0f} : SDL_FPoint{-1.0f, 0.0f};
+            } else {
+                rollDirection = {dirX, dirY};
+            }
+            timeSinceLastRoll = 0.0f;
         }
     }
 

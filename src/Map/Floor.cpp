@@ -35,7 +35,7 @@ Room *Floor::getStartRoom() {
     if (adjacency_list.empty()) {
         return nullptr;
     }
-    return adjacency_list[6].start;
+    return adjacency_list[0].start;
 }
 
 

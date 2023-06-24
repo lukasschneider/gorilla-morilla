@@ -27,7 +27,6 @@ class MainState : public GameState {
 protected:
     Player *player;
     Room *room;
-    Enemy *enemy;
     ui *userinterface;
     Floor floor;
     SoundManager * soundManager;

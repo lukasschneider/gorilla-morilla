@@ -155,6 +155,9 @@ void Player::takeDamage() {
     if (state != PlayerState::Dodge && !isHit) {
         SMS::getInstance().get()->playMonkeySound();
         health --;
+        if(health <= 0) {
+            health = 0;
+        }
         isHit = true;
         timeSinceLastDamage = 0;
     }

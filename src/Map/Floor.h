@@ -11,11 +11,17 @@ private:
         std::array<Room *,4> neighbors;
     };
     std::vector<Edge> adjacency_list;
-    //std::unordered_map<Room *, std::vector<Room *>> adjacency_list;
+    std::vector<Room*> nodes;
+
 public:;
+
+    void addNode(Room *n);
+
     void addEdge(Room *src, Room *dst, int index);
 
     std::array<Room *, 4> getNeighbors(Room *room);
+
+    bool checkCleared();
 
     Room* getStartRoom();
 };

@@ -26,7 +26,7 @@ void SoundManager::loadSounds() {
             { SoundId::MONKEY3, BasePath"asset/sounds/monk3.wav" },
             { SoundId::SHOOTING, BasePath"asset/sounds/gunshot2.wav" },
             { SoundId::MUSIC, BasePath"asset/sounds/junglebeats.wav" },
-            { SoundId::AMBIENT, BasePath"asset/sounds/ambient.mp3" },
+            { SoundId::AMBIENT, BasePath"asset/sounds/ambienteee.wav" },
             { SoundId::COIN, BasePath"asset/sounds/coin.wav" },
             { SoundId::POWERUP, BasePath"asset/sounds/powerup.wav" }
     };

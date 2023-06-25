@@ -53,7 +53,6 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     SDL_RenderFillRectF(renderer, &borderRecht);
     SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
     SDL_RenderFillRectF(renderer, &fillRect);
-
 }
 
 int Player::handleTeleport(const Room &room) {

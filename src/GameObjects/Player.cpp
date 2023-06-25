@@ -24,9 +24,13 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
         angle = (rollDuration - rollTimer) / rollDuration * 360.0;
     }
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, angle, nullptr, flip);
-    // Dashbar
 
 
+    if(isHit){
+        SDL_SetTextureColorMod(playerTexture,255,50,50);
+    } else {
+        SDL_SetTextureColorMod(playerTexture,255,255,255);
+    }
 
     SDL_FRect fillRect = {
             screenWidth / 2 - dRect.w / 2,
@@ -49,6 +53,7 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     SDL_RenderFillRectF(renderer, &borderRecht);
     SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
     SDL_RenderFillRectF(renderer, &fillRect);
+
 }
 
 int Player::handleTeleport(const Room &room) {
@@ -187,9 +192,11 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
 
 void Player::takeDamage() {
     if (state != PlayerState::Dodge && !isHit) {
-        SMS::getInstance().get()->playMonkeySound();
-        health--;
-        if (health <= 0) {
+        if(health != 0) {
+            SMS::getInstance().get()->playMonkeySound();
+        }
+        health --;
+        if(health <= 0) {
             health = 0;
         }
         isHit = true;

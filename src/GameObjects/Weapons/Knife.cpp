@@ -15,11 +15,11 @@ Knife::Knife() {
     }
     SDL_FreeSurface(surface);
     SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
-    auto ratio = width/height;
-    dstRect = { 500, 500, 64,static_cast<float>(48/ratio)};
+    [[maybe_unused]] auto ratio = width/height;
+    dstRect = { 500, 500, 64,static_cast<float>(48.0/ratio)};
 }
 
-void Knife::renderKnife(const SDL_FRect &viewport) {
+void Knife::renderKnife(const SDL_FRect &viewport) const {
     Renderer * render = RS::getInstance().get();
     SDL_FRect renderDstRect = dstRect;
     renderDstRect.x -= viewport.x;
@@ -42,7 +42,7 @@ void Knife::renderKnife(const SDL_FRect &viewport) {
 
 
 
-void Knife::updateKnife(const SDL_FRect &enemyRect, float dt) {
+void Knife::updateKnife(const SDL_FRect &enemyRect, [[maybe_unused]] float dt) {
     Player * player = PS::getInstance().get();
     float centerX = enemyRect.x + enemyRect.w / 2;
     float centerY = enemyRect.y + enemyRect.h / 2;
@@ -58,17 +58,12 @@ void Knife::updateKnife(const SDL_FRect &enemyRect, float dt) {
     float dot = refX * deltaX + refY * deltaY;
     float cross = refX * deltaY - refY * deltaX;
 
-    angle = atan2(cross, dot) * (180 / M_PI);
+    angle = static_cast<float>(atan2(cross, dot) * (180 / M_PI));
     if (angle < 0) {
         angle += 360;
     }
-    float orbitRadius = enemyRect.w / 2;
-    orbitRadius = 40;
+    float orbitRadius = 40;
 
-    dstRect.x = centerX + orbitRadius * cos(angle * M_PI / 180.0f) - dstRect.w / 2;
-    dstRect.y = centerY + orbitRadius * sin(angle * M_PI / 180.0f) - dstRect.h / 2;
-}
-
-void Knife::slash() {
-
+    dstRect.x = static_cast<float>(centerX + orbitRadius * cos(angle * M_PI / 180.0f) - dstRect.w / 2);
+    dstRect.y = static_cast<float>(centerY + orbitRadius * sin(angle * M_PI / 180.0f) - dstRect.h / 2);
 }

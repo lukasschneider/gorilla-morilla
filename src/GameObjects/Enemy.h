@@ -21,7 +21,7 @@ public:
     std::unique_ptr<Knife> knife;
     float hp;
     float maxHp;
-    bool movingRight = true;
+    [[maybe_unused]] bool movingRight = true;
     float speed = 500.0f;
     float radius = 75.0f;
     std::vector<Pickup*>* activePowerUps;
@@ -32,13 +32,13 @@ public:
 
     Enemy(float x, float y, float maxHp, std::vector<Pickup*>* pickup);
 
-    bool spawnrate();
+    static bool spawnrate();
 
     Enemy* die();
 
-    void update(float dt, Room &room);
+    void update(float dt, [[maybe_unused]] Room &room);
 
-    void respawn();
+    [[maybe_unused]] void respawn();
 
     void render(SDL_Renderer *renderer, const SDL_FRect &viewport);
 

@@ -1,6 +1,4 @@
 #include "Enemy.h"
-#include "../lib/ph.h"
-
 
 Enemy::Enemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
         : dRect({x, y, 48, 48}), knife(std::make_unique<Knife>()), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {
@@ -43,8 +41,8 @@ void Enemy::update(float dt, Room &room) {
         path->erase(path->begin());
         std::pair<int, int> destination = path->front();
 
-        float destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f;
-        float destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f;
+        auto destinationX = static_cast<float>(destination.first * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f);
+        auto destinationY = static_cast<float>(destination.second * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f);
 
         // Compute the direction vector
         float dx = destinationX - dRect.x;
@@ -97,7 +95,7 @@ void Enemy::update(float dt, Room &room) {
     }
 }
 
-void Enemy::respawn() {
+[[maybe_unused]] void Enemy::respawn() {
     die();
     dRect.x = 64;
     dRect.y = 64;

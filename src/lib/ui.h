@@ -12,10 +12,10 @@ public:
     SDL_FRect *viewport;
 
     TTF_Font* font;
-    SDL_Rect ammoCount;
-    SDL_Rect currencyCount;
-    SDL_Rect winLossScreen;
-    SDL_Rect infoScreen;
+    SDL_Rect ammoCount{};
+    SDL_Rect currencyCount{};
+    SDL_Rect winLossScreen{};
+    SDL_Rect infoScreen{};
     bool won = false;
 
     //stores heart texutres
@@ -23,12 +23,11 @@ public:
 
     // used for the reload animation
     std::string buttonsPath = BasePath "asset/graphic/ui/tilemap_packed.png";
-    SDL_Texture *buttons;
     // other reload spritesheet
     std::string emotesPath = BasePath "asset/graphic/ui/emotes.png";
     SDL_Texture *emotes;
     std::vector<SDL_Rect> reloadFrames;
-    int reloadIndex;
+    int reloadIndex{};
     // ui backboard
     std::string backboardPath = BasePath "asset/graphic/ui/UIpackSheet_transparent.png";
     SDL_Texture * backboard;

@@ -31,7 +31,7 @@ struct SoundPair {
 
 class SoundManager {
 public:
-    SoundId lastMonkeySound;
+    [[maybe_unused]] SoundId lastMonkeySound;
 
     SoundManager();
     ~SoundManager();

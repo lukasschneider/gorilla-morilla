@@ -115,9 +115,9 @@ void ui::drawUi() {
 
 
     // Draw Ammo
-    SDL_Texture *ammoT = getAmmo();
-    SDL_RenderCopy(render, ammoT, nullptr, &ammoCount);
-    SDL_DestroyTexture(ammoT);
+    SDL_Texture *ammoTT = getAmmo();
+    SDL_RenderCopy(render, ammoTT, nullptr, &ammoCount);
+    SDL_DestroyTexture(ammoTT);
 
     //Draw Hearts
     std::vector<SDL_Texture *> hp = getHearts();
@@ -160,10 +160,10 @@ SDL_Texture *ui::getAmmo() {
     SDL_Rect ammoRect = {0, 0, ammoW, ammoH};
     SDL_Rect textRect = {ammoW+ 5, 5, textSurface->w, textSurface->h};
 
-    SDL_RenderCopy(render, ammoT, NULL, &ammoRect);
+    SDL_RenderCopy(render, ammoT, nullptr, &ammoRect);
 
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
-    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_RenderCopy(render, textTexture, nullptr, &textRect);
     SDL_DestroyTexture(textTexture);
 
     SDL_SetRenderTarget(render, nullptr);
@@ -220,13 +220,13 @@ SDL_Texture *ui::getCurrency() {
     SDL_Rect bananaRect = {0, 0, bananaW, bananaH};
     SDL_Rect textRect = {bananaW + 5, 5, textSurface->w, textSurface->h};
 
-    SDL_RenderCopy(render, bananaT, NULL, &bananaRect);
+    SDL_RenderCopy(render, bananaT, nullptr, &bananaRect);
 
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
-    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_RenderCopy(render, textTexture, nullptr, &textRect);
     SDL_DestroyTexture(textTexture);
 
-    SDL_SetRenderTarget(render, NULL);
+    SDL_SetRenderTarget(render, nullptr);
     SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
 
     SDL_FreeSurface(textSurface);
@@ -271,11 +271,11 @@ SDL_Texture *ui::getLossScreen() {
 
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
 
-    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_RenderCopy(render, textTexture, nullptr, &textRect);
 
     SDL_DestroyTexture(textTexture);
 
-    SDL_SetRenderTarget(render, NULL);
+    SDL_SetRenderTarget(render, nullptr);
     SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
 
     SDL_FreeSurface(textSurface);
@@ -304,9 +304,9 @@ SDL_Texture *ui::getWinScreen() {
 
     SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
-    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_RenderCopy(render, textTexture, nullptr, &textRect);
     SDL_DestroyTexture(textTexture);
-    SDL_SetRenderTarget(render, NULL);
+    SDL_SetRenderTarget(render, nullptr);
     SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
 
     SDL_FreeSurface(textSurface);
@@ -339,11 +339,11 @@ SDL_Texture *ui::getInfoScreen() {
 
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
 
-    SDL_RenderCopy(render, textTexture, NULL, &textRect);
+    SDL_RenderCopy(render, textTexture, nullptr, &textRect);
 
     SDL_DestroyTexture(textTexture);
 
-    SDL_SetRenderTarget(render, NULL);
+    SDL_SetRenderTarget(render, nullptr);
     SDL_SetTextureBlendMode(finalTexture, SDL_BLENDMODE_BLEND);
 
     SDL_FreeSurface(textSurface);

@@ -10,22 +10,22 @@ class Player;
 class Knife {
 public:
     float angle = 0.0f;
-    const float stabTime = 0.2f;
-    float timeSinceLastLondon = 0.0f;
+    [[maybe_unused]] const float stabTime = 0.2f;
+    [[maybe_unused]] float timeSinceLastLondon = 0.0f;
 
     std::string path = BasePath "asset/graphic/guns/bigKnife.png";
     SDL_Texture* texture;
-    SDL_Rect srcRect{};
+    [[maybe_unused]] SDL_Rect srcRect{};
     SDL_FRect dstRect{};
 
-    bool isSlashing = false; // indicates if knife is slashing
-    float slashingStartTime = 0.0f; // stores the start time of slash
+    [[maybe_unused]] bool isSlashing = false;
+    [[maybe_unused]] float slashingStartTime = 0.0f;
 
     Knife();
 
-    void renderKnife(const SDL_FRect &viewport);
-    void updateKnife(const SDL_FRect &enemyRect, float dt);
-    void slash();
+    void renderKnife(const SDL_FRect &viewport) const;
+    void updateKnife(const SDL_FRect &enemyRect, [[maybe_unused]] float dt);
+
 };
 
 

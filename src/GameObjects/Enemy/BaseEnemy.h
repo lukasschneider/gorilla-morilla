@@ -35,7 +35,7 @@ public:
 
     virtual void render(const SDL_FRect &viewport);
 
-    virtual void coll(BulletRingBuffer& bullets);
+    [[maybe_unused]] virtual void coll(BulletRingBuffer& bullets);
 
     virtual void attack() = 0;
 
@@ -43,7 +43,7 @@ public:
 
     virtual void getHit();
 
-    virtual bool lineOfSightCheck(const Player &player, const std::vector<std::vector<int>> &collisionLayer);
+    //virtual bool lineOfSightCheck(const Player &player, const std::vector<std::vector<int>> &collisionLayer);
 };
 
 #endif //GORILLAGAME_BASEENEMY_H

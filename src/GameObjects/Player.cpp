@@ -26,12 +26,19 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, angle, nullptr, flip);
     // Dashbar
 
+
+
     SDL_FRect fillRect = {
             screenWidth / 2 - dRect.w / 2,
             screenHeight / 2 - dRect.h / 2 + dRect.w + 10,
             dashBarProgress * 10,
             10
     };
+s
+    if(fillRect.w >= 50) {
+        fillRect.w = 50;
+    }
+
     SDL_FRect borderRecht = {
             screenWidth / 2 - dRect.w / 2 - 1,
             screenHeight / 2 - dRect.h / 2 + dRect.w + 10 - 1,

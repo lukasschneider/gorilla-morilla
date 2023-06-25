@@ -3,7 +3,7 @@
 //
 
 #include "SoundManager.h"
-SoundManager::SoundManager() {
+SoundManager::SoundManager() : lastMonkeySound(SoundId::MONKEY1){
     // Initialize SDL_mixer
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
@@ -59,11 +59,9 @@ SoundId SoundManager::randomMonkeySound() {
 }
 
 void SoundManager::playMonkeySound() {
-    SoundId currentSound = randomMonkeySound();
+    lastMonkeySound = randomMonkeySound();
     Mix_FadeOutChannel(1, 200);
 
-    Mix_FadeInChannel(1, soundMap[currentSound], 0, 200);
-
-    lastMonkeySound = currentSound;
+    Mix_FadeInChannel(1, soundMap[lastMonkeySound], 0, 200);
 }
 

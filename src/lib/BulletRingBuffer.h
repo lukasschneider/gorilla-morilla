@@ -13,7 +13,7 @@ private:
     int end;
 
 public:
-    BulletRingBuffer(int size) : maxSize(size), currentSize(0), start(0), end(0) {
+    explicit BulletRingBuffer(int size) : maxSize(size), currentSize(0), start(0), end(0) {
         buffer.resize(maxSize);
     }
 
@@ -43,22 +43,22 @@ public:
         return result;
     }
 
-    Bullet* get(int index) const {
+    [[nodiscard]] Bullet* get(int index) const {
         if (index < 0 || index >= currentSize) {
             return nullptr; // index out of range
         }
         return buffer[(start + index) % maxSize];
     }
 
-    int size() const {
+    [[nodiscard]] int size() const {
         return currentSize;
     }
 
-    bool isFull() const {
+    [[nodiscard]] bool isFull() const {
         return currentSize == maxSize;
     }
 
-    bool isEmpty() const {
+    [[nodiscard]] bool isEmpty() const {
         return currentSize == 0;
     }
 };

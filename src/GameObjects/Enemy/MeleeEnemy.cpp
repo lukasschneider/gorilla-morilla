@@ -1,9 +1,4 @@
-//
-// Created by Jonas Luven on 19.06.23.
-//
-
 #include "MeleeEnemy.h"
-#include "../../lib/ph.h"
 
 MeleeEnemy::MeleeEnemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
         : BaseEnemy(x, y, maxHp, pickup),

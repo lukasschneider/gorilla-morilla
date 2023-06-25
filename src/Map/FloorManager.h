@@ -6,7 +6,7 @@
 
 class FloorManager {
 public:
-    Floor createFloor(SDL_Renderer *render, SDL_FRect *camera);
+    static Floor createFloor(SDL_Renderer *render, SDL_FRect *camera);
 };
 
 

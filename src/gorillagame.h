@@ -20,7 +20,7 @@ class ExampleGame final : public Game {
 public:
     ExampleGame();
 
-    bool HandleEvent(const Event event) override;
+    bool HandleEvent(Event event) override;
 };
 
 class MainState : public GameState {
@@ -39,9 +39,9 @@ public:
 
     void UnInit() override;
 
-    void Events(const u32 frame, const u32 totalMSec, const float deltaT) override;
+    void Events(u32 frame, u32 totalMSec, float deltaT) override;
 
-    void Update(const u32 frame, const u32 totalMSec, const float deltaT) override;
+    void Update(u32 frame, u32 totalMSec, float deltaT) override;
 
-    void Render(const u32 frame, const u32 totalMSec, const float deltaT) override;
+    void Render(u32 frame, u32 totalMSec, float deltaT) override;
 };

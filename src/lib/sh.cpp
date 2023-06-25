@@ -1,7 +1,3 @@
-//
-// Created by Jonas Luven on 24.06.23.
-//
-
 #include "sh.h"
 SMS &SMS::getInstance() {
     if (instance == nullptr) {

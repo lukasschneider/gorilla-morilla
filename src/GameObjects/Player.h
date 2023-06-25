@@ -22,8 +22,8 @@ class Player {
 public:
     std::string playerPath = BasePath "asset/graphic/player/a.png";
     std::string reloadPath = BasePath "asset/graphic/ui/tilemap_packed.png";
-    Rect sRect;
-    FRect dRect;
+    [[maybe_unused]] Rect sRect{};
+    FRect dRect{};
     Dir dir = LEFT;
     std::unique_ptr<Gun> gun;
     SDL_Texture *playerTexture;
@@ -33,7 +33,7 @@ public:
     float maxSpeed = 650.0f;
     int health;
     int currency;
-    SDL_FPoint rollDirection;
+    SDL_FPoint rollDirection{};
     float rollDuration = 0.7;
     float rollTimer = 0.0f;
     float rollMovementSpeed = 650.0f;
@@ -53,7 +53,7 @@ public:
 
     void handleMovement(const Uint8 *keyboardState, float deltaTime, const Room &room);
 
-    int handleTeleport(const Room &room);
+    [[nodiscard]] int handleTeleport(const Room &room) const;
 };
 
 

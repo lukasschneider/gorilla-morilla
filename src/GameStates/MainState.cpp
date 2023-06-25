@@ -1,14 +1,11 @@
 #include "../gorillagame.h"
-#include "../lib/rh.h"
-#include "../lib/ph.h"
-#include "../lib/sh.h"
 #include "../lib/astar.h"
 
 SDL_FRect camera = {0, 0, 1280, 720};
 int mouseX, mouseY;
 SDL_Rect crossDrect;
 
-void adjustViewportToPlayer(SDL_FRect &viewport, const SDL_FRect &playerRect, int screenWidth, int screenHeight) {
+void adjustViewportToPlayer(SDL_FRect &viewport, const SDL_FRect &playerRect, float screenWidth, float screenHeight) {
     viewport.x = playerRect.x - screenWidth / 2 + playerRect.w / 2;
     viewport.y = playerRect.y - screenHeight / 2 + playerRect.h / 2;
 }
@@ -23,7 +20,14 @@ void MainState::Init() {
     RS::getInstance().init(render);
 
     SDL_ShowCursor(SDL_DISABLE);
-    //SDL_SetRelativeMouseMode(SDL_TRUE);
+    #ifdef WIN32
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    #endif
+
+#ifdef __APPLE__
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+#endif
+
 
     auto gun = std::make_unique<Gun>(render);
     player = new Player(render, std::move(gun));
@@ -31,8 +35,7 @@ void MainState::Init() {
     crosshair = SDL_CreateTextureFromSurface(render, surface);
     SDL_FreeSurface(surface);
 
-    FloorManager fm;
-    this->floor = fm.createFloor(render, &camera);
+    this->floor = FloorManager::createFloor(render, &camera);
     this->room = floor.getStartRoom();
 
     userinterface = new ui(render, player, &camera);
@@ -185,7 +188,7 @@ void MainState::Render(const u32 frame, const u32 totalMSec, const float deltaT)
     // Forground renders every styling aspekt
     userinterface->drawUi();
 
-    room->renderPickups(camera);
+    room->renderPickups();
 
 
     SDL_RenderCopy(render, crosshair, nullptr, &crossDrect);

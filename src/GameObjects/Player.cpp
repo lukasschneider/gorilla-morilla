@@ -11,8 +11,8 @@ Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move
 
 void Player::renderPlayer(SDL_Renderer *renderer) {
     SDL_RendererFlip flip = (dir == RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    int screenWidth = 1280;
-    int screenHeight = 720;
+    float screenWidth = 1280;
+    float screenHeight = 720;
     SDL_FRect screenRect = {
             screenWidth / 2 - dRect.w / 2,
             screenHeight / 2 - dRect.h / 2,
@@ -63,16 +63,16 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     Uint8 greenR = 0, greenG = 255, greenB = 0;
     Uint8 orangeR = 255, orangeG = 165, orangeB = 0;
 
-    Uint8 r = (Uint8) (greenR + ratio * (orangeR - greenR));
-    Uint8 g = (Uint8) (greenG + ratio * (orangeG - greenG));
-    Uint8 b = (Uint8) (greenB + ratio * (orangeB - greenB));
+    auto r = (Uint8) (greenR + ratio * (orangeR - greenR));
+    auto g = (Uint8) (greenG + ratio * (orangeG - greenG));
+    auto b = (Uint8) (greenB + ratio * (orangeB - greenB));
 
     SDL_SetRenderDrawColor(renderer, r, g, b, 255);
     SDL_RenderFillRectF(renderer, &fillRect);
 
 }
 
-int Player::handleTeleport(const Room &room) {
+int Player::handleTeleport(const Room &room) const {
     const SDL_Rect rect{
             static_cast<int>(dRect.x),
             static_cast<int>(dRect.y),

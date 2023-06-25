@@ -34,7 +34,7 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             dashBarProgress * 10,
             10
     };
-s
+    
     if(fillRect.w >= 50) {
         fillRect.w = 50;
     }

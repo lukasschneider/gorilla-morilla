@@ -23,6 +23,11 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     if (state == PlayerState::Dodge) {
         angle = (rollDuration - rollTimer) / rollDuration * 360.0;
     }
+    if(isHit){
+        SDL_SetTextureColorMod(playerTexture,255,50,50);
+    } else {
+        SDL_SetTextureColorMod(playerTexture,255,255,255);
+    }
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, angle, nullptr, flip);
 
 
@@ -36,9 +41,9 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             screenWidth / 2 - dRect.w / 2,
             screenHeight / 2 - dRect.h / 2 + dRect.w + 10,
             dashBarProgress * 10,
-            10
+            6
     };
-    
+
     if(fillRect.w >= 50) {
         fillRect.w = 50;
     }
@@ -47,12 +52,24 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             screenWidth / 2 - dRect.w / 2 - 1,
             screenHeight / 2 - dRect.h / 2 + dRect.w + 10 - 1,
             52,
-            12
+            8
     };
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderFillRectF(renderer, &borderRecht);
-    SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
+
+    float ratio = fillRect.w / 50.0f;
+
+    Uint8 greenR = 0, greenG = 255, greenB = 0;
+    Uint8 orangeR = 255, orangeG = 165, orangeB = 0;
+
+    Uint8 r = (Uint8) (greenR + ratio * (orangeR - greenR));
+    Uint8 g = (Uint8) (greenG + ratio * (orangeG - greenG));
+    Uint8 b = (Uint8) (greenB + ratio * (orangeB - greenB));
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
     SDL_RenderFillRectF(renderer, &fillRect);
+
 }
 
 int Player::handleTeleport(const Room &room) {

@@ -88,7 +88,10 @@ void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT)
         }
     }
 
-    player->handleMovement(keyboardState, deltaT, *room);
+    if(player->health != 0) {
+        player->handleMovement(keyboardState, deltaT, *room);
+    }
+
 
     if (player->handleTeleport(*room) == TELEPORT_TOP) {
         std::array<Room *, 4> neighbors{};
@@ -122,6 +125,7 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     if (player->health == 0) {
         player->maxSpeed = 0;
         player->gun->ammo = 0;
+        player->currency = 0;
     }
 
     if (room->enemies.empty()) {
@@ -133,7 +137,9 @@ void MainState::Update(const u32 frame, const u32 totalMSec, const float deltaT)
     }
 
     adjustViewportToPlayer(camera, player->dRect, 1280, 720);
-    player->gun->update(mouseX, mouseY, player->dRect, camera, deltaT);
+    if(player->health != 0) {
+        player->gun->update(mouseX, mouseY, player->dRect, camera, deltaT);
+    }
     crossDrect = {mouseX - 50, mouseY - 50, 100, 100};
     player->gun->updateBullets(deltaT);
     room->updatePickups();

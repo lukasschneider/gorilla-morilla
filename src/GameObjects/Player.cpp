@@ -24,6 +24,13 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
         angle = (rollDuration - rollTimer) / rollDuration * 360.0;
     }
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, angle, nullptr, flip);
+
+    if(isHit){
+        SDL_SetTextureColorMod(playerTexture,255,50,50);
+    } else {
+        SDL_SetTextureColorMod(playerTexture,255,255,255);
+    }
+
 }
 
 int Player::handleTeleport(const Room &room) {
@@ -157,7 +164,9 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
 
 void Player::takeDamage() {
     if (state != PlayerState::Dodge && !isHit) {
-        SMS::getInstance().get()->playMonkeySound();
+        if(health != 0) {
+            SMS::getInstance().get()->playMonkeySound();
+        }
         health --;
         if(health <= 0) {
             health = 0;

@@ -89,24 +89,7 @@ void ui::drawUi() {
         SDL_DestroyTexture(info);
 
     }
-    if(player->isHit) {
-        SDL_FRect dstRect = {
-                0,
-                0,
-                viewport->w,
-                viewport->h
-        };
 
-        SDL_Texture *dead = deadScreen;
-        int alpha = 192;
-
-        SDL_SetTextureAlphaMod(dead, alpha);
-
-        SDL_RenderCopyF(render, dead, nullptr, &dstRect);
-        if(player->invincTimer == 0.0f) {
-            SDL_DestroyTexture(deadScreen);
-        }
-    }
 
     if(won) {
         SDL_Texture* win = getWinScreen();

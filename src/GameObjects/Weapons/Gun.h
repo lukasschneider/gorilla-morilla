@@ -11,12 +11,12 @@ public:
     int magazin;
     float reloadTime;
     float timeSinceLastReload;
-    bool isReloading;
+    bool isReloading{};
 
     std::string path = BasePath "asset/graphic/guns/ak.png";
     SDL_Texture* texture;
-    SDL_Rect srcRect;
-    SDL_FRect dstRect;
+    SDL_Rect srcRect{};
+    SDL_FRect dstRect{};
 
     BulletRingBuffer bullets;
 
@@ -24,9 +24,9 @@ public:
     const float shotDelay = 0.2f;
     float angle = 0.0f;
 
-    Gun(SDL_Renderer * render);
+    explicit Gun(SDL_Renderer * render);
 
-    SDL_FPoint getBulletExitPosition() const;
+    [[nodiscard]] SDL_FPoint getBulletExitPosition() const;
 
     void render(SDL_Renderer *renderer);
 
@@ -37,9 +37,9 @@ public:
 
     void updateBullets(float dt);
 
-    void renderBullets(SDL_Renderer *renderer, SDL_FRect *vp);
+    void renderBullets(SDL_Renderer *renderer, SDL_FRect *vp) const;
 
-    bool isEmpty();
+    [[nodiscard]] bool isEmpty() const;
 
     void reload();
 

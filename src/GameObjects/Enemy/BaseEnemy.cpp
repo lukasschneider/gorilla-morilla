@@ -1,6 +1,5 @@
 #include "BaseEnemy.h"
-#include "../../lib/ph.h"
-#include "../../lib/rh.h"
+
 
 BaseEnemy::BaseEnemy(float x, float y, float maxHp, std::vector<Pickup *> *pickup)
         : dRect({x, y, 32, 32}), hp(maxHp), maxHp(maxHp), activePowerUps(pickup) {
@@ -40,8 +39,8 @@ void BaseEnemy::update(float dt, Room &room) {
         path->erase(path->begin());
         std::pair<int, int> destination = path->front();
 
-        float destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f;
-        float destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f;
+        float destinationX = static_cast<float>(destination.first) * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f;
+        float destinationY = static_cast<float>(destination.second) * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f;
 
         float dx = destinationX - dRect.x;
         float dy = destinationY - dRect.y;
@@ -53,8 +52,8 @@ void BaseEnemy::update(float dt, Room &room) {
 
             if (!path->empty()) {
                 destination = path->front();
-                destinationX = destination.first * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f;
-                destinationY = destination.second * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f;
+                destinationX = static_cast<float>(destination.first) * TILE_SIZE + TILE_SIZE / 2.0f - dRect.w / 2.0f;
+                destinationY = static_cast<float>(destination.second) * TILE_SIZE + TILE_SIZE / 2.0f - dRect.h / 2.0f;
 
                 dx = destinationX - dRect.x;
                 dy = destinationY - dRect.y;
@@ -94,7 +93,7 @@ void BaseEnemy::respawn() {
 void BaseEnemy::render(const SDL_FRect &viewport) {
     Renderer * renderer = RS::getInstance().get();
     if (isHit) {
-        int alpha = 255 * (0.5f + 0.5f * sin(10.0f * hitTime)); // Flashing effect
+        int alpha = static_cast<int>(255 * (0.5f + 0.5f * sin(10.0f * hitTime))); // Flashing effect
         SDL_SetTextureAlphaMod(enemyTexture, alpha);
     } else {
         SDL_SetTextureAlphaMod(enemyTexture, 255);
@@ -142,7 +141,7 @@ void BaseEnemy::render(const SDL_FRect &viewport) {
 
 }
 
-void BaseEnemy::coll(BulletRingBuffer &bullets) {
+[[maybe_unused]] void BaseEnemy::coll(BulletRingBuffer &bullets) {
     for (int i = 0; i < bullets.size(); ++i) {
         Bullet *bullet = bullets.get(i);
         if (!bullet->isActive) continue;
@@ -170,7 +169,7 @@ void BaseEnemy::getHit() {
     isHit = true;
 }
 
-bool BaseEnemy::lineOfSightCheck(const Player& player, const std::vector<std::vector<int>>& collisionLayer) {
+/*bool BaseEnemy::lineOfSightCheck(const Player& player, const std::vector<std::vector<int>>& collisionLayer) {
     // Calculate the start and end points in tile coordinates
     int startX = static_cast<int>(dRect.x / TILE_SIZE);
     int startY = static_cast<int>(dRect.y / TILE_SIZE);
@@ -205,11 +204,9 @@ bool BaseEnemy::lineOfSightCheck(const Player& player, const std::vector<std::ve
             startY += sy;
         }
     }
-
-    return false;
 }
 
-
+*/
 
 
 

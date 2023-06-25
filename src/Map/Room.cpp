@@ -1,15 +1,5 @@
 #include "Room.h"
-#include "../lib/ph.h"
 #include <utility>
-
-/**
- * Room Layout is always the same
- * [0] Backboard layer
- * [1] Collision layer
- * [2] Foreground Styling
- * [3] Foreground Styling
- * ...
- */
 
 Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FRect *viewport, int map_type) {
 
@@ -120,7 +110,6 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
             this->enemies.push_back(new Enemy(192, 1024, 100, &this->activePickups));
             this->enemies.push_back(new Enemy(448, 1088, 100, &this->activePickups));
             break;
-            break;
         default:
             perror("No valid enum - Room Constructor");
             return;
@@ -137,11 +126,11 @@ Room::Room(int id, SDL_Renderer *render, Vector<Vector<Vector<int>>> map, SDL_FR
 
 }
 
-int Room::getMapPixelHeight() {
+int Room::getMapPixelHeight() const {
     return this->MAP_PIXEL_HEIGHT;
 }
 
-int Room::getMapPixelWidth() {
+int Room::getMapPixelWidth() const {
     return this->MAP_PIXEL_WIDTH;
 }
 
@@ -324,12 +313,12 @@ bool Room::checkCollision(const Rect &rect) const {
     return false;
 }
 
-void Room::renderPickups(const SDL_FRect &vp) {
+void Room::renderPickups() {
     if (!activePickups.empty()) {
         for (auto pickup: activePickups) {
-            pickup->render(RS::getInstance().get(), vp);
+            pickup->render(RS::getInstance().get(), *this->vp);
             if (dynamic_cast<Banana*>(pickup) == nullptr && pickup->checkCollision(PS::getInstance().get()->dRect, 32)) {
-                std::string currentPickupDesc = pickup->description;
+                currentPickupDesc = pickup->description;
 
                 std::string textToRender = std::to_string(pickup->cost) + " :\n"+ currentPickupDesc;
 
@@ -338,13 +327,13 @@ void Room::renderPickups(const SDL_FRect &vp) {
                 SDL_Texture* textTexture = SDL_CreateTextureFromSurface(RS::getInstance().get(), textSurface);
 
                 int textW, textH;
-                SDL_QueryTexture(textTexture, NULL, NULL, &textW, &textH);
+                SDL_QueryTexture(textTexture, nullptr, nullptr, &textW, &textH);
 
                 SDL_FPoint centerPoint = {175, 300};
 
                 SDL_FRect textRect;
-                textRect.x = centerPoint.x - textW / 2;
-                textRect.y = centerPoint.y - textH / 2;
+                textRect.x = centerPoint.x - (float)textW / 2;
+                textRect.y = centerPoint.y - (float)textH / 2;
                 textRect.w = textW;
                 textRect.h = textH;
 
@@ -355,8 +344,8 @@ void Room::renderPickups(const SDL_FRect &vp) {
                 SDL_FreeSurface(banana);
 
                 SDL_FRect pickupRect;
-                pickupRect.x = textRect.x + 56;
-                pickupRect.y = textRect.y + 2;
+                pickupRect.x = textRect.x + 72;
+                pickupRect.y = textRect.y -3;
                 pickupRect.w = 32;
                 pickupRect.h = 32;
 
@@ -390,7 +379,7 @@ Room::~Room() {
 
 void Room::updatePickups() {
     Player *player = PS::getInstance().get();
-    const Uint8* state = SDL_GetKeyboardState(NULL);
+    const Uint8* state = SDL_GetKeyboardState(nullptr);
     currentPickupDesc = "";
     for (unsigned long i = 0; i < activePickups.size(); ++i) {
         if (dynamic_cast<Banana*>(activePickups[i]) != nullptr) {

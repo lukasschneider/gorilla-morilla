@@ -33,14 +33,14 @@ struct Tile {
     std::string path;
     SDL_Texture *texture;
     SDL_Rect srcRect = {0, 0, 16, 16};
-    TileType tileType;
+    [[maybe_unused]] TileType tileType;
     bool isSolid;
 
-    void destroy() {
+    void destroy() const {
         SDL_DestroyTexture(texture);
     }
 
-    Tile(const std::string path, SDL_Renderer *render, TileType tileType, bool isSolid)
+    Tile(const std::string& path, SDL_Renderer *render, TileType tileType, bool isSolid)
             : path(path), tileType(tileType), isSolid(isSolid) {
         texture = SDL_CreateTextureFromSurface(render, IMG_Load(path.c_str()));
     }
@@ -62,8 +62,8 @@ public:
     std::string currentPickupDesc;
     TTF_Font* font;
     int id;
-    bool isShop = false;
-    bool isStart = false;
+    [[maybe_unused]] bool isShop = false;
+    [[maybe_unused]] bool isStart = false;
     std::vector<Tile> tiles;
     std::vector<Pickup*> activePickups;
 
@@ -77,11 +77,11 @@ public:
 
     [[nodiscard]] bool checkCollision(const SDL_Rect &rect) const;
 
-    int getMapPixelWidth();
+    [[nodiscard]] int getMapPixelWidth() const;
 
-    int getMapPixelHeight();
+    [[nodiscard]] int getMapPixelHeight() const;
 
-    void renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect, SDL_FRect &viewport);
+    static void renderTile(SDL_Renderer *render, const Tile &tile, SDL_Rect &dstRect, SDL_FRect &viewport);
 
     void render_backboard(SDL_Renderer *render);
 
@@ -95,12 +95,11 @@ public:
 
     [[nodiscard]] int checkTeleport(const SDL_Rect &rect) const;
 
-    void renderPickups(const SDL_FRect &viewport);
-
     ~Room();
 
     void updatePickups();
 
+    void renderPickups();
 };
 
 

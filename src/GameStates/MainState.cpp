@@ -46,11 +46,11 @@ void MainState::Init() {
 }
 
 void MainState::UnInit() {
+    SDL_DestroyTexture(userinterface->deadScreen);
     delete player;
     delete room;
     delete userinterface;
     delete soundManager;
-    SDL_DestroyTexture(userinterface->deadScreen);
 }
 
 void MainState::Events(const u32 frame, const u32 totalMSec, const float deltaT) {

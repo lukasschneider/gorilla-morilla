@@ -42,6 +42,7 @@ public:
     float timeSinceLastDamage = 0.0f;
     float timeSinceLastRoll = 1000.0f;
     float cooldownRoll = 5.0f;
+    float dashBarProgress = 5.0f;
     int dmg = 20;
 
     Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun);

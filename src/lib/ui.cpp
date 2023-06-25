@@ -111,6 +111,9 @@ void ui::drawUi() {
         };
         SDL_RenderCopyF(render, emotes, &srcRect, &dstRect);
     }
+
+
+
     // Draw Ammo
     SDL_Texture *ammoT = getAmmo();
     SDL_RenderCopy(render, ammoT, nullptr, &ammoCount);

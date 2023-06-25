@@ -47,8 +47,6 @@ public:
 
     Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun);
 
-    void setPlayerPosition(float x, float y);
-
     void takeDamage();
 
     void renderPlayer(SDL_Renderer *renderer);

@@ -49,7 +49,7 @@ void MeleeEnemy::render(const SDL_FRect &viewport) {
     BaseEnemy::render(viewport);
 
     // Draw the circle (radius)
-    Renderer * render = RS::getInstance().get();
+    //Renderer * render = RS::getInstance().get();
 
 
 }

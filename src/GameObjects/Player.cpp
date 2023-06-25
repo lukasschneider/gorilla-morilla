@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(50){
+Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(50) {
 
     dRect = {static_cast<float>(448), static_cast<float>(700), 48, 48};
     SDL_Surface *surface = IMG_Load(playerPath.c_str());
@@ -24,6 +24,31 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
         angle = (rollDuration - rollTimer) / rollDuration * 360.0;
     }
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, angle, nullptr, flip);
+    // Dashbar
+
+
+
+    SDL_FRect fillRect = {
+            screenWidth / 2 - dRect.w / 2,
+            screenHeight / 2 - dRect.h / 2 + dRect.w + 10,
+            dashBarProgress * 10,
+            10
+    };
+    
+    if(fillRect.w >= 50) {
+        fillRect.w = 50;
+    }
+
+    SDL_FRect borderRecht = {
+            screenWidth / 2 - dRect.w / 2 - 1,
+            screenHeight / 2 - dRect.h / 2 + dRect.w + 10 - 1,
+            52,
+            12
+    };
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderFillRectF(renderer, &borderRecht);
+    SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
+    SDL_RenderFillRectF(renderer, &fillRect);
 }
 
 int Player::handleTeleport(const Room &room) {
@@ -65,8 +90,13 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
         dir = RIGHT;
     }
     timeSinceLastRoll += deltaTime;
+    if (dashBarProgress <= cooldownRoll) {
+        dashBarProgress += deltaTime;
+    }
+
     if (keyboardState[SDL_SCANCODE_LSHIFT] && state != PlayerState::Dodge) {
-        if(timeSinceLastRoll >= cooldownRoll) {
+        if (timeSinceLastRoll >= cooldownRoll) {
+            dashBarProgress = 0;
             state = PlayerState::Dodge;
             rollTimer = rollDuration;
             if (dirX == 0.0f && dirY == 0.0f) {
@@ -158,8 +188,8 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
 void Player::takeDamage() {
     if (state != PlayerState::Dodge && !isHit) {
         SMS::getInstance().get()->playMonkeySound();
-        health --;
-        if(health <= 0) {
+        health--;
+        if (health <= 0) {
             health = 0;
         }
         isHit = true;

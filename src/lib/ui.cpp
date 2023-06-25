@@ -264,6 +264,9 @@ SDL_Texture *ui::getLossScreen() {
     SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
     SDL_SetRenderTarget(render, finalTexture);
 
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+
     SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
 
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
@@ -296,6 +299,9 @@ SDL_Texture *ui::getWinScreen() {
     SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
     SDL_SetRenderTarget(render, finalTexture);
 
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+
     SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(render, textSurface);
     SDL_RenderCopy(render, textTexture, NULL, &textRect);
@@ -325,6 +331,9 @@ SDL_Texture *ui::getInfoScreen() {
 
     SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 600, 200);
     SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
 
     SDL_Rect textRect = {0, 0, textSurface->w, textSurface->h};
 

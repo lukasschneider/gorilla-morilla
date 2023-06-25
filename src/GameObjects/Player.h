@@ -36,7 +36,7 @@ public:
     SDL_FPoint rollDirection;
     float rollDuration = 0.7;
     float rollTimer = 0.0f;
-    float rollMovementSpeed = 550.0f;
+    float rollMovementSpeed = 650.0f;
     bool isHit = false;
     float invincTimer = 0.5f;
     float timeSinceLastDamage = 0.0f;

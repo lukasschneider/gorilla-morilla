@@ -25,6 +25,7 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     }
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, angle, nullptr, flip);
 
+
     if(isHit){
         SDL_SetTextureColorMod(playerTexture,255,50,50);
     } else {

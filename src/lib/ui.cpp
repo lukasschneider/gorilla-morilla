@@ -154,6 +154,9 @@ SDL_Texture *ui::getAmmo() {
     SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, totalW, totalH);
     SDL_SetRenderTarget(render, finalTexture);
 
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+
     SDL_Rect ammoRect = {0, 0, ammoW, ammoH};
     SDL_Rect textRect = {ammoW+ 5, 5, textSurface->w, textSurface->h};
 
@@ -210,6 +213,9 @@ SDL_Texture *ui::getCurrency() {
 
     SDL_Texture* finalTexture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, totalW, totalH);
     SDL_SetRenderTarget(render, finalTexture);
+
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
 
     SDL_Rect bananaRect = {0, 0, bananaW, bananaH};
     SDL_Rect textRect = {bananaW + 5, 5, textSurface->w, textSurface->h};

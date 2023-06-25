@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(50) {
+Player::Player(SDL_Renderer *renderer, std::unique_ptr<Gun> gun) : gun(std::move(gun)), health(6), currency(5) {
 
     dRect = {static_cast<float>(448), static_cast<float>(700), 48, 48};
     SDL_Surface *surface = IMG_Load(playerPath.c_str());
@@ -23,7 +23,13 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
     if (state == PlayerState::Dodge) {
         angle = (rollDuration - rollTimer) / rollDuration * 360.0;
     }
+    if(isHit){
+        SDL_SetTextureColorMod(playerTexture,255,50,50);
+    } else {
+        SDL_SetTextureColorMod(playerTexture,255,255,255);
+    }
     SDL_RenderCopyExF(renderer, playerTexture, nullptr, &screenRect, angle, nullptr, flip);
+
 
     if(isHit){
         SDL_SetTextureColorMod(playerTexture,255,50,50);
@@ -35,9 +41,9 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             screenWidth / 2 - dRect.w / 2,
             screenHeight / 2 - dRect.h / 2 + dRect.w + 10,
             dashBarProgress * 10,
-            10
+            6
     };
-    
+
     if(fillRect.w >= 50) {
         fillRect.w = 50;
     }
@@ -46,12 +52,24 @@ void Player::renderPlayer(SDL_Renderer *renderer) {
             screenWidth / 2 - dRect.w / 2 - 1,
             screenHeight / 2 - dRect.h / 2 + dRect.w + 10 - 1,
             52,
-            12
+            8
     };
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderFillRectF(renderer, &borderRecht);
-    SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
+
+    float ratio = fillRect.w / 50.0f;
+
+    Uint8 greenR = 0, greenG = 255, greenB = 0;
+    Uint8 orangeR = 255, orangeG = 165, orangeB = 0;
+
+    Uint8 r = (Uint8) (greenR + ratio * (orangeR - greenR));
+    Uint8 g = (Uint8) (greenG + ratio * (orangeG - greenG));
+    Uint8 b = (Uint8) (greenB + ratio * (orangeB - greenB));
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
     SDL_RenderFillRectF(renderer, &fillRect);
+
 }
 
 int Player::handleTeleport(const Room &room) {
@@ -117,8 +135,17 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
             state = PlayerState::Damage;
         } else {
             float rollSpeed = rollMovementSpeed * deltaTime;
-            float newX = dRect.x + rollDirection.x * rollSpeed;
-            float newY = dRect.y + rollDirection.y * rollSpeed;
+            float rollSpeedX = rollDirection.x * rollSpeed;
+            float rollSpeedY = rollDirection.y * rollSpeed;
+
+            if (rollSpeedX != 0.0f && rollSpeedY != 0.0f) {
+                float diagonalFactor = 1.0f / sqrt(2.0f);
+                rollSpeedX *= diagonalFactor;
+                rollSpeedY *= diagonalFactor;
+            }
+
+            float newX = dRect.x + rollSpeedX;
+            float newY = dRect.y + rollSpeedY;
 
             if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y),
                                       static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
@@ -130,10 +157,8 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
                 dRect.y = newY;
             }
 
-
             return;
         }
-
     }
 
     float length = std::sqrt(dirX * dirX + dirY * dirY);

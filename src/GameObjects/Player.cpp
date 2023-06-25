@@ -118,8 +118,17 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
             state = PlayerState::Damage;
         } else {
             float rollSpeed = rollMovementSpeed * deltaTime;
-            float newX = dRect.x + rollDirection.x * rollSpeed;
-            float newY = dRect.y + rollDirection.y * rollSpeed;
+            float rollSpeedX = rollDirection.x * rollSpeed;
+            float rollSpeedY = rollDirection.y * rollSpeed;
+
+            if (rollSpeedX != 0.0f && rollSpeedY != 0.0f) {
+                float diagonalFactor = 1.0f / sqrt(2.0f);
+                rollSpeedX *= diagonalFactor;
+                rollSpeedY *= diagonalFactor;
+            }
+
+            float newX = dRect.x + rollSpeedX;
+            float newY = dRect.y + rollSpeedY;
 
             if (!room.checkCollision({static_cast<int>(newX), static_cast<int>(dRect.y),
                                       static_cast<int>(dRect.w), static_cast<int>(dRect.h)})) {
@@ -131,10 +140,8 @@ void Player::handleMovement(const Uint8 *keyboardState, float deltaTime, const R
                 dRect.y = newY;
             }
 
-
             return;
         }
-
     }
 
     float length = std::sqrt(dirX * dirX + dirY * dirY);

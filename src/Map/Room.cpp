@@ -333,7 +333,7 @@ void Room::renderPickups(const SDL_FRect &vp) {
 
                 std::string textToRender = std::to_string(pickup->cost) + " :\n"+ currentPickupDesc;
 
-                SDL_Color textColor = { 255, 255, 255 };
+                SDL_Color textColor = { 255, 255, 255 , 255};
                 SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped(font, textToRender.c_str(), textColor, 300);
                 SDL_Texture* textTexture = SDL_CreateTextureFromSurface(RS::getInstance().get(), textSurface);
 
@@ -392,7 +392,7 @@ void Room::updatePickups() {
     Player *player = PS::getInstance().get();
     const Uint8* state = SDL_GetKeyboardState(NULL);
     currentPickupDesc = "";
-    for (int i = 0; i < activePickups.size(); ++i) {
+    for (unsigned long i = 0; i < activePickups.size(); ++i) {
         if (dynamic_cast<Banana*>(activePickups[i]) != nullptr) {
             if (activePickups[i]->checkCollision(player->dRect, 0)) {
                 SMS::getInstance().get()->playSound(SoundId::COIN,0);

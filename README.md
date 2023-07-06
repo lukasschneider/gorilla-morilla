@@ -1,19 +1,21 @@
-# sdl_basegame
+# Gorilla Morilla
 
-A skeleton project to start your SDL2 journey
+Just another Game where u play a Guy with an AK-47, but that guy is actually a Gorilla
 
-# Classes
+## Context
 
-- Game: The base class for your own game
-    - Runs from start to the end of execution and calls Events(), Update(), and Render() on the current GameState
-    - Has a prioritzied HandleEvent method that is processed before the GameState events
-    - Has two ways of showing msec/frame (which is the same as 1000/FPS, so a higher number means its running slower)
-- GameState: The base class for your different game states
-    - Can dynamically load and unload it's assets etc. on activation/deactivation with Init() and UnInit()
+This game was developed during my study at Hochschule Niederrhein Krefeld Germany. It's based on the [sdl_basegame](https://github.com/sor/sdl_basegame) from 
+[@sor](https://github.com/sor)
 
-Either Game and GameState can initiate a state switch by calling SetNextState( number ) or game.SetNextState( number ), the change will happen after the frame has finished processing.
+## Credits
 
-# Classdiagram
+- Special Thanks to [@LeLuven](https://github.com/LeLuven) for an amazing journey, and one of the best Teammates.
+- Big Thanks to [@sor](https://github.com/sor) for teaching us the necassary tools and giving us this amazing Skeleton for starting our first trip into Game Development.
+- Thanks to [Kenny](https://www.kenney.nl/) for the cute Tiles and Spritesheets.
+- Thanks to [VladPenn](https://vladpenn.itch.io/) for everything thats Weapon related.
+- Thanks to [1up Indie](https://opengameart.org/users/1up-indie) for the Game Over Screen Overlay
 
-Classdiagram outlining base classes and their relations
-![Classdiagram](./classdiagram.png)
+
+
+
+
